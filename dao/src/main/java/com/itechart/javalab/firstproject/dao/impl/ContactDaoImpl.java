@@ -396,4 +396,14 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         connection.close();
         return contacts;
     }
+
+    @Override
+    public Set<Contact> searchContacts(Contact entity) {
+        String getContacts = "select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, a.city, a.street, a.houseNumber, a.flatNumber from contact as c left join " +
+                "contact_address as ca on c.id = ca.contact_id left join address as a on ca.address_id = a.id where c.firstName = if(? is null, is not null, ?) and " +
+                "c.lastName = if(? is null, is not null, ?) and c.middleName = if(? is null, is not null, ?) and c.gender = if(? is null, is not null, ?) and " +
+                "c.maritalStatus = if(? is null, is not null, ?) and c.nationality = if(? is null, is not null, ?) and a.city = if(? is null, is not null, ?) and " +
+                "a.street = if(? is null, is not null, ?) and a.houseNumber = if(? is null, is not null, ?) and a.flatNumber = if(? is null, is not null, ?) and " +
+                "a.postalIndex = if(? is null, is not null, ?);";
+    }
 }

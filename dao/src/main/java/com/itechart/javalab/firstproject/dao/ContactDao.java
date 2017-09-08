@@ -19,8 +19,15 @@ public interface ContactDao<T> extends GenericDao<Contact> {
      * Method is used for pagination and returns certain set of contacts.
      * @param startContactNumber
      * @param quantityOfContacts
-     * @return Set
+     * @return Set of contacts
      * @throws SQLException
      */
-    Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
+    Set<T> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
+
+    /**
+     * Method searches necessary contacts.
+     * @param entity
+     * @return Set of contacts
+     */
+    Set<T> searchContacts(T entity);
 }
