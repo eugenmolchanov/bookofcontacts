@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * Created by Евгений Молчанов on 06.09.2017.
  */
@@ -22,7 +24,7 @@ public class Phone {
     public boolean equals(Object obj) {
         if (obj instanceof Phone) {
             Phone phone = (Phone) obj;
-            return this.countryCode == phone.countryCode && this.operatorCode == phone.operatorCode && this.number == phone.number && this.type.equals(phone.type);
+            return this.countryCode == phone.countryCode && this.operatorCode == phone.operatorCode && this.number == phone.number && Objects.equals(this.type, phone.getType());
         }
         return false;
     }
@@ -33,7 +35,7 @@ public class Phone {
         result = result * 31 + countryCode;
         result = result * 31 + operatorCode;
         result = result * 31 + (int) number;
-        if (type != null) {result = result * 31 + type.hashCode();}
+        result = result * 31 + Objects.hashCode(type);
         return result;
     }
 }

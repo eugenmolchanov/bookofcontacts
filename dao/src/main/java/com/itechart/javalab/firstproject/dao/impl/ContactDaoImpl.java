@@ -5,7 +5,9 @@ import com.itechart.javalab.firstproject.dao.connection.Database;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by Евгений Молчанов on 06.09.2017.
@@ -154,6 +156,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             statement.setString(9, entity.getEmail());
             statement.setString(10, entity.getEmploymentPlace());
             statement.setLong(11, entity.getId());
+            statement.executeUpdate();
 
             if (entity.getAddress().getId() != 0) {
                 statement = connection.prepareStatement(updateAddress);
@@ -180,9 +183,9 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             }
             if (databaseContact.getAttachments().size() != 0) {
                 Iterator<Attachment> entityIterator = entity.getAttachments().iterator();
-                Iterator<Attachment> databaseContactIterator = databaseContact.getAttachments().iterator();
                 while (entityIterator.hasNext()) {
                     Attachment potentialNewcomer = entityIterator.next();
+                    Iterator<Attachment> databaseContactIterator = databaseContact.getAttachments().iterator();
                     while (databaseContactIterator.hasNext()) {
                         Attachment databaseAttachment = databaseContactIterator.next();
                         if (databaseAttachment.getId() == potentialNewcomer.getId()) {
@@ -213,9 +216,9 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             }
             if (databaseContact.getPhones().size() != 0) {
                 Iterator<Phone> entityIterator = entity.getPhones().iterator();
-                Iterator<Phone> databaseContactIterator = databaseContact.getPhones().iterator();
                 while (entityIterator.hasNext()) {
                     Phone potentialNewcomer = entityIterator.next();
+                    Iterator<Phone> databaseContactIterator = databaseContact.getPhones().iterator();
                     while (databaseContactIterator.hasNext()) {
                         Phone databasePhone = databaseContactIterator.next();
                         if (databasePhone.getId() == potentialNewcomer.getId()) {
@@ -247,7 +250,8 @@ public class ContactDaoImpl implements ContactDao<Contact> {
                 statement.setLong(2, entity.getId());
                 statement.executeUpdate();
             }
-
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             connection.rollback();
             throw e;
@@ -258,8 +262,51 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id) throws SQLException {
+        String deleteContactAddress = "delete from contact_address where contact_id = ?;";
+        String deleteAttachment = "delete from attachment where contact_id = ?;";
+        String deletePhone = "delete from phone where contact_id = ?;";
+        String deletePhoto = "delete from photo where contact_id = ?;";
+        String deleteContactMessage = "delete from contact_message where contact_id = ?;";
+        String deleteContact = "delete from contact where id = ?;";
 
+        Connection connection = Database.getConnection();
+        PreparedStatement statement = null;
+        try {
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(deleteContactAddress);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement(deleteContactMessage);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement(deleteAttachment);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement(deletePhone);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement(deletePhoto);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement(deleteContact);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            statement.close();
+            connection.close();
+        }
     }
 
 
@@ -314,5 +361,33 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             statement.close();
             connection.close();
         }
+    }
+
+    @Override
+    public Set<Contact> getSetOfContacts(int firstContact, int secondContact) throws SQLException {
+        String getContacts = "select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, a.city, a.street, a.houseNumber, a.flatNumber from contact as c left join " +
+                "contact_address as ca on c.id = ca.contact_id left join address as a on ca.address_id = a.id limit ?, ?;";
+        Connection connection = Database.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getContacts);
+        statement.setLong(1, firstContact);
+        statement.setLong(2, secondContact);
+        ResultSet resultSet = statement.executeQuery();
+        Set<Contact> contacts = new HashSet<>();
+        while (resultSet.next()) {
+            Contact contact = new Contact();
+            contact.setId(resultSet.getLong("c.id"));
+            contact.setFirstName(resultSet.getString("c.firstName"));
+            contact.setLastName(resultSet.getString("c.lastName"));
+            contact.setBirthday(resultSet.getDate("c.birthday"));
+            contact.setEmploymentPlace(resultSet.getString("c.employmentPlace"));
+            contact.getAddress().setCity(resultSet.getString("a.city"));
+            contact.getAddress().setStreet("a.street");
+            contact.getAddress().setHouseNumber(resultSet.getInt("a.houseNumber"));
+            contact.getAddress().setFlatNumber(resultSet.getInt("a.flatNumber"));
+            contacts.add(contact);
+        }
+        statement.close();
+        connection.close();
+        return contacts;
     }
 }

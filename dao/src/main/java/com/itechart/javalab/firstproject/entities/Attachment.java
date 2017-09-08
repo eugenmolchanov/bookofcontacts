@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Created by Евгений Молчанов on 06.09.2017.
@@ -23,8 +24,8 @@ public class Attachment {
     public boolean equals(Object obj) {
         if (obj instanceof Attachment) {
             Attachment attachment = (Attachment) obj;
-            return this.fileName.equals(attachment.getFileName()) && this.commentary.equals(attachment.getCommentary()) && this.date.getTime() ==
-                    attachment.getDate().getTime() && this.pathToFile.equals(attachment.getPathToFile());
+            return Objects.equals(this.fileName, attachment.getFileName()) && Objects.equals(this.commentary, attachment.commentary) &&
+                    Objects.equals(this.date, attachment.getDate()) && Objects.equals(this.pathToFile, attachment.pathToFile);
         }
         return false;
     }
@@ -32,10 +33,10 @@ public class Attachment {
     @Override
     public int hashCode() {
         int result = 17;
-        if (fileName != null) {result = 31 * result + fileName.hashCode();}
-        if (commentary != null) {result = 31 * result + commentary.hashCode();}
-        if (date != null) {result = 31 * result + date.hashCode();}
-        if (pathToFile != null) {result = 31 * result + pathToFile.hashCode();}
+        result = 31 * result + Objects.hashCode(fileName);
+        result = 31 * result + Objects.hashCode(commentary);
+        result = 31 * result + Objects.hashCode(date);
+        result = 31 * result + Objects.hashCode(pathToFile);
         return result;
     }
 }

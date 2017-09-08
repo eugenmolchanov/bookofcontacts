@@ -30,7 +30,9 @@ public class Contact {
     private Photo photo;
 
     public Contact() {
+        this.address = new Address();
         this.attachments = new HashSet<>();
         this.phones = new HashSet<>();
+        this.photo = new Photo();
     }
 }

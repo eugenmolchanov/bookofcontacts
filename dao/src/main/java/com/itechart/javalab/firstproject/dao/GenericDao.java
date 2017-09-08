@@ -30,5 +30,5 @@ public interface GenericDao<T> {
      * Method deletes entity from database by id.
      * @param id
      */
-    void delete(long id);
+    void delete(long id) throws SQLException;
 }

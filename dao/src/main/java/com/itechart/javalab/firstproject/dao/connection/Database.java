@@ -74,12 +74,12 @@ public class Database {
             statement.setString(4, attachment.getPathToFile());
             statement.setLong(5, entity.getId());
             statement.executeUpdate();
+            statement.close();
         }
-        statement.close();
     }
 
     public static void savePhone(Connection connection, String savePhone, Contact entity) throws SQLException {
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         for (Phone phone : entity.getPhones()) {
             statement = connection.prepareStatement(savePhone);
             statement.setInt(1, phone.getCountryCode());
@@ -89,7 +89,7 @@ public class Database {
             statement.setString(5, phone.getComment());
             statement.setLong(6, entity.getId());
             statement.executeUpdate();
+            statement.close();
         }
-        statement.close();
     }
 }
