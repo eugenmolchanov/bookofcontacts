@@ -39,6 +39,7 @@ public class PhoneDaoImplTest {
         contactDao.deleteAll();
     }
 
+
     @Test
     public void shouldDeletePhone() throws SQLException {
         Contact contact = contactDao.findById(1);
