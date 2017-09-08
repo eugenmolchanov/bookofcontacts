@@ -405,5 +405,6 @@ public class ContactDaoImpl implements ContactDao<Contact> {
                 "c.maritalStatus = if(? is null, is not null, ?) and c.nationality = if(? is null, is not null, ?) and a.city = if(? is null, is not null, ?) and " +
                 "a.street = if(? is null, is not null, ?) and a.houseNumber = if(? is null, is not null, ?) and a.flatNumber = if(? is null, is not null, ?) and " +
                 "a.postalIndex = if(? is null, is not null, ?);";
+
     }
 }
