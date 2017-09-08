@@ -5,6 +5,7 @@ import com.itechart.javalab.firstproject.dao.connection.Database;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
+import java.util.Iterator;
 
 /**
  * Created by Евгений Молчанов on 06.09.2017.
@@ -54,44 +55,12 @@ public class ContactDaoImpl implements ContactDao<Contact> {
                 statement.setLong(2, resultSet.getLong("id"));
                 statement.executeUpdate();
             } else {
-                statement = connection.prepareStatement(saveAddress, Statement.RETURN_GENERATED_KEYS);
-                statement.setString(1, entity.getAddress().getCity());
-                statement.setString(2, entity.getAddress().getStreet());
-                statement.setInt(3, entity.getAddress().getHouseNumber());
-                statement.setInt(4, entity.getAddress().getFlatNumber());
-                statement.setInt(5, entity.getAddress().getPostalIndex());
-                statement.executeUpdate();
-                int affectedAddressRows = statement.executeUpdate();
-                if (affectedAddressRows == 0) {
-                    throw new SQLException("Creating address failed, no rows affected.");
-                }
-                entity.getAddress().setId(Database.getGeneratedIdAfterCreate(statement));
-                statement = connection.prepareStatement(saveContactAddress);
-                statement.setLong(1, entity.getId());
-                statement.setLong(2, entity.getAddress().getId());
-                statement.executeUpdate();
+                Database.saveAddress(connection, saveAddress, saveContactAddress, entity);
             }
 
-            for (Attachment attachment : entity.getAttachments()) {
-                statement = connection.prepareStatement(saveAttachment);
-                statement.setString(1, attachment.getFileName());
-                statement.setString(2, attachment.getCommentary());
-                statement.setDate(3, attachment.getDate());
-                statement.setString(4, attachment.getPathToFile());
-                statement.setLong(5, entity.getId());
-                statement.executeUpdate();
-            }
+            Database.saveAttachment(connection, saveAttachment, entity);
 
-            for (Phone phone : entity.getPhones()) {
-                statement = connection.prepareStatement(savePhone);
-                statement.setInt(1, phone.getCountryCode());
-                statement.setInt(2, phone.getOperatorCode());
-                statement.setLong(3, phone.getNumber());
-                statement.setString(4, phone.getType());
-                statement.setString(5, phone.getComment());
-                statement.setLong(6, entity.getId());
-                statement.executeUpdate();
-            }
+            Database.savePhone(connection, savePhone, entity);
 
             statement = connection.prepareStatement(savePhoto);
             statement.setString(1, entity.getPhoto().getPathToFile());
@@ -155,8 +124,137 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public void update(Contact entity) {
-        
+    public void update(Contact entity) throws SQLException {
+        String updateContact = "update contact set firstName = ?, lastName = ?, middleName = ?, birthday = ?, gender = ?, nationality = ?, maritalStatus = ?, webSite = ?, " +
+                "email = ?, employmentPlace = ? where id = ?;";
+        String saveAddress = "insert into address (city, street, houseNumber, flatNumber, postalIndex) values (?, ?, ?, ?, ?);";
+        String saveContactAddress = "insert into contact_address values (?, ?);";
+        String updateAddress = "update address set city = ?, street = ?, houseNumber = ?, flatNumber = ?, postalIndex = ? where id = ?;";
+        String getAttachments = "select * from attachment where contact_id = ?";
+        String getPhones = "select * from phone where contact_id = ?;";
+        String saveAttachment = "insert into attachment (fileName, commentary, recordDate, path, contact_id) values (?, ?, ?, ?, ?);";
+        String savePhone = "insert into phone (countryCode, operatorCode, phoneNumber, phoneType, commentary, contact_id) values (?, ?, ?, ?, ?, ?);";
+        String savePhoto = "insert into photo (path, contact_id) values (?, ?);";
+        String updatePhoto = "update photo set path = ? where id = ?;";
+        String updateAttachment = "update attachment set fileName = ?, commentary = ?, recordDate = ?, path = ? where id = ?;";
+        String updatePhone = "update phone set countryCode = ?, operatorCode = ?, phoneNumber = ?, phoneType = ?, commentary = ? where id = ?;";
+        Connection connection = Database.getConnection();
+        PreparedStatement statement = null;
+        try {
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(updateContact);
+            statement.setString(1, entity.getFirstName());
+            statement.setString(2, entity.getLastName());
+            statement.setString(3, entity.getMiddleName());
+            statement.setDate(4, entity.getBirthday());
+            statement.setString(5, entity.getGender());
+            statement.setString(6, entity.getNationality());
+            statement.setString(7, entity.getMaritalStatus());
+            statement.setString(8, entity.getWebSite());
+            statement.setString(9, entity.getEmail());
+            statement.setString(10, entity.getEmploymentPlace());
+            statement.setLong(11, entity.getId());
+
+            if (entity.getAddress().getId() != 0) {
+                statement = connection.prepareStatement(updateAddress);
+                statement.setString(1, entity.getAddress().getCity());
+                statement.setString(2, entity.getAddress().getStreet());
+                statement.setInt(3, entity.getAddress().getHouseNumber());
+                statement.setInt(4, entity.getAddress().getFlatNumber());
+                statement.setInt(5, entity.getAddress().getPostalIndex());
+                statement.setLong(6, entity.getAddress().getId());
+                statement.executeUpdate();
+            } else {
+                Database.saveAddress(connection, saveAddress, saveContactAddress, entity);
+            }
+
+            statement = connection.prepareStatement(getAttachments);
+            statement.setLong(1, entity.getId());
+            ResultSet resultSet = statement.executeQuery();
+            Attachment attachment;
+            Contact databaseContact = new Contact();
+            while (resultSet.next()) {
+                attachment = new Attachment(resultSet.getLong("id"), resultSet.getString("fileName"), resultSet.getString("commentary"), resultSet.getDate("recordDate"),
+                        resultSet.getString("path"));
+                databaseContact.getAttachments().add(attachment);
+            }
+            if (databaseContact.getAttachments().size() != 0) {
+                Iterator<Attachment> entityIterator = entity.getAttachments().iterator();
+                Iterator<Attachment> databaseContactIterator = databaseContact.getAttachments().iterator();
+                while (entityIterator.hasNext()) {
+                    Attachment potentialNewcomer = entityIterator.next();
+                    while (databaseContactIterator.hasNext()) {
+                        Attachment databaseAttachment = databaseContactIterator.next();
+                        if (databaseAttachment.getId() == potentialNewcomer.getId()) {
+                            statement = connection.prepareStatement(updateAttachment);
+                            statement.setString(1, potentialNewcomer.getFileName());
+                            statement.setString(2, potentialNewcomer.getCommentary());
+                            statement.setDate(3, potentialNewcomer.getDate());
+                            statement.setString(4, potentialNewcomer.getPathToFile());
+                            statement.setLong(5, potentialNewcomer.getId());
+                            statement.executeUpdate();
+                            entityIterator.remove();
+                        }
+                    }
+                }
+                Database.saveAttachment(connection, saveAttachment, entity);
+            } else if (entity.getAttachments().size() != 0) {
+                Database.saveAttachment(connection, saveAttachment, entity);
+            }
+
+            statement = connection.prepareStatement(getPhones);
+            statement.setLong(1, entity.getId());
+            resultSet = statement.executeQuery();
+            Phone phone;
+            while (resultSet.next()) {
+                phone = new Phone(resultSet.getLong("id"), resultSet.getInt("countryCode"), resultSet.getInt("operatorCode"), resultSet.getLong("phoneNumber"),
+                        resultSet.getString("phoneType"), resultSet.getString("commentary"));
+                databaseContact.getPhones().add(phone);
+            }
+            if (databaseContact.getPhones().size() != 0) {
+                Iterator<Phone> entityIterator = entity.getPhones().iterator();
+                Iterator<Phone> databaseContactIterator = databaseContact.getPhones().iterator();
+                while (entityIterator.hasNext()) {
+                    Phone potentialNewcomer = entityIterator.next();
+                    while (databaseContactIterator.hasNext()) {
+                        Phone databasePhone = databaseContactIterator.next();
+                        if (databasePhone.getId() == potentialNewcomer.getId()) {
+                            statement = connection.prepareStatement(updatePhone);
+                            statement.setInt(1, potentialNewcomer.getCountryCode());
+                            statement.setInt(2, potentialNewcomer.getOperatorCode());
+                            statement.setLong(3, potentialNewcomer.getNumber());
+                            statement.setString(4, potentialNewcomer.getType());
+                            statement.setString(5, potentialNewcomer.getComment());
+                            statement.setLong(6, potentialNewcomer.getId());
+                            statement.executeUpdate();
+                            entityIterator.remove();
+                        }
+                    }
+                }
+                Database.savePhone(connection, savePhone, entity);
+            } else if (entity.getPhones().size() != 0) {
+                Database.savePhone(connection, savePhone, entity);
+            }
+
+            if (entity.getPhoto().getId() != 0) {
+                statement = connection.prepareStatement(updatePhoto);
+                statement.setString(1, entity.getPhoto().getPathToFile());
+                statement.setLong(2, entity.getPhoto().getId());
+                statement.executeUpdate();
+            } else {
+                statement = connection.prepareStatement(savePhoto);
+                statement.setString(1, entity.getPhoto().getPathToFile());
+                statement.setLong(2, entity.getId());
+                statement.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            statement.close();
+            connection.close();
+        }
     }
 
     @Override

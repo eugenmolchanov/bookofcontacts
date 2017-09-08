@@ -24,7 +24,7 @@ public interface GenericDao<T> {
      * Method updates entity.
      * @param entity
      */
-    void update(T entity);
+    void update(T entity) throws SQLException;
 
     /**
      * Method deletes entity from database by id.
