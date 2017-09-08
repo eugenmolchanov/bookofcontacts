@@ -32,10 +32,10 @@ public class Phone {
     @Override
     public int hashCode() {
         int result = 17;
-        result = result * 31 + countryCode;
-        result = result * 31 + operatorCode;
-        result = result * 31 + (int) number;
-        result = result * 31 + Objects.hashCode(type);
+        result = result * 31 + this.countryCode;
+        result = result * 31 + this.operatorCode;
+        result = result * 31 + (int) this.number;
+        result = result * 31 + Objects.hashCode(this.type);
         return result;
     }
 }

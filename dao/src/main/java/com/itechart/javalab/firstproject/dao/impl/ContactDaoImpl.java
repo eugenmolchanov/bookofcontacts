@@ -1,13 +1,11 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.ContactDao;
-import com.itechart.javalab.firstproject.dao.connection.Database;
+import com.itechart.javalab.firstproject.dao.database.Database;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Евгений Молчанов on 06.09.2017.
@@ -364,15 +362,23 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public Set<Contact> getSetOfContacts(int firstContact, int secondContact) throws SQLException {
+    public Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException {
         String getContacts = "select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, a.city, a.street, a.houseNumber, a.flatNumber from contact as c left join " +
                 "contact_address as ca on c.id = ca.contact_id left join address as a on ca.address_id = a.id limit ?, ?;";
         Connection connection = Database.getConnection();
         PreparedStatement statement = connection.prepareStatement(getContacts);
-        statement.setLong(1, firstContact);
-        statement.setLong(2, secondContact);
+        statement.setLong(1, startContactNumber);
+        statement.setLong(2, quantityOfContacts);
         ResultSet resultSet = statement.executeQuery();
-        Set<Contact> contacts = new HashSet<>();
+        TreeSet<Contact> contacts = new TreeSet<>((contact, nextContact) -> {
+            if (contact.getId() > nextContact.getId()) {
+                return 1;
+            } else if (contact.getId() == nextContact.getId()) {
+                return 0;
+            } else {
+                return -1;
+            }
+        });
         while (resultSet.next()) {
             Contact contact = new Contact();
             contact.setId(resultSet.getLong("c.id"));

@@ -11,14 +11,16 @@ import java.util.Set;
 public interface ContactDao<T> extends GenericDao<Contact> {
     /**
      * Method deletes all contacts and reset the counter.
+     * @throws SQLException
      */
     void deleteAll() throws SQLException;
 
     /**
      * Method is used for pagination and returns certain set of contacts.
-     * @param firstContact
-     * @param secondContact
-     * @return
+     * @param startContactNumber
+     * @param quantityOfContacts
+     * @return Set
+     * @throws SQLException
      */
-    Set<Contact> getSetOfContacts(int firstContact, int secondContact) throws SQLException;
+    Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
 }

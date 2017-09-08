@@ -1,4 +1,4 @@
-package com.itechart.javalab.firstproject.dao.connection;
+package com.itechart.javalab.firstproject.dao.database;
 
 import com.itechart.javalab.firstproject.entities.Attachment;
 import com.itechart.javalab.firstproject.entities.Contact;
@@ -65,7 +65,7 @@ public class Database {
     }
 
     public static void saveAttachment(Connection connection, String saveAttachment, Contact entity) throws SQLException {
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         for (Attachment attachment : entity.getAttachments()) {
             statement = connection.prepareStatement(saveAttachment);
             statement.setString(1, attachment.getFileName());

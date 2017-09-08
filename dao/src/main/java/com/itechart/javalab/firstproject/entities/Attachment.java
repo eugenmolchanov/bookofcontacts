@@ -33,10 +33,10 @@ public class Attachment {
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + Objects.hashCode(fileName);
-        result = 31 * result + Objects.hashCode(commentary);
-        result = 31 * result + Objects.hashCode(date);
-        result = 31 * result + Objects.hashCode(pathToFile);
+        result = 31 * result + Objects.hashCode(this.fileName);
+        result = 31 * result + Objects.hashCode(this.commentary);
+        result = 31 * result + Objects.hashCode(this.date);
+        result = 31 * result + Objects.hashCode(this.pathToFile);
         return result;
     }
 }

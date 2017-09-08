@@ -78,4 +78,20 @@ public class ContactDaoImplTest {
         dao.delete(1);
         Assert.assertEquals(0, dao.findById(1).getId());
     }
+
+    @Test
+    public void shouldGetContacts() throws SQLException {
+        long startContactNumber = 0;
+        long quantityOfContacts = 4;
+        StringBuilder name = new StringBuilder("1");
+        for (int i = 0; i < 10; i++) {
+            Contact contact = new Contact();
+            contact.setFirstName(name.toString());
+            contact.setLastName(name.toString());
+            name.append(i);
+            dao.save(contact);
+        }
+        Set<Contact> contacts = dao.getSetOfContacts(startContactNumber, quantityOfContacts);
+        Assert.assertEquals((quantityOfContacts), contacts.size());
+    }
 }
