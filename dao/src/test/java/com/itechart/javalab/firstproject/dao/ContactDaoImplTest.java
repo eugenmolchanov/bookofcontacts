@@ -35,7 +35,7 @@ public class ContactDaoImplTest {
         attachments.add(firstAttachment);
         attachments.add(secondAttachment);
         Photo photo = new Photo(0, "path");
-        contact = new Contact(0, "FirstName", "LastName", "MiddleName", Date.valueOf(LocalDate.now()), "gender", "nationality", "maritalStatus", "webSite", "email",
+        contact = new Contact(0, "FirstName", "LastName", "MiddleName", Date.valueOf(LocalDate.of(1980, 10, 10)), "gender", "nationality", "maritalStatus", "webSite", "email",
                 "employmentPlace", address, phones, attachments, photo);
     }
 
@@ -93,5 +93,16 @@ public class ContactDaoImplTest {
         }
         Set<Contact> contacts = dao.getSetOfContacts(startContactNumber, quantityOfContacts);
         Assert.assertEquals((quantityOfContacts), contacts.size());
+    }
+
+    @Test
+    public void shouldGetSearchedContacts() throws SQLException {
+        dao.save(contact);
+        Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
+        Date upperLimit = Date.valueOf(LocalDate.of(1997, 10, 10));
+        Contact conditionContact = new Contact();
+        conditionContact.setFirstName("FirstName");
+        Set<Contact> contacts = dao.searchContacts(conditionContact, lowerLimit, upperLimit);
+        Assert.assertEquals(1, contacts.size());
     }
 }

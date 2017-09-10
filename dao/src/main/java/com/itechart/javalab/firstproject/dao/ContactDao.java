@@ -3,6 +3,7 @@ package com.itechart.javalab.firstproject.dao;
 import com.itechart.javalab.firstproject.entities.Contact;
 
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.Set;
 
 /**
@@ -29,5 +30,5 @@ public interface ContactDao<T> extends GenericDao<Contact> {
      * @param entity
      * @return Set of contacts
      */
-    Set<T> searchContacts(T entity);
+    Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit) throws SQLException;
 }

@@ -1,11 +1,15 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.ContactDao;
+import com.itechart.javalab.firstproject.dao.database.Builder;
 import com.itechart.javalab.firstproject.dao.database.Database;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Евгений Молчанов on 06.09.2017.
@@ -398,13 +402,78 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public Set<Contact> searchContacts(Contact entity) {
-        String getContacts = "select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, a.city, a.street, a.houseNumber, a.flatNumber from contact as c left join " +
-                "contact_address as ca on c.id = ca.contact_id left join address as a on ca.address_id = a.id where c.firstName = if(? is null, is not null, ?) and " +
-                "c.lastName = if(? is null, is not null, ?) and c.middleName = if(? is null, is not null, ?) and c.gender = if(? is null, is not null, ?) and " +
-                "c.maritalStatus = if(? is null, is not null, ?) and c.nationality = if(? is null, is not null, ?) and a.city = if(? is null, is not null, ?) and " +
-                "a.street = if(? is null, is not null, ?) and a.houseNumber = if(? is null, is not null, ?) and a.flatNumber = if(? is null, is not null, ?) and " +
-                "a.postalIndex = if(? is null, is not null, ?);";
+    public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit) throws SQLException {
+        StringBuilder getContacts = new StringBuilder("select c.id, c.firstName, c.lastName, c.middleName, c.birthday, c.gender, c.nationality, c.maritalStatus, c.webSite, c.email, " +
+                "c.employmentPlace, ad.id, ad.city, ad.street, ad.houseNumber, ad.flatNumber, ad.postalIndex, att.id, att.fileName, att.commentary, att.recordDate, " +
+                "att.path, pe.id, pe.countryCode, pe.operatorCode, pe.phoneNumber, pe.phoneType, pe.commentary, po.id, po.path from contact as c left join contact_address " +
+                "as ca on c.id=ca.contact_id left join address as ad on ca.address_id=ad.id left join attachment as att on c.id=att.contact_id left join phone as pe on " +
+                "c.id=pe.contact_id left join photo as po on c.id=po.contact_id ");
 
+        Builder query = new Builder();
+        query.where(getContacts).addConditionIfExist("firstName", entity.getFirstName(), getContacts).and(getContacts).addConditionIfExist("lastName", entity.getLastName(),
+                getContacts).and(getContacts).addConditionIfExist("middleName", entity.getMiddleName(), getContacts).and(getContacts).addConditionIfExist("gender", entity.getMiddleName(),
+                getContacts).and(getContacts).addConditionIfExist("maritalStatus", entity.getMiddleName(), getContacts).and(getContacts).addConditionIfExist("nationality", entity.getNationality(),
+                getContacts).addConditionIfExist("city", entity.getAddress().getCity(), getContacts).addConditionIfExist("street", entity.getAddress().getStreet(),
+                getContacts).and(getContacts).addConditionIfExist("houseNumber", entity.getAddress().getHouseNumber(), getContacts).and(getContacts).addConditionIfExist("flatNumber",
+                entity.getAddress().getFlatNumber(), getContacts).and(getContacts).addConditionIfExist("postalIndex", entity.getAddress().getPostalIndex(),
+                getContacts).and(getContacts).addBirthdayCondition(getContacts).build(getContacts);
+
+        Connection connection = Database.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getContacts.toString());
+        int counter = 0;
+        if (entity.getFirstName() != null) {
+            statement.setString(++counter, entity.getFirstName());
+        }
+        if (entity.getLastName() != null) {
+            statement.setString(++counter, entity.getLastName());
+        }
+        if (entity.getMiddleName() != null) {
+            statement.setString(++counter, entity.getMiddleName());
+        }
+        if (entity.getGender() != null) {
+            statement.setString(++counter, entity.getGender());
+        }
+        if (entity.getMaritalStatus() != null) {
+            statement.setString(++counter, entity.getMaritalStatus());
+        }
+        if (entity.getNationality() != null) {
+            statement.setString(++counter, entity.getNationality());
+        }
+        if (entity.getAddress().getCity() != null) {
+            statement.setString(++counter, entity.getAddress().getCity());
+        }
+        if (entity.getAddress().getStreet() != null) {
+            statement.setString(++counter, entity.getAddress().getStreet());
+        }
+        if (entity.getAddress().getHouseNumber() != 0) {
+            statement.setInt(++counter, entity.getAddress().getHouseNumber());
+        }
+        if (entity.getAddress().getFlatNumber() != 0) {
+            statement.setInt(++counter, entity.getAddress().getFlatNumber());
+        }
+        if (entity.getAddress().getPostalIndex() != 0) {
+            statement.setInt(++counter, entity.getAddress().getPostalIndex());
+        }
+        statement.setDate(++counter, lowerLimit);
+        statement.setDate(++counter, upperLimit);
+
+        ResultSet resultSet = statement.executeQuery();
+        Set<Contact> contacts = new HashSet<>();
+        while (resultSet.next()) {
+            Contact contact = new Contact();
+            contact.setId(resultSet.getLong("c.id"));
+            contact.setFirstName(resultSet.getString("c.firstName"));
+            contact.setLastName(resultSet.getString("c.lastName"));
+            contact.setBirthday(resultSet.getDate("c.birthday"));
+            contact.setEmploymentPlace(resultSet.getString("c.employmentPlace"));
+            contact.getAddress().setCity(resultSet.getString("a.city"));
+            contact.getAddress().setStreet(resultSet.getString("a.street"));
+            contact.getAddress().setHouseNumber(resultSet.getInt("a.houseNumber"));
+            contact.getAddress().setFlatNumber(resultSet.getInt("a.flatNumber"));
+            contacts.add(contact);
+        }
+        statement.close();
+        connection.close();
+        return contacts;
     }
 }

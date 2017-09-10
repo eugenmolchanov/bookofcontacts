@@ -1,0 +1,48 @@
+package com.itechart.javalab.firstproject.dao;
+
+import com.itechart.javalab.firstproject.dao.impl.ContactDaoImpl;
+import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
+import com.itechart.javalab.firstproject.entities.Contact;
+import com.itechart.javalab.firstproject.entities.Photo;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Created by Евгений Молчанов on 10.09.2017.
+ */
+public class PhotoDaoImplTest {
+    private GenericDao<Photo> photoDao = new PhotoDaoImpl();
+    private ContactDao<Contact> contactDao = new ContactDaoImpl();
+    private Contact contact = new Contact();
+
+    @Before
+    public void beforeTesting() throws SQLException {
+        Photo photo = new Photo(0, "path");
+        contact.setFirstName("FirstName");
+        contact.setLastName("LastName");
+        contact.setPhoto(photo);
+        contactDao.save(contact);
+    }
+
+    @After
+    public void afterTesting() throws SQLException {
+        contactDao.deleteAll();
+    }
+
+
+    @Test
+    public void shouldDeletePhone() throws SQLException {
+        Contact beforeDeleteContact = contactDao.findById(1);
+        photoDao.delete(beforeDeleteContact.getId());
+        Contact afterDeleteContact = contactDao.findById(1);
+        Assert.assertNotEquals(beforeDeleteContact.getPhoto(), afterDeleteContact.getPhoto());
+    }
+}
