@@ -402,7 +402,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit) throws SQLException {
+    public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException {
         StringBuilder getContacts = new StringBuilder("select c.id, c.firstName, c.lastName, c.middleName, c.birthday, c.gender, c.nationality, c.maritalStatus, c.webSite, c.email, " +
                 "c.employmentPlace, ad.id, ad.city, ad.street, ad.houseNumber, ad.flatNumber, ad.postalIndex, att.id, att.fileName, att.commentary, att.recordDate, " +
                 "att.path, pe.id, pe.countryCode, pe.operatorCode, pe.phoneNumber, pe.phoneType, pe.commentary, po.id, po.path from contact as c left join contact_address " +
@@ -458,9 +458,17 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         statement.setDate(++counter, upperLimit);
 
         ResultSet resultSet = statement.executeQuery();
-        Set<Contact> contacts = new HashSet<>();
+        TreeSet<Contact> contacts = new TreeSet<>((contact, nextContact) -> {
+            if (contact.getId() > nextContact.getId()) {
+                return 1;
+            } else if (contact.getId() == nextContact.getId()) {
+                return 0;
+            } else {
+                return -1;
+            }
+        });
+        Contact contact = new Contact();
         while (resultSet.next()) {
-            Contact contact = new Contact();
             contact.setId(resultSet.getLong("c.id"));
             contact.setFirstName(resultSet.getString("c.firstName"));
             contact.setLastName(resultSet.getString("c.lastName"));

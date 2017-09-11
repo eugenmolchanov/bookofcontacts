@@ -28,7 +28,12 @@ public interface ContactDao<T> extends GenericDao<Contact> {
     /**
      * Method searches necessary contacts.
      * @param entity
+     * @param lowerLimit
+     * @param upperLimit
+     * @param startContactNumber
+     * @param quantityOfContacts
      * @return Set of contacts
+     * @throws SQLException
      */
-    Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit) throws SQLException;
+    Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException;
 }
