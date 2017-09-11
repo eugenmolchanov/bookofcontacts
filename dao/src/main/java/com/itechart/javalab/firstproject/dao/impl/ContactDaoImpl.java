@@ -6,10 +6,8 @@ import com.itechart.javalab.firstproject.dao.database.Database;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.sql.Date;
+import java.util.*;
 
 /**
  * Created by Евгений Молчанов on 06.09.2017.
@@ -374,15 +372,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         statement.setLong(1, startContactNumber);
         statement.setLong(2, quantityOfContacts);
         ResultSet resultSet = statement.executeQuery();
-        TreeSet<Contact> contacts = new TreeSet<>((contact, nextContact) -> {
-            if (contact.getId() > nextContact.getId()) {
-                return 1;
-            } else if (contact.getId() == nextContact.getId()) {
-                return 0;
-            } else {
-                return -1;
-            }
-        });
+        TreeSet<Contact> contacts = new TreeSet<>(Comparator.comparing(Contact::getLastName));
         while (resultSet.next()) {
             Contact contact = new Contact();
             contact.setId(resultSet.getLong("c.id"));
@@ -403,20 +393,17 @@ public class ContactDaoImpl implements ContactDao<Contact> {
 
     @Override
     public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException {
-        StringBuilder getContacts = new StringBuilder("select c.id, c.firstName, c.lastName, c.middleName, c.birthday, c.gender, c.nationality, c.maritalStatus, c.webSite, c.email, " +
-                "c.employmentPlace, ad.id, ad.city, ad.street, ad.houseNumber, ad.flatNumber, ad.postalIndex, att.id, att.fileName, att.commentary, att.recordDate, " +
-                "att.path, pe.id, pe.countryCode, pe.operatorCode, pe.phoneNumber, pe.phoneType, pe.commentary, po.id, po.path from contact as c left join contact_address " +
-                "as ca on c.id=ca.contact_id left join address as ad on ca.address_id=ad.id left join attachment as att on c.id=att.contact_id left join phone as pe on " +
-                "c.id=pe.contact_id left join photo as po on c.id=po.contact_id ");
+        StringBuilder getContacts = new StringBuilder("select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, ad.city, ad.street, ad.houseNumber, ad.flatNumber " +
+                "from contact as c left join contact_address as ca on c.id=ca.contact_id left join address as ad on ca.address_id=ad.id ");
 
         Builder query = new Builder();
-        query.where(getContacts).addConditionIfExist("firstName", entity.getFirstName(), getContacts).and(getContacts).addConditionIfExist("lastName", entity.getLastName(),
-                getContacts).and(getContacts).addConditionIfExist("middleName", entity.getMiddleName(), getContacts).and(getContacts).addConditionIfExist("gender", entity.getMiddleName(),
-                getContacts).and(getContacts).addConditionIfExist("maritalStatus", entity.getMiddleName(), getContacts).and(getContacts).addConditionIfExist("nationality", entity.getNationality(),
+        query.where(getContacts).addConditionIfExist("firstName", entity.getFirstName(), getContacts).addConditionIfExist("lastName", entity.getLastName(),
+                getContacts).addConditionIfExist("middleName", entity.getMiddleName(), getContacts).addConditionIfExist("gender", entity.getMiddleName(),
+                getContacts).addConditionIfExist("maritalStatus", entity.getMiddleName(), getContacts).addConditionIfExist("nationality", entity.getNationality(),
                 getContacts).addConditionIfExist("city", entity.getAddress().getCity(), getContacts).addConditionIfExist("street", entity.getAddress().getStreet(),
-                getContacts).and(getContacts).addConditionIfExist("houseNumber", entity.getAddress().getHouseNumber(), getContacts).and(getContacts).addConditionIfExist("flatNumber",
-                entity.getAddress().getFlatNumber(), getContacts).and(getContacts).addConditionIfExist("postalIndex", entity.getAddress().getPostalIndex(),
-                getContacts).and(getContacts).addBirthdayCondition(getContacts).build(getContacts);
+                getContacts).addConditionIfExist("houseNumber", entity.getAddress().getHouseNumber(), getContacts).addConditionIfExist("flatNumber",
+                entity.getAddress().getFlatNumber(), getContacts).addConditionIfExist("postalIndex", entity.getAddress().getPostalIndex(),
+                getContacts).addBirthdayCondition(getContacts).limit(getContacts).build(getContacts);
 
         Connection connection = Database.getConnection();
         PreparedStatement statement = connection.prepareStatement(getContacts.toString());
@@ -456,17 +443,11 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         }
         statement.setDate(++counter, lowerLimit);
         statement.setDate(++counter, upperLimit);
+        statement.setLong(++counter, startContactNumber);
+        statement.setLong(++counter, quantityOfContacts);
 
         ResultSet resultSet = statement.executeQuery();
-        TreeSet<Contact> contacts = new TreeSet<>((contact, nextContact) -> {
-            if (contact.getId() > nextContact.getId()) {
-                return 1;
-            } else if (contact.getId() == nextContact.getId()) {
-                return 0;
-            } else {
-                return -1;
-            }
-        });
+        TreeSet<Contact> contacts = new TreeSet<>(Comparator.comparing(Contact::getLastName));
         Contact contact = new Contact();
         while (resultSet.next()) {
             contact.setId(resultSet.getLong("c.id"));
@@ -474,10 +455,10 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             contact.setLastName(resultSet.getString("c.lastName"));
             contact.setBirthday(resultSet.getDate("c.birthday"));
             contact.setEmploymentPlace(resultSet.getString("c.employmentPlace"));
-            contact.getAddress().setCity(resultSet.getString("a.city"));
-            contact.getAddress().setStreet(resultSet.getString("a.street"));
-            contact.getAddress().setHouseNumber(resultSet.getInt("a.houseNumber"));
-            contact.getAddress().setFlatNumber(resultSet.getInt("a.flatNumber"));
+            contact.getAddress().setCity(resultSet.getString("ad.city"));
+            contact.getAddress().setStreet(resultSet.getString("ad.street"));
+            contact.getAddress().setHouseNumber(resultSet.getInt("ad.houseNumber"));
+            contact.getAddress().setFlatNumber(resultSet.getInt("ad.flatNumber"));
             contacts.add(contact);
         }
         statement.close();

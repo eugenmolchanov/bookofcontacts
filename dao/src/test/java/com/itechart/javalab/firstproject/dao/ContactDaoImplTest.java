@@ -97,12 +97,14 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldGetSearchedContacts() throws SQLException {
+        long startContactNumber = 0;
+        long quantityOfContacts = 4;
         dao.save(contact);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.of(1997, 10, 10));
         Contact conditionContact = new Contact();
         conditionContact.setFirstName("FirstName");
-        Set<Contact> contacts = dao.searchContacts(conditionContact, lowerLimit, upperLimit);
+        Set<Contact> contacts = dao.searchContacts(conditionContact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts);
         Assert.assertEquals(1, contacts.size());
     }
 }

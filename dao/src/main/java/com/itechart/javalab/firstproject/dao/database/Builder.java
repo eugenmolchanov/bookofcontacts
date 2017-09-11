@@ -4,18 +4,18 @@ package com.itechart.javalab.firstproject.dao.database;
  * Created by Евгений Молчанов on 11.09.2017.
  */
 public class Builder {
-    private String firstNameCondition = "c.firstName = ? ";
-    private String lastNameCondition = "c.lastName = ? ";
-    private String middleNameCondition = "c.middleName = ? ";
-    private String genderCondition = "c.gender = ? ";
-    private String maritalCondition = "c.maritalStatus = ? ";
-    private String nationalityCondition = "c.nationality = ? ";
-    private String cityCondition = "a.city = ? ";
-    private String streetCondition = "a.street = ? ";
-    private String houseNumberCondition = "a.houseNumber = ? ";
-    private String flatNumberCondition = "a.flatNumber = ? ";
-    private String postalIndexCondition = "a.postalIndex = ? ";
-    private String birthdayCondition = "c.birthday between ? and ?";
+    private String firstNameCondition = "c.firstName = ? and ";
+    private String lastNameCondition = "c.lastName = ? and ";
+    private String middleNameCondition = "c.middleName = ? and ";
+    private String genderCondition = "c.gender = ? and ";
+    private String maritalCondition = "c.maritalStatus = ? and ";
+    private String nationalityCondition = "c.nationality = ? and ";
+    private String cityCondition = "a.city = ? and ";
+    private String streetCondition = "a.street = ? and ";
+    private String houseNumberCondition = "a.houseNumber = ? and ";
+    private String flatNumberCondition = "a.flatNumber = ? and ";
+    private String postalIndexCondition = "a.postalIndex = ? and ";
+    private String birthdayCondition = "c.birthday between ? and ? ";
 
 
     public Builder addConditionIfExist(String name, Object condition, StringBuilder builder) {
@@ -63,13 +63,13 @@ public class Builder {
         return this;
     }
 
-    public Builder and(StringBuilder builder) {
-        builder.append("and ");
+    public Builder where(StringBuilder builder) {
+        builder.append("where ");
         return this;
     }
 
-    public Builder where(StringBuilder builder) {
-        builder.append("where ");
+    public Builder limit(StringBuilder builder) {
+        builder.append("limit ?, ?");
         return this;
     }
 
