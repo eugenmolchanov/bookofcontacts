@@ -18,7 +18,7 @@ public class AttachmentServiceImpl implements AttachmentService<Attachment> {
     private AttachmentServiceImpl() {
     }
 
-    public static AttachmentService<Attachment> getInstance() {
+    public static AttachmentServiceImpl getInstance() {
         if (INSTANCE == null) {
             synchronized (AttachmentServiceImpl.class) {
                 if (INSTANCE == null) {

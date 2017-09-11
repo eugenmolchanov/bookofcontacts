@@ -18,7 +18,7 @@ public class AttachmentDaoImpl implements AttachmentDao<Attachment> {
     private AttachmentDaoImpl() {
     }
 
-    public static AttachmentDao<Attachment> getInstance() {
+    public static AttachmentDaoImpl getInstance() {
         if (INSTANCE == null) {
             synchronized (AttachmentDaoImpl.class) {
                 if (INSTANCE == null) {
