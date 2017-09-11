@@ -17,8 +17,8 @@ import java.util.Set;
  */
 public class PhoneDaoImplTest {
 
-    private GenericDao<Phone> phoneDao = new PhoneDaoImpl();
-    private ContactDao<Contact> contactDao = new ContactDaoImpl();
+    private GenericDao<Phone> phoneDao = PhoneDaoImpl.getInstance();
+    private ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
     private Contact contact = new Contact();
 
     @Before

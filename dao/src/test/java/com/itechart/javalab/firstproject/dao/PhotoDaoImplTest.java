@@ -9,18 +9,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Евгений Молчанов on 10.09.2017.
  */
 public class PhotoDaoImplTest {
-    private GenericDao<Photo> photoDao = new PhotoDaoImpl();
-    private ContactDao<Contact> contactDao = new ContactDaoImpl();
+    private GenericDao<Photo> photoDao = PhotoDaoImpl.getInstance();
+    private ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
     private Contact contact = new Contact();
 
     @Before

@@ -1,4 +1,4 @@
-package com.itechart.javalab.firstproject.dao.database;
+package com.itechart.javalab.firstproject.dao.util;
 
 import com.itechart.javalab.firstproject.entities.Attachment;
 import com.itechart.javalab.firstproject.entities.Contact;
@@ -7,8 +7,6 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 import java.sql.*;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Created by Евгений Молчанов on 06.09.2017.

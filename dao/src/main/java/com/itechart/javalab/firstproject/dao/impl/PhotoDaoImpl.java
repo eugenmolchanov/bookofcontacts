@@ -1,7 +1,8 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
+import com.itechart.javalab.firstproject.dao.ContactDao;
 import com.itechart.javalab.firstproject.dao.PhotoDao;
-import com.itechart.javalab.firstproject.dao.database.Database;
+import com.itechart.javalab.firstproject.dao.util.Database;
 import com.itechart.javalab.firstproject.entities.Photo;
 
 import java.sql.Connection;
@@ -12,19 +13,21 @@ import java.sql.SQLException;
  * Created by Евгений Молчанов on 08.09.2017.
  */
 public class PhotoDaoImpl implements PhotoDao<Photo> {
-    @Override
-    public void save(Photo entity) throws SQLException {
 
+    private static PhotoDaoImpl INSTANCE;
+
+    private PhotoDaoImpl() {
     }
 
-    @Override
-    public Photo findById(long id) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void update(Photo entity) throws SQLException {
-
+    public static PhotoDao<Photo> getInstance() {
+        if (INSTANCE == null) {
+            synchronized (PhotoDaoImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new PhotoDaoImpl();
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.itechart.javalab.firstproject.dao.database;
+package com.itechart.javalab.firstproject.dao.util;
 
 /**
  * Created by Евгений Молчанов on 11.09.2017.

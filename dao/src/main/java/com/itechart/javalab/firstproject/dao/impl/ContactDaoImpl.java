@@ -1,8 +1,8 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.ContactDao;
-import com.itechart.javalab.firstproject.dao.database.Builder;
-import com.itechart.javalab.firstproject.dao.database.Database;
+import com.itechart.javalab.firstproject.dao.util.Builder;
+import com.itechart.javalab.firstproject.dao.util.Database;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
@@ -13,6 +13,23 @@ import java.util.*;
  * Created by Евгений Молчанов on 06.09.2017.
  */
 public class ContactDaoImpl implements ContactDao<Contact> {
+
+    private static ContactDaoImpl INSTANCE;
+
+    private ContactDaoImpl() {
+    }
+
+    public static ContactDao<Contact> getInstance() {
+        if (INSTANCE == null) {
+            synchronized (ContactDaoImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new ContactDaoImpl();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
     @Override
     public void save(Contact entity) throws SQLException {
         String saveContact = "insert into contact (firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace)" +

@@ -1,7 +1,7 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.AttachmentDao;
-import com.itechart.javalab.firstproject.dao.database.Database;
+import com.itechart.javalab.firstproject.dao.util.Database;
 import com.itechart.javalab.firstproject.entities.Attachment;
 
 import java.sql.Connection;
@@ -12,19 +12,21 @@ import java.sql.SQLException;
  * Created by Евгений Молчанов on 08.09.2017.
  */
 public class AttachmentDaoImpl implements AttachmentDao<Attachment> {
-    @Override
-    public void save(Attachment entity) throws SQLException {
 
+    private static AttachmentDaoImpl INSTANCE;
+
+    private AttachmentDaoImpl() {
     }
 
-    @Override
-    public Attachment findById(long id) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void update(Attachment entity) throws SQLException {
-
+    public static AttachmentDao<Attachment> getInstance() {
+        if (INSTANCE == null) {
+            synchronized (AttachmentDaoImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new AttachmentDaoImpl();
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     @Override

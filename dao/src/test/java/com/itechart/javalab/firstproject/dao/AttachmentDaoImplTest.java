@@ -19,8 +19,8 @@ import java.util.Set;
  * Created by Евгений Молчанов on 10.09.2017.
  */
 public class AttachmentDaoImplTest {
-    private GenericDao<Attachment> attachmentDao = new AttachmentDaoImpl();
-    private ContactDao<Contact> contactDao = new ContactDaoImpl();
+    private GenericDao<Attachment> attachmentDao = AttachmentDaoImpl.getInstance();
+    private ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
     private Contact contact = new Contact();
 
     @Before

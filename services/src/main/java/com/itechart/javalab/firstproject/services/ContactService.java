@@ -1,15 +1,13 @@
-package com.itechart.javalab.firstproject.dao;
+package com.itechart.javalab.firstproject.services;
 
-import com.itechart.javalab.firstproject.entities.Contact;
-
-import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Created by Евгений Молчанов on 06.09.2017.
+ * Created by Евгений Молчанов on 11.09.2017.
  */
-public interface ContactDao<T> extends GenericDao<Contact> {
+public interface ContactService<T> extends GenericService<T> {
     /**
      * Method saves entity in util.
      * @param entity

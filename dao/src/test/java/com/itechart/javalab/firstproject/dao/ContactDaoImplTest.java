@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class ContactDaoImplTest {
 
-    private ContactDao<Contact> dao = new ContactDaoImpl();
+    private ContactDao<Contact> dao = ContactDaoImpl.getInstance();
     private Contact contact;
 
     @Before

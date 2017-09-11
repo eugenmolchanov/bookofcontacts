@@ -20,5 +20,10 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.itechart.javalab.firstproject</groupId>
+            <artifactId>dao</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

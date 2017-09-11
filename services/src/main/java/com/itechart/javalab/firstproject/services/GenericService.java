@@ -1,11 +1,11 @@
-package com.itechart.javalab.firstproject.dao;
+package com.itechart.javalab.firstproject.services;
 
 import java.sql.SQLException;
 
 /**
- * Created by Евгений Молчанов on 06.09.2017.
+ * Created by Евгений Молчанов on 11.09.2017.
  */
-public interface GenericDao<T> {
+public interface GenericService<T> {
     /**
      * Method deletes entity from util by id.
      * @param id

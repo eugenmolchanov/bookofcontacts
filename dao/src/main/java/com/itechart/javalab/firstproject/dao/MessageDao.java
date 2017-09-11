@@ -7,7 +7,7 @@ import java.util.Set;
  */
 public interface MessageDao<T> extends GenericDao<MessageDao> {
     /**
-     * Method returns all messages stored in database.
+     * Method returns all messages stored in util.
      * @return
      */
     Set<T> getAll();
