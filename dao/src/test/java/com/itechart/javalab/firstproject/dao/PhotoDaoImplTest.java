@@ -12,7 +12,7 @@ import org.junit.Test;
 import java.sql.SQLException;
 
 /**
- * Created by Евгений Молчанов on 10.09.2017.
+ * Created by Yauhen Malchanau on 10.09.2017.
  */
 public class PhotoDaoImplTest {
     private GenericDao<Photo> photoDao = PhotoDaoImpl.getInstance();

@@ -2,41 +2,21 @@ package com.itechart.javalab.firstproject.dao;
 
 import com.itechart.javalab.firstproject.entities.Contact;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.util.Set;
 
 /**
- * Created by Евгений Молчанов on 06.09.2017.
+ * Created by Yauhen Malchanau on 06.09.2017.
  */
 public interface ContactDao<T> extends GenericDao<Contact> {
-    /**
-     * Method saves entity in util.
-     * @param entity
-     * @throws SQLException
-     */
-    void save(T entity) throws SQLException;
-
-    /**
-     * Method finds entity by id.
-     * @param id
-     * @return
-     * @throws SQLException
-     */
-    T findById(long id) throws SQLException;
-
-    /**
-     * Method updates entity.
-     * @param entity
-     * @throws SQLException
-     */
-    void update(T entity) throws SQLException;
 
     /**
      * Method deletes all contacts and reset the counter.
      * @throws SQLException
      */
-    void deleteAll() throws SQLException;
+    void deleteAll(Connection connection) throws SQLException;
 
     /**
      * Method is used for pagination and returns certain set of contacts.
@@ -45,7 +25,7 @@ public interface ContactDao<T> extends GenericDao<Contact> {
      * @return Set of contacts
      * @throws SQLException
      */
-    Set<T> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
+    Set<T> getSetOfContacts(long startContactNumber, long quantityOfContacts, Connection connection) throws SQLException;
 
     /**
      * Method searches necessary contacts.
@@ -57,5 +37,9 @@ public interface ContactDao<T> extends GenericDao<Contact> {
      * @return Set of contacts
      * @throws SQLException
      */
-    Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException;
+    Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts,
+                          Connection connection) throws SQLException;
+
+    void addDependencyFromAttachment(long contactId, long attachmentId, Connection connection) throws SQLException;
+    void addDependencyFromPhone(long contactId, long phoneId, Connection connection) throws SQLException;
 }

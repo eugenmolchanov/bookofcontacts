@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 /**
- * Created by Евгений Молчанов on 11.09.2017.
+ * Created by Yauhen Malchanau on 11.09.2017.
  */
 @WebFilter(urlPatterns = "/*")
 public class EncodingFilter implements Filter {

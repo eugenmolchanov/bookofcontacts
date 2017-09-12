@@ -3,7 +3,7 @@ package resources;
 import java.util.ResourceBundle;
 
 /**
- * Created by Евгений Молчанов on 16.03.2017.
+ * Created by Yauhen Malchanau on 16.03.2017.
  */
 public class ConfigurationManager {
     private final static ResourceBundle resourceBundle = ResourceBundle.getBundle("config");

@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Евгений Молчанов on 10.09.2017.
+ * Created by Yauhen Malchanau on 10.09.2017.
  */
 public class AttachmentDaoImplTest {
     private GenericDao<Attachment> attachmentDao = AttachmentDaoImpl.getInstance();

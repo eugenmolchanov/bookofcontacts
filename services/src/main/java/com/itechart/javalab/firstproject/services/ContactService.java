@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Created by Евгений Молчанов on 11.09.2017.
+ * Created by Yauhen Malchanau on 11.09.2017.
  */
 public interface ContactService<T> extends GenericService<T> {
     /**

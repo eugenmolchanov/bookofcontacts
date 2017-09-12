@@ -2,7 +2,7 @@ package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.ContactDao;
 import com.itechart.javalab.firstproject.dao.util.Builder;
-import com.itechart.javalab.firstproject.dao.util.Database;
+import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.*;
 
 /**
- * Created by Евгений Молчанов on 06.09.2017.
+ * Created by Yauhen Malchanau on 06.09.2017.
  */
 public class ContactDaoImpl implements ContactDao<Contact> {
 
@@ -31,95 +31,50 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public void save(Contact entity) throws SQLException {
-        String saveContact = "insert into contact (firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace)" +
-                " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        String saveAddress = "insert into address (city, street, houseNumber, flatNumber, postalIndex) values (?, ?, ?, ?, ?);";
-        String savePhone = "insert into phone (countryCode, operatorCode, phoneNumber, phoneType, commentary, contact_id) values (?, ?, ?, ?, ?, ?);";
-        String saveAttachment = "insert into attachment (fileName, commentary, recordDate, path, contact_id) values (?, ?, ?, ?, ?);";
-        String savePhoto = "insert into photo (path, contact_id) values (?, ?);";
-        String saveContactAddress = "insert into contact_address values (?, ?);";
-        String checkAddress = "select id from address where city=? and street=? and houseNumber=? and flatNumber=?;";
-
-        Connection connection = Database.getConnection();
-        connection.setAutoCommit(false);
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(saveContact, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, entity.getFirstName());
-            statement.setString(2, entity.getLastName());
-            statement.setString(3, entity.getMiddleName());
-            statement.setDate(4, entity.getBirthday());
-            statement.setString(5, entity.getGender());
-            statement.setString(6, entity.getNationality());
-            statement.setString(7, entity.getMaritalStatus());
-            statement.setString(8, entity.getWebSite());
-            statement.setString(9, entity.getEmail());
-            statement.setString(10, entity.getEmploymentPlace());
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating contact failed, no rows affected.");
-            }
-            entity.setId(Database.getGeneratedIdAfterCreate(statement));
-
-            statement = connection.prepareStatement(checkAddress);
-            statement.setString(1, entity.getAddress().getCity());
-            statement.setString(2, entity.getAddress().getStreet());
-            statement.setInt(3, entity.getAddress().getHouseNumber());
-            statement.setInt(4, entity.getAddress().getFlatNumber());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                statement = connection.prepareStatement(saveContactAddress);
-                statement.setLong(1, entity.getId());
-                statement.setLong(2, resultSet.getLong("id"));
-                statement.executeUpdate();
-            } else {
-                Database.saveAddress(connection, saveAddress, saveContactAddress, entity);
-            }
-
-            Database.saveAttachment(connection, saveAttachment, entity);
-
-            Database.savePhone(connection, savePhone, entity);
-
-            statement = connection.prepareStatement(savePhoto);
-            statement.setString(1, entity.getPhoto().getPathToFile());
-            statement.setLong(2, entity.getId());
-            statement.executeUpdate();
-
-            connection.commit();
-            connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            statement.close();
-            connection.close();
-        }
+    public long save(Contact entity, Connection connection) throws SQLException {
+        final String SAVE_CONTACT = "insert into contact (firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace, " +
+                "photo_id, address_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        PreparedStatement statement = connection.prepareStatement(SAVE_CONTACT, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, entity.getFirstName());
+        statement.setString(2, entity.getLastName());
+        statement.setString(3, entity.getMiddleName());
+        statement.setDate(4, entity.getBirthday());
+        statement.setString(5, entity.getGender());
+        statement.setString(6, entity.getNationality());
+        statement.setString(7, entity.getMaritalStatus());
+        statement.setString(8, entity.getWebSite());
+        statement.setString(9, entity.getEmail());
+        statement.setString(10, entity.getEmploymentPlace());
+        statement.setLong(11, entity.getPhoto().getId());
+        statement.setLong(12, entity.getAddress().getId());
+        long id = Util.getGeneratedIdAfterCreate(statement);
+        statement.close();
+        return id;
     }
 
+
     @Override
-    public Contact findById(long id) throws SQLException {
+    public Contact findById(long id, Connection connection) throws SQLException {
         String findContactById = "select c.id, c.firstName, c.lastName, c.middleName, c.birthday, c.gender, c.nationality, c.maritalStatus, c.webSite, c.email, " +
-                "c.employmentPlace, ad.id, ad.city, ad.street, ad.houseNumber, ad.flatNumber, ad.postalIndex, att.id, att.fileName, att.commentary, att.recordDate, " +
-                "att.path, pe.id, pe.countryCode, pe.operatorCode, pe.phoneNumber, pe.phoneType, pe.commentary, po.id, po.path from contact as c left join contact_address " +
-                "as ca on c.id=ca.contact_id left join address as ad on ca.address_id=ad.id left join attachment as att on c.id=att.contact_id left join phone as pe on " +
-                "c.id=pe.contact_id left join photo as po on c.id=po.contact_id where c.id=?;";
-        Connection connection = Database.getConnection();
+                "c.employmentPlace, ad.id, ad.country, ad.city, ad.street, ad.houseNumber, ad.flatNumber, ad.postalIndex, att.id, att.fileName, att.commentary, att.recordDate, " +
+                "att.path, att.uuid, pe.id, pe.countryCode, pe.operatorCode, pe.phoneNumber, pe.phoneType, pe.commentary, po.id, po.path, po.uuid from contact as c left join " +
+                "address as ad on c.address_id=ad.id left join contact_attachment as ca on c.id=ca.contact_id left join attachment as att on ca.attachment_id=att.id left join " +
+                "contact_phone as cp on c.id=cp.contact_id left join phone as pe on cp.phone_id=pe.id left join photo as po on c.photo_id=po.id where c.id=?;";
         PreparedStatement statement = connection.prepareStatement(findContactById);
         statement.setLong(1, id);
         ResultSet resultSet = statement.executeQuery();
         Contact contact = new Contact();
         while (resultSet.next()) {
-            Address address = new Address(resultSet.getLong("ad.id"), resultSet.getString("ad.city"), resultSet.getString("ad.street"), resultSet.getInt("ad.houseNumber"),
-                    resultSet.getInt("ad.flatNumber"), resultSet.getInt("ad.postalIndex"));
+            Address address = new Address(resultSet.getLong("ad.id"), resultSet.getString("ad.country"), resultSet.getString("ad.city"), resultSet.getString("ad.street"),
+                    resultSet.getInt("ad.houseNumber"), resultSet.getInt("ad.flatNumber"), resultSet.getInt("ad.postalIndex"));
 
             Phone phone = new Phone(resultSet.getLong("pe.id"), resultSet.getInt("pe.countryCode"), resultSet.getInt("pe.operatorCode"), resultSet.getLong("pe.phoneNumber"),
                     resultSet.getString("pe.phoneType"), resultSet.getString("pe.commentary"));
 
             Attachment attachment = new Attachment(resultSet.getLong("att.id"), resultSet.getString("att.fileName"), resultSet.getString("att.commentary"),
-                    resultSet.getDate("att.recordDate"), resultSet.getString("att.path"));
+                    resultSet.getTimestamp("att.recordDate"), resultSet.getString("att.path"), resultSet.getString("att.uuid"));
 
-            Photo photo = new Photo(resultSet.getLong("po.id"), resultSet.getString("po.path"));
+            Photo photo = new Photo(resultSet.getLong("po.id"), resultSet.getString("po.path"), resultSet.getString("po.uuid"));
 
             contact.setId(resultSet.getLong("c.id"));
             contact.setFirstName(resultSet.getString("c.firstName"));
@@ -138,12 +93,11 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             contact.setPhoto(photo);
         }
         statement.close();
-        connection.close();
         return contact;
     }
 
     @Override
-    public void update(Contact entity) throws SQLException {
+    public void update(Contact entity, Connection connection) throws SQLException {
         String updateContact = "update contact set firstName = ?, lastName = ?, middleName = ?, birthday = ?, gender = ?, nationality = ?, maritalStatus = ?, webSite = ?, " +
                 "email = ?, employmentPlace = ? where id = ?;";
         String saveAddress = "insert into address (city, street, houseNumber, flatNumber, postalIndex) values (?, ?, ?, ?, ?);";
@@ -157,10 +111,8 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         String updatePhoto = "update photo set path = ? where id = ?;";
         String updateAttachment = "update attachment set fileName = ?, commentary = ?, recordDate = ?, path = ? where id = ?;";
         String updatePhone = "update phone set countryCode = ?, operatorCode = ?, phoneNumber = ?, phoneType = ?, commentary = ? where id = ?;";
-        Connection connection = Database.getConnection();
         PreparedStatement statement = null;
         try {
-            connection.setAutoCommit(false);
             statement = connection.prepareStatement(updateContact);
             statement.setString(1, entity.getFirstName());
             statement.setString(2, entity.getLastName());
@@ -175,18 +127,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             statement.setLong(11, entity.getId());
             statement.executeUpdate();
 
-            if (entity.getAddress().getId() != 0) {
-                statement = connection.prepareStatement(updateAddress);
-                statement.setString(1, entity.getAddress().getCity());
-                statement.setString(2, entity.getAddress().getStreet());
-                statement.setInt(3, entity.getAddress().getHouseNumber());
-                statement.setInt(4, entity.getAddress().getFlatNumber());
-                statement.setInt(5, entity.getAddress().getPostalIndex());
-                statement.setLong(6, entity.getAddress().getId());
-                statement.executeUpdate();
-            } else {
-                Database.saveAddress(connection, saveAddress, saveContactAddress, entity);
-            }
+
 
             statement = connection.prepareStatement(getAttachments);
             statement.setLong(1, entity.getId());
@@ -217,9 +158,9 @@ public class ContactDaoImpl implements ContactDao<Contact> {
                         }
                     }
                 }
-                Database.saveAttachment(connection, saveAttachment, entity);
+                Util.saveAttachment(connection, saveAttachment, entity);
             } else if (entity.getAttachments().size() != 0) {
-                Database.saveAttachment(connection, saveAttachment, entity);
+                Util.saveAttachment(connection, saveAttachment, entity);
             }
 
             statement = connection.prepareStatement(getPhones);
@@ -251,9 +192,9 @@ public class ContactDaoImpl implements ContactDao<Contact> {
                         }
                     }
                 }
-                Database.savePhone(connection, savePhone, entity);
+                Util.savePhone(connection, savePhone, entity);
             } else if (entity.getPhones().size() != 0) {
-                Database.savePhone(connection, savePhone, entity);
+                Util.savePhone(connection, savePhone, entity);
             }
 
             if (entity.getPhoto().getId() != 0) {
@@ -279,7 +220,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public void delete(long id) throws SQLException {
+    public void delete(long id, Connection connection) throws SQLException {
         String deleteContactAddress = "delete from contact_address where contact_id = ?;";
         String deleteAttachment = "delete from attachment where contact_id = ?;";
         String deletePhone = "delete from phone where contact_id = ?;";
@@ -287,7 +228,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         String deleteContactMessage = "delete from contact_message where contact_id = ?;";
         String deleteContact = "delete from contact where id = ?;";
 
-        Connection connection = Database.getConnection();
+        Connection connection = Util.getConnection();
         PreparedStatement statement = null;
         try {
             connection.setAutoCommit(false);
@@ -328,7 +269,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
 
 
     @Override
-    public void deleteAll() throws SQLException {
+    public void deleteAll(Connection connection) throws SQLException {
         String deleteAllContacts = "delete from contact;";
         String deleteAllAddresses = "delete from address;";
         String deleteAllAttachments = "delete from attachment;";
@@ -346,7 +287,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         String resetContactCounter = "alter table contact auto_increment=1;";
         String resetAddressCounter = "alter table address auto_increment=1;";
         String resetMessageCounter = "alter table message auto_increment=1;";
-        Connection connection = Database.getConnection();
+        Connection connection = Util.getConnection();
         connection.setAutoCommit(false);
         Statement statement = null;
         try {
@@ -381,10 +322,10 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException {
+    public Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts, Connection connection) throws SQLException {
         String getContacts = "select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, a.city, a.street, a.houseNumber, a.flatNumber from contact as c left join " +
                 "contact_address as ca on c.id = ca.contact_id left join address as a on ca.address_id = a.id limit ?, ?;";
-        Connection connection = Database.getConnection();
+        Connection connection = Util.getConnection();
         PreparedStatement statement = connection.prepareStatement(getContacts);
         statement.setLong(1, startContactNumber);
         statement.setLong(2, quantityOfContacts);
@@ -409,7 +350,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
     }
 
     @Override
-    public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException {
+    public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts, Connection connection) throws SQLException {
         StringBuilder getContacts = new StringBuilder("select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, ad.city, ad.street, ad.houseNumber, ad.flatNumber " +
                 "from contact as c left join contact_address as ca on c.id=ca.contact_id left join address as ad on ca.address_id=ad.id ");
 
@@ -422,7 +363,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
                 entity.getAddress().getFlatNumber(), getContacts).addConditionIfExist("postalIndex", entity.getAddress().getPostalIndex(),
                 getContacts).addBirthdayCondition(getContacts).limit(getContacts).build(getContacts);
 
-        Connection connection = Database.getConnection();
+        Connection connection = Util.getConnection();
         PreparedStatement statement = connection.prepareStatement(getContacts.toString());
         int counter = 0;
         if (entity.getFirstName() != null) {
@@ -481,5 +422,25 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         statement.close();
         connection.close();
         return contacts;
+    }
+
+    @Override
+    public void addDependencyFromAttachment(long contactId, long attachmentId, Connection connection) throws SQLException {
+        final String SAVE_CONTACT_ATTACHMENT = "insert into contact_attachment values (?, ?);";
+        PreparedStatement statement = connection.prepareStatement(SAVE_CONTACT_ATTACHMENT);
+        statement.setLong(1, contactId);
+        statement.setLong(2, attachmentId);
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    @Override
+    public void addDependencyFromPhone(long contactId, long phoneId, Connection connection) throws SQLException {
+        final String SAVE_CONTACT_PHONE = "insert into contact_phone values (?, ?);";
+        PreparedStatement statement = connection.prepareStatement(SAVE_CONTACT_PHONE);
+        statement.setLong(1, contactId);
+        statement.setLong(2, phoneId);
+        statement.executeUpdate();
+        statement.close();
     }
 }

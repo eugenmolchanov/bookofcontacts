@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Евгений Молчанов on 08.09.2017.
+ * Created by Yauhen Malchanau on 08.09.2017.
  */
 public class PhoneDaoImplTest {
 
