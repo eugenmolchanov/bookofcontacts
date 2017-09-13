@@ -79,11 +79,11 @@ public class AttachmentDaoImpl implements AttachmentDao<Attachment> {
     }
 
     @Override
-    public Set<Attachment> getAllAttachmentsOfContact(Contact entity, Connection connection) throws SQLException {
+    public Set<Attachment> getAllAttachmentsOfContact(long contactId, Connection connection) throws SQLException {
         final String GET_ATTACHMENTS = "select att.id, att.fileName, att.commentary, att.recordDate, att.path, att.uuid from attachment as att left join contact_attachment " +
                 "as ca on att.id=ca.attachment_id where ca.contact_id = ?";
         PreparedStatement statement = connection.prepareStatement(GET_ATTACHMENTS);
-        statement.setLong(1, entity.getId());
+        statement.setLong(1, contactId);
         ResultSet resultSet = statement.executeQuery();
         Attachment attachment;
         Set<Attachment> attachments = new HashSet<>();

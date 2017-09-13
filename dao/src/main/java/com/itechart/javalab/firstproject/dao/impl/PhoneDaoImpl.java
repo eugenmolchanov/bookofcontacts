@@ -79,11 +79,11 @@ public class PhoneDaoImpl implements PhoneDao<Phone> {
     }
 
     @Override
-    public Set<Phone> getAllPhonesOfContact(Contact entity, Connection connection) throws SQLException {
+    public Set<Phone> getAllPhonesOfContact(long contactId, Connection connection) throws SQLException {
         final String GET_PHONES = "select p.id, p.countryCode, p.operatorCode, p.phoneNumber, p.phoneType, p.commentary from phone as p left join contact_phone as cp " +
                 "on p.id=cp.phone_id where cp.contact_id = ?;";
         PreparedStatement statement = connection.prepareStatement(GET_PHONES);
-        statement.setLong(1, entity.getId());
+        statement.setLong(1, contactId);
         ResultSet resultSet = statement.executeQuery();
         Phone phone;
         Set<Phone> phones = new HashSet<>();

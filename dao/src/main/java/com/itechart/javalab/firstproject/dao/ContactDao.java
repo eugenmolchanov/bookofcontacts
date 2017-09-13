@@ -40,6 +40,8 @@ public interface ContactDao<T> extends GenericDao<Contact> {
     Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts,
                           Connection connection) throws SQLException;
 
-    void addDependencyFromAttachment(long contactId, long attachmentId, Connection connection) throws SQLException;
-    void addDependencyFromPhone(long contactId, long phoneId, Connection connection) throws SQLException;
+    void addDependenceFromAttachment(long contactId, long attachmentId, Connection connection) throws SQLException;
+    void addDependenceFromPhone(long contactId, long phoneId, Connection connection) throws SQLException;
+    void deleteDependenceFromAttachment(long contactId, Connection connection) throws SQLException;
+    void deleteDependenceFromPhone(long contactId, Connection connection) throws SQLException;
 }

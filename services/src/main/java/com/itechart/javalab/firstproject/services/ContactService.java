@@ -13,7 +13,7 @@ public interface ContactService<T> extends GenericService<T> {
      * @param entity
      * @throws SQLException
      */
-    void save(T entity) throws SQLException;
+    void create(T entity) throws SQLException;
 
     /**
      * Method finds entity by id.
@@ -29,12 +29,6 @@ public interface ContactService<T> extends GenericService<T> {
      * @throws SQLException
      */
     void update(T entity) throws SQLException;
-
-    /**
-     * Method deletes all contacts and reset the counter.
-     * @throws SQLException
-     */
-    void deleteAll() throws SQLException;
 
     /**
      * Method is used for pagination and returns certain set of contacts.
