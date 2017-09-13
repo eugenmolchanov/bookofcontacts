@@ -1,4 +1,4 @@
-package servlets;
+package commands;
 
 import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.services.ContactService;

@@ -62,7 +62,17 @@ public class AddressDaoImpl implements AddressDao<Address> {
 
     @Override
     public Address findById(long id, Connection connection) throws SQLException {
-        return null;
+        final String GET_ADDRESS_BY_ID = "select * from address where id = ?;";
+        PreparedStatement statement = connection.prepareStatement(GET_ADDRESS_BY_ID);
+        statement.setLong(1, id);
+        Address address = null;
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            address = new Address(resultSet.getLong("id"), resultSet.getString("country"), resultSet.getString("city"), resultSet.getString("street"),
+                    resultSet.getInt("houseNumber"), resultSet.getInt("flatNumber"), resultSet.getInt("postalIndex"));
+        }
+        statement.close();
+        return address;
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  * Created by Yauhen Malchanau on 06.09.2017.
  */
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"id", "date"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Attachment {

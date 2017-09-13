@@ -2,7 +2,6 @@ package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.PhoneDao;
 import com.itechart.javalab.firstproject.dao.util.Util;
-import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Phone;
 
 import java.sql.*;
@@ -14,20 +13,20 @@ import java.util.Set;
  */
 public class PhoneDaoImpl implements PhoneDao<Phone> {
 
-    private static PhoneDaoImpl INSTANCE;
+    private static volatile PhoneDaoImpl instance;
 
     private PhoneDaoImpl() {
     }
 
     public static PhoneDao<Phone> getInstance() {
-        if (INSTANCE == null) {
+        if (instance == null) {
             synchronized (PhoneDaoImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new PhoneDaoImpl();
+                if (instance == null) {
+                    instance = new PhoneDaoImpl();
                 }
             }
         }
-        return INSTANCE;
+        return instance;
     }
 
     @Override
@@ -47,7 +46,17 @@ public class PhoneDaoImpl implements PhoneDao<Phone> {
 
     @Override
     public Phone findById(long id, Connection connection) throws SQLException {
-        return null;
+        final String GET_PHONE_BY_ID = "select * from phone where id = ?;";
+        PreparedStatement statement = connection.prepareStatement(GET_PHONE_BY_ID);
+        statement.setLong(1, id);
+        Phone phone = null;
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            phone = new Phone(resultSet.getLong("id"), resultSet.getInt("countryCode"), resultSet.getInt("operatorCode"), resultSet.getLong("phoneNumber"),
+                    resultSet.getString("phoneType"), resultSet.getString("commentary"));
+        }
+        statement.close();
+        return phone;
     }
 
     @Override

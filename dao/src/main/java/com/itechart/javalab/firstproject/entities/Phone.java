@@ -11,7 +11,7 @@ import java.util.Objects;
  * Created by Yauhen Malchanau on 06.09.2017.
  */
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Phone {

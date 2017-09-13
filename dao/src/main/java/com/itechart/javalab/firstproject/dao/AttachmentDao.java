@@ -1,7 +1,6 @@
 package com.itechart.javalab.firstproject.dao;
 
 import com.itechart.javalab.firstproject.entities.Attachment;
-import com.itechart.javalab.firstproject.entities.Contact;
 
 import java.sql.Connection;
 import java.sql.SQLException;

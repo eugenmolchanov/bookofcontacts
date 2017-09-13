@@ -181,4 +181,16 @@ public class ContactServiceImpl implements ContactService<Contact> {
         connection.close();
         return contacts;
     }
+
+    protected void deleteAll() throws SQLException {
+        Connection connection = Database.getConnection();
+        connection.setAutoCommit(false);
+        try {
+            contactDao.deleteAll(connection);
+        } catch (SQLException e) {
+            connection.rollback();
+        } finally {
+            connection.close();
+        }
+    }
 }

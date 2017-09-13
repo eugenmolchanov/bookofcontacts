@@ -3,7 +3,6 @@ package com.itechart.javalab.firstproject.dao.impl;
 import com.itechart.javalab.firstproject.dao.AttachmentDao;
 import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.Attachment;
-import com.itechart.javalab.firstproject.entities.Contact;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -14,20 +13,20 @@ import java.util.Set;
  */
 public class AttachmentDaoImpl implements AttachmentDao<Attachment> {
 
-    private static AttachmentDaoImpl INSTANCE;
+    private static volatile AttachmentDaoImpl instance;
 
     private AttachmentDaoImpl() {
     }
 
     public static AttachmentDaoImpl getInstance() {
-        if (INSTANCE == null) {
+        if (instance == null) {
             synchronized (AttachmentDaoImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AttachmentDaoImpl();
+                if (instance == null) {
+                    instance = new AttachmentDaoImpl();
                 }
             }
         }
-        return INSTANCE;
+        return instance;
     }
 
     @Override
@@ -47,7 +46,17 @@ public class AttachmentDaoImpl implements AttachmentDao<Attachment> {
 
     @Override
     public Attachment findById(long id, Connection connection) throws SQLException {
-        return null;
+        final String GET_ATTACHMENT_BY_ID = "select * from attachment where id = ?;";
+        PreparedStatement statement = connection.prepareStatement(GET_ATTACHMENT_BY_ID);
+        statement.setLong(1, id);
+        Attachment attachment = null;
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            attachment = new Attachment(resultSet.getLong("id"), resultSet.getString("fileName"), resultSet.getString("commentary"), resultSet.getTimestamp("recordDate"),
+                    resultSet.getString("path"), resultSet.getString("uuid"));
+        }
+        statement.close();
+        return attachment;
     }
 
     @Override
