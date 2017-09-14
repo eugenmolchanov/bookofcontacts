@@ -79,7 +79,7 @@ public class AttachmentDaoImplTest {
         Set<Attachment> attachments = new HashSet<>();
         attachments.add(firstAttachment);
         attachments.add(secondAttachment);
-        Address address = new Address(0, "Belarus", "City", "Street", 10, 10, 10);
+        Address address = new Address(0, "Belarus", "city", "street", 10, 10, 10);
         AddressDao<Address> addressDao = AddressDaoImpl.getInstance();
         PhotoDao<Photo> photoDao = PhotoDaoImpl.getInstance();
         photo.setId(photoDao.save(photo, connection));

@@ -25,7 +25,7 @@ public class AddressDaoImplTest {
     @Before
     public void beforeTesting() throws SQLException {
         connection = Database.getConnection();
-        address = new Address(0, "Belarus", "City", "Street", 10, 10, 10);
+        address = new Address(0, "Belarus", "city", "street", 10, 10, 10);
     }
 
     @After

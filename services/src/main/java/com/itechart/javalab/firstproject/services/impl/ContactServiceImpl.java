@@ -182,6 +182,25 @@ public class ContactServiceImpl implements ContactService<Contact> {
         return contacts;
     }
 
+    @Override
+    public void deleteContacts(Set<Long> contactIds) throws SQLException {
+        Connection connection = Database.getConnection();
+        connection.setAutoCommit(false);
+        try {
+            for (Long id : contactIds) {
+                contactDao.deleteDependenceFromAttachment(id, connection);
+                contactDao.deleteDependenceFromPhone(id, connection);
+                contactDao.delete(id, connection);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.close();
+        }
+    }
+
     protected void deleteAll() throws SQLException {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);

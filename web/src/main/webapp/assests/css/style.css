@@ -1,0 +1,10 @@
+table, th, td {
+    border: solid 1px;
+    padding: 5px;
+}
+table {
+    margin-top: 10px;
+}
+.delete_form {
+    border: none;
+}
