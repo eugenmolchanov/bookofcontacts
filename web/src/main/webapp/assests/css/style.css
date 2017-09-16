@@ -8,3 +8,9 @@ table {
 .delete_form {
     border: none;
 }
+input {
+    margin-bottom: 5px;
+}
+#previous, #pageNumbers, #next, #pageInfo {
+    display: inline;
+}

@@ -15,8 +15,17 @@ public enum CommandEnum {
         {
             this.command = new DeleteContacts();
         }
+    },
+    REDIRECT {
+        {
+            this.command = new RedirectCommand();
+        }
+    },
+    CREATENEWCONTACT {
+        {
+            this.command = new CreateNewContactCommand();
+        }
     }
-
     ;
     ActionCommand command;
     public ActionCommand getCurrentCommand() {

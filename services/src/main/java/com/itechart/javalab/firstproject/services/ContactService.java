@@ -51,4 +51,5 @@ public interface ContactService<T> extends GenericService<T> {
      */
     Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException;
     void deleteContacts(Set<Long> contactIds) throws SQLException;
+    long countContacts() throws SQLException;
 }

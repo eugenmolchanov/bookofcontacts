@@ -6,7 +6,7 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
-import validation.Validation;
+import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -24,7 +24,7 @@ public class DeleteContacts implements ActionCommand {
 
     @Override
     public String execute(HttpServletRequest req) {
-        if (Validation.deleteContactsisValid(req, logger)) {
+        if (Validation.deleteContactsDataIsValid(req, logger)) {
             String[] parameters = req.getParameterMap().get("id");
             Set<Long> ids = new HashSet<>();
             for (String parameter : parameters) {
@@ -38,9 +38,10 @@ public class DeleteContacts implements ActionCommand {
                 return page = ConfigurationManager.getProperty("error");
             }
             req.setAttribute("deleteMessage", MessageManager.getProperty("successful_delete"));
-            return page = ConfigurationManager.getProperty("main");
+            return new ListOfContactsCommand().execute(req);
         } else {
-            return page = ConfigurationManager.getProperty("main");
+
+            return new ListOfContactsCommand().execute(req);
         }
     }
 }

@@ -6,9 +6,10 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
-import validation.Validation;
+import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Set;
 
@@ -23,19 +24,35 @@ public class ListOfContactsCommand implements ActionCommand {
     private long quantityOfContacts;
     private Set<Contact> contacts;
     private String page;
+    private long numberOfContacts;
 
     @Override
     public String execute(HttpServletRequest req) {
-        if (Validation.paginationIsValid(req, logger)) {
-            startContactNumber = Long.parseLong(req.getParameter("startContactNumber"));
-            quantityOfContacts = Long.parseLong(req.getParameter("quantityOfContacts"));
+        if (Validation.paginationDataIsValid(req, logger)) {
+            try {
+                startContactNumber = Long.parseLong(req.getParameter("startContactNumber"));
+            } catch (Exception e) {
+                logger.debug("Getting attribute for variable from the server.");
+                startContactNumber = (long) req.getSession().getAttribute("startContactNumber");
+            }
+            try {
+                quantityOfContacts = Long.parseLong(req.getParameter("quantityOfContacts"));
+            } catch (Exception e) {
+                logger.debug("");
+                quantityOfContacts = (long) req.getSession().getAttribute("quantityOfContacts");
+            }
+            HttpSession session = req.getSession(true);
+            session.setAttribute("startContactNumber", startContactNumber);
+            session.setAttribute("quantityOfContacts", quantityOfContacts);
             try {
                 contacts = service.getSetOfContacts(startContactNumber, quantityOfContacts);
+                numberOfContacts = service.countContacts();
             } catch (SQLException e) {
                 logger.error(e);
                 req.setAttribute("message", MessageManager.getProperty(""));
                 return page = ConfigurationManager.getProperty("error");
             }
+            req.setAttribute("numberOfContacts", numberOfContacts);
             req.setAttribute("contacts", contacts);
             return page = ConfigurationManager.getProperty("main");
         } else {

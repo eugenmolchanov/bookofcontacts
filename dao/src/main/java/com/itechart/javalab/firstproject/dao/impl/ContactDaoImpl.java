@@ -287,4 +287,17 @@ public class ContactDaoImpl implements ContactDao<Contact> {
         statement.executeUpdate();
         statement.close();
     }
+
+    @Override
+    public long getNumberOfContacts(Connection connection) throws SQLException {
+        final String countContacts = "select count(id) from contact;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(countContacts);
+        long number = 0;
+        while (resultSet.next()) {
+            number = resultSet.getLong("count(id)");
+        }
+        statement.close();
+        return number;
+    }
 }

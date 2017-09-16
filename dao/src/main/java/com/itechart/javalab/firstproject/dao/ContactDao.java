@@ -44,4 +44,6 @@ public interface ContactDao<T> extends GenericDao<Contact> {
     void addDependenceFromPhone(long contactId, long phoneId, Connection connection) throws SQLException;
     void deleteDependenceFromAttachment(long contactId, Connection connection) throws SQLException;
     void deleteDependenceFromPhone(long contactId, Connection connection) throws SQLException;
+
+    long getNumberOfContacts(Connection connection) throws SQLException;
 }

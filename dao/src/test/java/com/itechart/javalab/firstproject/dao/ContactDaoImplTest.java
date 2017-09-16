@@ -48,7 +48,7 @@ public class ContactDaoImplTest {
         AddressDao<Address> addressDao = AddressDaoImpl.getInstance();
         address.setId(addressDao.save(address, connection));
         photo.setId(photoDao.save(photo, connection));
-        contact = new Contact(0, "FirstName", "LastName", "MiddleName", Date.valueOf(LocalDate.of(1980, 10, 10)), "gender", "nationality", "maritalStatus", "webSite", "email",
+        contact = new Contact(0, "FirstName", "LastName14", "MiddleName", Date.valueOf(LocalDate.of(1980, 10, 10)), "gender", "nationality", "maritalStatus", "webSite", "emal10",
                 "employmentPlace", address, phones, attachments, photo);
     }
 
@@ -62,6 +62,11 @@ public class ContactDaoImplTest {
         dao.save(contact, connection);
         Contact actualContact = dao.findById(1, connection);
         Assert.assertEquals(contact.getFirstName(), actualContact.getFirstName());
+    }
+
+    @Test
+    public void shouldCountContacts() throws SQLException {
+        System.out.println(dao.getNumberOfContacts(connection));
     }
 
     @Test

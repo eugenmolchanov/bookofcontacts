@@ -201,6 +201,14 @@ public class ContactServiceImpl implements ContactService<Contact> {
         }
     }
 
+    @Override
+    public long countContacts() throws SQLException {
+        Connection connection = Database.getConnection();
+        long number = contactDao.getNumberOfContacts(connection);
+        connection.close();
+        return number;
+    }
+
     protected void deleteAll() throws SQLException {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);
