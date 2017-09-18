@@ -15,7 +15,7 @@
 <head>
     <title><fmt:message key="send_email"/></title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assests/css/style.css?v=1">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=1"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=1" ></script>
 </head>
 <body>
 <jsp:include page="language.jsp"/>
