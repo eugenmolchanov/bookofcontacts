@@ -58,3 +58,24 @@ function createContact() {
 
     return dataIsValid;
 }
+
+function search() {
+    var dataIsValid = true;
+    var firstName = document.forms["searchForm"]["firstName"].value;
+    var lastName = document.forms["searchForm"]["lastName"].value;
+    var middleName = document.forms["searchForm"]["middleName"].value;
+    var birthdayFrom = document.forms["searchForm"]["birthdayFrom"].value;
+    var birthdayTo = document.forms["searchForm"]["birthdayTo"].value;
+    var gender = document.forms["searchForm"]["gender"].value;
+    var maritalStatus = document.forms["searchForm"]["maritalStatus"].value;
+    var country = document.forms["searchForm"]["country"].value;
+    var city = document.forms["searchForm"]["city"].value;
+    var street = document.forms["searchForm"]["street"].value;
+    var houseNumber = document.forms["searchForm"]["houseNumber"].value;
+    var flatNumber = document.forms["searchForm"]["flatNumber"].value;
+    var postalIndex = document.forms["searchForm"]["postalIndex"].value;
+}
+
+function chooseEmail() {
+    
+}

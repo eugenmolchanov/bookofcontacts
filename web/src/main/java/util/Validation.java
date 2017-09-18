@@ -141,9 +141,28 @@ public class Validation {
         boolean result = false;
         String param = req.getParameter("form");
         if (param != null) {
-            if (param.equals("createContact") || param.equals("contact")) {
+            if (param.equals("createContact") || param.equals("contact") || param.equals("search") || param.equals("sendEmail")) {
                 result = true;
             }
+        }
+        return result;
+    }
+
+    public static boolean searchDataIsValid(HttpServletRequest request, Logger logger) {
+        boolean result = true;
+        return true;
+    }
+
+    public static boolean sendEmailDataIsValid(HttpServletRequest request, Logger logger) {
+        boolean result = true;
+        return result;
+    }
+
+    public static boolean languageDataIsValid(HttpServletRequest request, Logger logger) {
+        boolean result = false;
+        String language = request.getParameter("language");
+        if (language.equals("en_US") || language.equals("ru_RU") || language.equals("be_BY")) {
+            result = true;
         }
         return result;
     }

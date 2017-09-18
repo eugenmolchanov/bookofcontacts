@@ -18,6 +18,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=15"></script>
 </head>
 <body>
+<jsp:include page="language.jsp"/>
 <div><p>${requestScope.message}</p></div>
 <div class="contact_form">
     <form action="/controller?command=createNewContact" method="post" name="createForm" onsubmit="createContact()"

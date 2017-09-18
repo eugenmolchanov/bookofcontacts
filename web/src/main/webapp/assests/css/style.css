@@ -11,6 +11,13 @@ table {
 input {
     margin-bottom: 5px;
 }
-#previous, #pageNumbers, #next, #pageInfo {
+#previous, #pageNumbers, #next, #pageInfo, #ru, #by, #en, .main{
     display: inline;
+}
+#en, #ru, #by {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.language {
+    text-align: right;
 }

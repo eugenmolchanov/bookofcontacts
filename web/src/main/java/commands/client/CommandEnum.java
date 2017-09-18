@@ -25,6 +25,21 @@ public enum CommandEnum {
         {
             this.command = new CreateNewContactCommand();
         }
+    },
+    SEARCH {
+        {
+            this.command = new SearchCommand();
+        }
+    },
+    SENDEMAIL {
+        {
+            this.command = new SendEmailCommand();
+        }
+    },
+    LANGUAGE {
+        {
+            this.command = new LanguageCommand();
+        }
     }
     ;
     ActionCommand command;

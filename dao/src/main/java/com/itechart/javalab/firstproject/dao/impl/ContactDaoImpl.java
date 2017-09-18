@@ -167,7 +167,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
 
     @Override
     public Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts, Connection connection) throws SQLException {
-        final String GET_CONTACTS = "select c.id, c.firstName, c.lastName, c.birthday, c.employmentPlace, a.city, a.street, a.houseNumber, a.flatNumber, a.country from contact " +
+        final String GET_CONTACTS = "select c.id, c.email, c.firstName, c.lastName, c.birthday, c.employmentPlace, a.city, a.street, a.houseNumber, a.flatNumber, a.country from contact " +
                 "as c left join address as a on c.address_id = a.id order by c.firstName limit ?, ?;";
         PreparedStatement statement = connection.prepareStatement(GET_CONTACTS);
         statement.setLong(1, startContactNumber);
@@ -181,6 +181,7 @@ public class ContactDaoImpl implements ContactDao<Contact> {
             contact.setLastName(resultSet.getString("c.lastName"));
             contact.setBirthday(resultSet.getDate("c.birthday"));
             contact.setEmploymentPlace(resultSet.getString("c.employmentPlace"));
+            contact.setEmail(resultSet.getString("c.email"));
             contact.getAddress().setCity(resultSet.getString("a.city"));
             contact.getAddress().setStreet(resultSet.getString("a.street"));
             contact.getAddress().setHouseNumber(resultSet.getInt("a.houseNumber"));
@@ -232,8 +233,8 @@ public class ContactDaoImpl implements ContactDao<Contact> {
 
         ResultSet resultSet = statement.executeQuery();
         TreeSet<Contact> contacts = new TreeSet<>(Comparator.comparing(Contact::getLastName));
-        Contact contact = new Contact();
         while (resultSet.next()) {
+            Contact contact = new Contact();
             contact.setId(resultSet.getLong("c.id"));
             contact.setFirstName(resultSet.getString("c.firstName"));
             contact.setLastName(resultSet.getString("c.lastName"));

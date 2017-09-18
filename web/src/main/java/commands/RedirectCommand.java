@@ -15,6 +15,8 @@ public class RedirectCommand implements ActionCommand {
     private String page;
     private final String createContact = "createContact";
     private final String contact = "contact";
+    private final String search = "search";
+    private final String sendEmail = "sendEmail";
 
     @Override
     public String execute(HttpServletRequest req) {
@@ -25,6 +27,12 @@ public class RedirectCommand implements ActionCommand {
                     return page = ConfigurationManager.getProperty("create_contact");
                 case contact :
                     return page = ConfigurationManager.getProperty("contact");
+                case search :
+                    return page = ConfigurationManager.getProperty("search");
+                case sendEmail :
+                    String[] emails = req.getParameterMap().get("id");
+                    req.setAttribute("emails", emails);
+                    return page = ConfigurationManager.getProperty("send_email");
                 default:
                     return new ListOfContactsCommand().execute(req);
 

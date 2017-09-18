@@ -14,17 +14,20 @@
 <html>
 <head>
     <title><fmt:message key="contacts"/></title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assests/css/style.css?v=1">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assests/css/style.css?v=2">
     <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=7"></script>
 </head>
 <body>
-<div>
-    <form action="/controller" method="post" name="deleteForm" onsubmit="return deleteContacts()">
-        <input type="hidden" name="command" value="deleteContacts">
+<jsp:include page="language.jsp"/>
+<div class="main">
+    <form action="/controller?command=deleteContacts" method="post" name="deleteForm" onsubmit="return deleteContacts()">
         <input type="checkbox" onclick="toggle(this)" id="chooseAll"/>
         <input type="submit" value="<fmt:message key="delete"/>" class="button" onclick="deleteContacts()"/>
         <a href="/controller?command=redirect&form=createContact"><fmt:message key="create_contact"/></a>
-        <input type="button" value="<fmt:message key="create_contact"/>" class="button" onclick="goToCreateForm()"/>
+        <a href="/controller?command=redirect&form=search"><fmt:message key="search"/></a>
+        <input type="submit" value="<fmt:message key="send_email"/> " formaction="/controller?command=redirect&form=sendEmail" onsubmit="return chooseEmail()">
+        <a href="/controller?command=redirect&form=sendEmail"><fmt:message key="send_email"/></a>
+        <%--<input type="button" value="<fmt:message key="create_contact"/>" class="button" onclick="goToCreateForm()"/>--%>
         <table>
             <thead>
             <tr>
@@ -42,7 +45,8 @@
             <tbody>
             <c:forEach var="contact" items="${requestScope.contacts}">
                 <tr>
-                    <td><input type="checkbox" name="id" value="${contact.id}"/></td>
+                    <td><input type="checkbox" name="id" value="${contact.email}"/>
+                    </td>
                     <td>
                         <a href="controller?command=redirect&form=contact">${contact.lastName} ${" "} ${contact.firstName}</a>
                     </td>
