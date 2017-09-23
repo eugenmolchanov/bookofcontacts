@@ -12,14 +12,15 @@ import java.util.Set;
  * Created by Yauhen Malchanau on 06.09.2017.
  */
 @Data
-@EqualsAndHashCode(exclude = {"id", "sendingDate"})
+@EqualsAndHashCode(exclude = {"id"})
 @AllArgsConstructor
 public class Message {
     private long id;
-    private Set<Contact> addressees;
     private String topic;
+    private Set<Contact> addressees;
     private String text;
     private Timestamp sendingDate;
+    private int isDeleted;
 
     public Message() {
         this.addressees = new HashSet<>();

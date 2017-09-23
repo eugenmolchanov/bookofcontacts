@@ -1,17 +1,12 @@
 package com.itechart.javalab.firstproject.services.impl;
 
-import com.itechart.javalab.firstproject.dao.AddressDao;
-import com.itechart.javalab.firstproject.dao.impl.AddressDaoImpl;
-import com.itechart.javalab.firstproject.entities.Address;
-import com.itechart.javalab.firstproject.services.AddressService;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
  * Created by Yauhen Malchanau on 13.09.2017.
  */
-public class AddressServiceImpl implements AddressService<Address> {
+public class AddressServiceImpl {
 
     private static volatile AddressServiceImpl instance;
     private AddressDao<Address> addressDao = AddressDaoImpl.getInstance();

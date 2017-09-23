@@ -11,33 +11,30 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 08.09.2017.
  */
-public class PhoneDaoImpl implements PhoneDao<Phone> {
+public class PhoneDaoImpl implements PhoneDao {
 
     private static volatile PhoneDaoImpl instance;
 
     private PhoneDaoImpl() {
     }
 
-    public static PhoneDao<Phone> getInstance() {
+    public static PhoneDao getInstance() {
         if (instance == null) {
-            synchronized (PhoneDaoImpl.class) {
-                if (instance == null) {
-                    instance = new PhoneDaoImpl();
-                }
-            }
+            instance = new PhoneDaoImpl();
         }
         return instance;
     }
 
     @Override
     public long save(Phone entity, Connection connection) throws SQLException {
-        final String SAVE_PHONE = "insert into phone (countryCode, operatorCode, phoneNumber, phoneType, commentary) values (?, ?, ?, ?, ?);";
+        final String SAVE_PHONE = "insert into phone (country_code, operator_code, phone_number, phone_type, commentary, contact_id) values (?, ?, ?, ?, ?, ?);";
         PreparedStatement statement = connection.prepareStatement(SAVE_PHONE, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, entity.getCountryCode());
         statement.setInt(2, entity.getOperatorCode());
         statement.setLong(3, entity.getNumber());
         statement.setString(4, entity.getType());
         statement.setString(5, entity.getComment());
+        statement.setLong(6, entity.getContactId());
         statement.executeUpdate();
         long id = Util.getGeneratedIdAfterCreate(statement);
         statement.close();
@@ -52,8 +49,8 @@ public class PhoneDaoImpl implements PhoneDao<Phone> {
         Phone phone = null;
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-            phone = new Phone(resultSet.getLong("id"), resultSet.getInt("countryCode"), resultSet.getInt("operatorCode"), resultSet.getLong("phoneNumber"),
-                    resultSet.getString("phoneType"), resultSet.getString("commentary"));
+            phone = new Phone(resultSet.getLong("id"), resultSet.getInt("country_code"), resultSet.getInt("operator_code"), resultSet.getLong("phone_number"),
+                    resultSet.getString("phone_type"), resultSet.getString("commentary"), resultSet.getLong("contact_id"));
         }
         statement.close();
         return phone;
@@ -61,7 +58,7 @@ public class PhoneDaoImpl implements PhoneDao<Phone> {
 
     @Override
     public void update(Phone entity, Connection connection) throws SQLException {
-        final String UPDATE_PHONE = "update phone set countryCode = ?, operatorCode = ?, phoneNumber = ?, phoneType = ?, commentary = ? where id = ?;";
+        final String UPDATE_PHONE = "update phone set country_code = ?, operator_code = ?, phone_number = ?, phone_type = ?, commentary = ? where id = ?;";
         PreparedStatement statement = connection.prepareStatement(UPDATE_PHONE);
         statement.setInt(1, entity.getCountryCode());
         statement.setInt(2, entity.getOperatorCode());
@@ -75,13 +72,8 @@ public class PhoneDaoImpl implements PhoneDao<Phone> {
 
     @Override
     public void delete(long id, Connection connection) throws SQLException {
-        final String DELETE_CONTACT_PHONE = "delete from contact_phone where phone_id = ?;";
         final String DELETE_PHONE = "delete from phone where id = ?;";
-        PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT_PHONE);
-        statement.setLong(1, id);
-        statement.executeUpdate();
-
-        statement = connection.prepareStatement(DELETE_PHONE);
+        PreparedStatement statement = connection.prepareStatement(DELETE_PHONE);
         statement.setLong(1, id);
         statement.executeUpdate();
         statement.close();
@@ -89,16 +81,15 @@ public class PhoneDaoImpl implements PhoneDao<Phone> {
 
     @Override
     public Set<Phone> getAllPhonesOfContact(long contactId, Connection connection) throws SQLException {
-        final String GET_PHONES = "select p.id, p.countryCode, p.operatorCode, p.phoneNumber, p.phoneType, p.commentary from phone as p left join contact_phone as cp " +
-                "on p.id=cp.phone_id where cp.contact_id = ?;";
+        final String GET_PHONES = "select id, country_code, operator_code, phone_number, phone_type, commentary from phone where contact_id = ?;";
         PreparedStatement statement = connection.prepareStatement(GET_PHONES);
         statement.setLong(1, contactId);
         ResultSet resultSet = statement.executeQuery();
         Phone phone;
         Set<Phone> phones = new HashSet<>();
         while (resultSet.next()) {
-            phone = new Phone(resultSet.getLong("p.id"), resultSet.getInt("p.countryCode"), resultSet.getInt("p.operatorCode"), resultSet.getLong("p.phoneNumber"),
-                    resultSet.getString("p.phoneType"), resultSet.getString("p.commentary"));
+            phone = new Phone(resultSet.getLong("id"), resultSet.getInt("country_code"), resultSet.getInt("operator_code"), resultSet.getLong("phone_number"),
+                    resultSet.getString("phone_type"), resultSet.getString("commentary"), contactId);
             phones.add(phone);
         }
         statement.close();

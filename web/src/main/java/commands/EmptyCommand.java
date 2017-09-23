@@ -19,25 +19,27 @@ public class EmptyCommand implements ActionCommand {
 
     private ContactService<Contact> service = ContactServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
-    private Set<Contact> contacts;
-    private String page;
-    private long numberOfContacts;
 
     @Override
     public String execute(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        session.setAttribute("startContactNumber", 0L);
-        session.setAttribute("quantityOfContacts", 10L);
+        Set<Contact> contacts;
+        long numberOfContacts;
         try {
             contacts = service.getSetOfContacts(0, 10);
             numberOfContacts = service.countContacts();
         } catch (SQLException e) {
             logger.error(e);
             req.setAttribute("message", MessageManager.getProperty(""));
-            return page = ConfigurationManager.getProperty("error");
+            return ConfigurationManager.getProperty("error");
         }
+        HttpSession session = req.getSession(true);
+        session.setAttribute("startContactNumber", 0L);
+        session.setAttribute("quantityOfContacts", 10L);
+        req.setAttribute("startContactNumber", 0L);
+        req.setAttribute("quantityOfContacts", 10L);
+        req.setAttribute("command", "listOfContacts");
         req.setAttribute("numberOfContacts", numberOfContacts);
         req.setAttribute("contacts", contacts);
-        return page = ConfigurationManager.getProperty("main");
+        return ConfigurationManager.getProperty("main");
     }
 }

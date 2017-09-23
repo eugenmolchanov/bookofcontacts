@@ -9,20 +9,16 @@ import java.sql.*;
 /**
  * Created by Yauhen Malchanau on 08.09.2017.
  */
-public class PhotoDaoImpl implements PhotoDao<Photo> {
+public class PhotoDaoImpl implements PhotoDao {
 
     private static volatile PhotoDaoImpl INSTANCE;
 
     private PhotoDaoImpl() {
     }
 
-    public static PhotoDao<Photo> getInstance() {
+    public static PhotoDao getInstance() {
         if (INSTANCE == null) {
-            synchronized (PhotoDaoImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new PhotoDaoImpl();
-                }
-            }
+            INSTANCE = new PhotoDaoImpl();
         }
         return INSTANCE;
     }

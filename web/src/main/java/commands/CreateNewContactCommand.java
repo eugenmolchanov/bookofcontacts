@@ -51,7 +51,7 @@ public class CreateNewContactCommand implements ActionCommand {
                 String street = (String) parameters.get("street");
                 int houseNumber = Integer.parseInt(String.valueOf(parameters.get("houseNumber")));
                 int flatNumber = Integer.parseInt(String.valueOf(parameters.get("flatNumber")));
-                int postalIndex = Integer.parseInt(String.valueOf(parameters.get("postalIndex")));
+                int postalIndex = Integer.parseInt(String.valueOf(parameters.get("postcode")));
                 Address address = new Address(0, country, city, street, houseNumber, flatNumber, postalIndex);
                 Photo photo = (Photo) parameters.get("image");
                 Contact contact = new Contact(0, firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace, address,

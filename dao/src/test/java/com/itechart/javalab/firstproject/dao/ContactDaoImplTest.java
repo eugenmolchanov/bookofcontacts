@@ -1,7 +1,6 @@
 package com.itechart.javalab.firstproject.dao;
 
 import com.itechart.javalab.firstproject.dao.database.Database;
-import com.itechart.javalab.firstproject.dao.impl.AddressDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.ContactDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
 import com.itechart.javalab.firstproject.entities.*;
@@ -25,36 +24,24 @@ import java.util.UUID;
  */
 public class ContactDaoImplTest {
 
-    private ContactDao<Contact> dao = ContactDaoImpl.getInstance();
+    private ContactDao dao = ContactDaoImpl.getInstance();
+    private PhotoDao photoDao = PhotoDaoImpl.getInstance();
     private Connection connection;
     private Contact contact;
 
     @Before
     public void beforeTesting() throws SQLException {
         connection = Database.getConnection();
-        Address address = new Address(0, "Belarus", "city", "street", 10, 10, 10);
-        Phone mobilePhone = new Phone(0, 1, 375, 222222222, "mobile", "actual number");
-        Phone homePhone = new Phone(0, 1, 209, 32312312, "home", "some comment");
-        Set<Phone> phones = new HashSet<>();
-        phones.add(mobilePhone);
-        phones.add(homePhone);
-        Attachment firstAttachment = new Attachment(0, "passport data", "comment", Timestamp.valueOf(LocalDateTime.now()), "path", UUID.randomUUID().toString());
-        Attachment secondAttachment = new Attachment(0, "another data", "comment", Timestamp.valueOf(LocalDateTime.now()), "anotherPath", UUID.randomUUID().toString());
-        Set<Attachment> attachments = new HashSet<>();
-        attachments.add(firstAttachment);
-        attachments.add(secondAttachment);
-        Photo photo = new Photo(0, "path", UUID.randomUUID().toString());
-        PhotoDao<Photo> photoDao = PhotoDaoImpl.getInstance();
-        AddressDao<Address> addressDao = AddressDaoImpl.getInstance();
-        address.setId(addressDao.save(address, connection));
-        photo.setId(photoDao.save(photo, connection));
-        contact = new Contact(0, "FirstName", "LastName14", "MiddleName", Date.valueOf(LocalDate.of(1980, 10, 10)), "gender", "nationality", "maritalStatus", "webSite", "emal10",
-                "employmentPlace", address, phones, attachments, photo);
+        Photo photo = new Photo();
+        long photoId = photoDao.save(photo, connection);
+        photo.setId(photoId);
+        contact = new Contact(0, "name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
+                photo);
     }
 
     @After
     public void afterTesting() throws SQLException {
-//        dao.deleteAll(connection);
+        dao.deleteAll(connection);
     }
 
     @Test
@@ -66,7 +53,8 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldCountContacts() throws SQLException {
-        System.out.println(dao.getNumberOfContacts(connection));
+        dao.save(contact, connection);
+        Assert.assertEquals(1, dao.getNumberOfContacts(connection));
     }
 
     @Test
@@ -95,16 +83,9 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldGetContacts() throws SQLException {
+        dao.save(contact, connection);
         long startContactNumber = 0;
         long quantityOfContacts = 4;
-//        StringBuilder name = new StringBuilder("1");
-//        for (int i = 0; i < 10; i++) {
-//            Contact contact = new Contact();
-//            contact.setFirstName(name.toString());
-//            contact.setLastName(name.toString());
-//            name.append(i);
-//            dao.save(contact, connection);
-//        }
         Set<Contact> contacts = dao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
         Assert.assertEquals(1, contacts.size());
     }
@@ -113,12 +94,22 @@ public class ContactDaoImplTest {
     public void shouldGetSearchedContacts() throws SQLException {
         long startContactNumber = 0;
         long quantityOfContacts = 10;
-//        dao.save(contact, connection);
+        dao.save(contact, connection);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
-        conditionContact.setFirstName("afbafdbaf");
+        conditionContact.setFirstName("name");
         Set<Contact> contacts = dao.searchContacts(conditionContact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
         Assert.assertEquals(1, contacts.size());
+    }
+
+    @Test
+    public void shouldGetTotalQuantityOfSearchedContacts() throws SQLException {
+        dao.save(contact, connection);
+        Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
+        Date upperLimit = Date.valueOf(LocalDate.now());
+        Contact conditionContact = new Contact();
+        long count = dao.getNumberOfSearchContacts(conditionContact, lowerLimit, upperLimit, connection);
+        Assert.assertEquals(1, count);
     }
 }

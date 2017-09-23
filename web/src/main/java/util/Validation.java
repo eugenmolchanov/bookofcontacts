@@ -124,9 +124,9 @@ public class Validation {
         } else {
             result = false;
         }
-        if (req.getParameter("postalIndex") != null) {
+        if (req.getParameter("postcode") != null) {
             try {
-                Integer.valueOf(req.getParameter("postalIndex"));
+                Integer.valueOf(req.getParameter("postcode"));
             } catch (Exception e) {
                 logger.debug(e);
                 result = false;

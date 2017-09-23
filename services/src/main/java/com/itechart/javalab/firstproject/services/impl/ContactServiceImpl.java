@@ -183,6 +183,14 @@ public class ContactServiceImpl implements ContactService<Contact> {
     }
 
     @Override
+    public long getCountOfSearchContacts(Contact entity, Date lowerLimit, Date upperLimit) throws SQLException {
+        Connection connection = Database.getConnection();
+        long totalQuantity = contactDao.getNumberOfSearchContacts(entity, lowerLimit, upperLimit, connection);
+        connection.close();
+        return totalQuantity;
+    }
+
+    @Override
     public void deleteContacts(Set<Long> contactIds) throws SQLException {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);

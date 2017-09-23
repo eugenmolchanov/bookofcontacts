@@ -20,21 +20,18 @@ public class ListOfContactsCommand implements ActionCommand {
 
     private ContactService<Contact> service = ContactServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
-    private long startContactNumber;
-    private long quantityOfContacts;
-    private Set<Contact> contacts;
-    private String page;
-    private long numberOfContacts;
 
     @Override
     public String execute(HttpServletRequest req) {
         if (Validation.paginationDataIsValid(req, logger)) {
+            long startContactNumber;
             try {
                 startContactNumber = Long.parseLong(req.getParameter("startContactNumber"));
             } catch (Exception e) {
                 logger.debug("Getting attribute for variable from the server.");
                 startContactNumber = (long) req.getSession().getAttribute("startContactNumber");
             }
+            long quantityOfContacts;
             try {
                 quantityOfContacts = Long.parseLong(req.getParameter("quantityOfContacts"));
             } catch (Exception e) {
@@ -44,20 +41,25 @@ public class ListOfContactsCommand implements ActionCommand {
             HttpSession session = req.getSession(true);
             session.setAttribute("startContactNumber", startContactNumber);
             session.setAttribute("quantityOfContacts", quantityOfContacts);
+            Set<Contact> contacts;
+            long numberOfContacts;
             try {
                 contacts = service.getSetOfContacts(startContactNumber, quantityOfContacts);
                 numberOfContacts = service.countContacts();
             } catch (SQLException e) {
                 logger.error(e);
                 req.setAttribute("message", MessageManager.getProperty(""));
-                return page = ConfigurationManager.getProperty("error");
+                return ConfigurationManager.getProperty("error");
             }
             req.setAttribute("numberOfContacts", numberOfContacts);
+            req.setAttribute("startContactNumber", startContactNumber);
+            req.setAttribute("quantityOfContacts", quantityOfContacts);
+            req.setAttribute("command", "listOfContacts");
             req.setAttribute("contacts", contacts);
-            return page = ConfigurationManager.getProperty("main");
+            return ConfigurationManager.getProperty("main");
         } else {
             req.setAttribute("message", MessageManager.getProperty("params_are_not_valid"));
-            return page = ConfigurationManager.getProperty("error");
+            return ConfigurationManager.getProperty("error");
         }
     }
 }

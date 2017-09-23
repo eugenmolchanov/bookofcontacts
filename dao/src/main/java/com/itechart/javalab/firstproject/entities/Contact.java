@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 
 import java.sql.Date;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -27,13 +26,18 @@ public class Contact {
     private String webSite;
     private String email;
     private String employmentPlace;
-    private Address address;
+    private String contactGroup;
+    private String country;
+    private String city;
+    private String street;
+    private String houseNumber;
+    private int flatNumber;
+    private int postcode;
     private Set<Phone> phones;
     private Set<Attachment> attachments;
     private Photo photo;
 
     public Contact() {
-        this.address = new Address();
         this.attachments = new HashSet<>();
         this.phones = new HashSet<>();
         this.photo = new Photo();

@@ -15,7 +15,7 @@
 <head>
     <title><fmt:message key="contacts"/></title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assests/css/style.css?v=2">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=7"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=10"></script>
 </head>
 <body>
 <jsp:include page="language.jsp"/>
@@ -25,7 +25,7 @@
         <input type="submit" value="<fmt:message key="delete"/>" class="button" onclick="deleteContacts()"/>
         <a href="/controller?command=redirect&form=createContact"><fmt:message key="create_contact"/></a>
         <a href="/controller?command=redirect&form=search"><fmt:message key="search"/></a>
-        <input type="submit" value="<fmt:message key="send_email"/> " formaction="/controller?command=redirect&form=sendEmail" onsubmit="return chooseEmail()">
+        <input type="submit" value="<fmt:message key="send_email"/> " formaction="/controller?command=redirect&form=sendEmail" onclick="return chooseEmail()">
         <a href="/controller?command=redirect&form=sendEmail"><fmt:message key="send_email"/></a>
         <%--<input type="button" value="<fmt:message key="create_contact"/>" class="button" onclick="goToCreateForm()"/>--%>
         <table>
@@ -45,7 +45,8 @@
             <tbody>
             <c:forEach var="contact" items="${requestScope.contacts}">
                 <tr>
-                    <td><input type="checkbox" name="id" value="${contact.email}"/>
+                    <td><input type="checkbox" name="id" email="${contact.email}" value="${contact.id}"/>
+                        <input type="hidden" name="email" id="useEmail_${contact.email}" value=""/>
                     </td>
                     <td>
                         <a href="controller?command=redirect&form=contact">${contact.lastName} ${" "} ${contact.firstName}</a>
@@ -64,8 +65,8 @@
     </form>
 </div>
 <div class="pagination">
-    <c:set var="start" value="${sessionScope.startContactNumber}"/>
-    <c:set var="step" value="${sessionScope.quantityOfContacts}"/>
+    <c:set var="start" value="${requestScope.startContactNumber}"/>
+    <c:set var="step" value="${requestScope.quantityOfContacts}"/>
     <c:set var="count" value="${requestScope.numberOfContacts}"/>
     <c:set var="maxPage"/>
     <c:choose>
@@ -82,7 +83,7 @@
         ${" "}${count}</div>
     <c:if test="${start != 0}">
         <div id="previous"><a
-                href="/controller?command=listOfContacts&startContactNumber=${start - step}&quantityOfContacts=${step}">
+                href="/controller?command=${requestScope.command}&startContactNumber=${start - step}&quantityOfContacts=${step}">
             <fmt:message key="previous"/></a></div>
     </c:if>
     <div id="pageNumbers">
@@ -91,7 +92,7 @@
                 <c:choose>
                     <c:when test="${i != 2}">
                         <fmt:parseNumber var = "page" type = "number" value = "${(start + step) / step + i - 2}" />
-                        <a href="/controller?command=listOfContacts&startContactNumber=${start + step * (i - 2)}&quantityOfContacts=${step}">
+                        <a href="/controller?command=${requestScope.command}&startContactNumber=${start + step * (i - 2)}&quantityOfContacts=${step}">
                                 ${page}</a> </c:when>
                     <c:otherwise>
                         <fmt:parseNumber var = "presentPage" type = "number" value = "${(start + step) / step}" />
@@ -102,7 +103,7 @@
         </c:forEach>
     </div>
     <c:if test="${(count - start) gt step}">
-        <div id="next"><a href="/controller?command=listOfContacts&startContactNumber=${start + step}&quantityOfContacts=${step}"><fmt:message key="next"/></a></div>
+        <div id="next"><a href="/controller?command=${requestScope.command}&startContactNumber=${start + step}&quantityOfContacts=${step}"><fmt:message key="next"/></a></div>
     </c:if>
 </div>
 </body>

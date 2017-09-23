@@ -22,15 +22,23 @@ import java.util.UUID;
  * Created by Yauhen Malchanau on 10.09.2017.
  */
 public class AttachmentDaoImplTest {
-    private AttachmentDao<Attachment> attachmentDao = AttachmentDaoImpl.getInstance();
-    private ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
+    private AttachmentDao attachmentDao = AttachmentDaoImpl.getInstance();
+    private PhotoDao photoDao = PhotoDaoImpl.getInstance();
+    private ContactDao contactDao = ContactDaoImpl.getInstance();
     private Connection connection;
     private Attachment attachment;
+    private long contactId;
 
     @Before
     public void beforeTesting() throws SQLException {
         connection = Database.getConnection();
-        attachment = new Attachment(0, "first", "comment", Timestamp.valueOf(LocalDateTime.now()), "path", UUID.randomUUID().toString());
+        Photo photo = new Photo();
+        long photoId = photoDao.save(photo, connection);
+        photo.setId(photoId);
+        Contact contact = new Contact(0, "name", "surname", null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
+                photo);
+        contactId = contactDao.save(contact, connection);
+        attachment = new Attachment(0, "first", "comment", Timestamp.valueOf(LocalDateTime.now()), "path", UUID.randomUUID().toString(), contactId);
     }
 
     @After
@@ -73,26 +81,8 @@ public class AttachmentDaoImplTest {
 
     @Test
     public void shouldGetAllAttachmentsOfContact() throws SQLException {
-        Photo photo = new Photo(0, "path", UUID.randomUUID().toString());
-        Attachment firstAttachment = new Attachment(0, "passport data", "comment", Timestamp.valueOf(LocalDateTime.now()), "path", UUID.randomUUID().toString());
-        Attachment secondAttachment = new Attachment(0, "another data", "comment", Timestamp.valueOf(LocalDateTime.now()), "anotherPath", UUID.randomUUID().toString());
-        Set<Attachment> attachments = new HashSet<>();
-        attachments.add(firstAttachment);
-        attachments.add(secondAttachment);
-        Address address = new Address(0, "Belarus", "city", "street", 10, 10, 10);
-        AddressDao<Address> addressDao = AddressDaoImpl.getInstance();
-        PhotoDao<Photo> photoDao = PhotoDaoImpl.getInstance();
-        photo.setId(photoDao.save(photo, connection));
-        address.setId(addressDao.save(address, connection));
-        Contact contact = new Contact(0, "FirstName", "LastName", "MiddleName", Date.valueOf(LocalDate.of(1980, 10, 10)), "gender", "nationality", "maritalStatus", "webSite", "email",
-                "employmentPlace", address, new HashSet<>(), attachments, photo);
-        ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
-        long contactId = contactDao.save(contact, connection);
-        long firstAttachmentId = attachmentDao.save(firstAttachment, connection);
-        long secondAttachmentId = attachmentDao.save(secondAttachment, connection);
-        contactDao.addDependenceFromAttachment(contactId, firstAttachmentId, connection);
-        contactDao.addDependenceFromAttachment(contactId, secondAttachmentId, connection);
-        Set<Attachment> contactAttachments = attachmentDao.getAllAttachmentsOfContact(1, connection);
-        Assert.assertEquals(2, contactAttachments.size());
+        attachmentDao.save(attachment, connection);
+        Set<Attachment> attachments = attachmentDao.getAllAttachmentsOfContact(contactId, connection);
+        Assert.assertEquals(1, attachments.size());
     }
 }

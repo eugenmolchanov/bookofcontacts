@@ -21,3 +21,41 @@ input {
 .language {
     text-align: right;
 }
+.phonePopupText {
+    visibility: hidden;
+    position: absolute;
+    left: 80%;
+    right: 5%;
+    border: outset 3px;
+    height: 25%;
+    width: 18%;
+    text-align: center;
+}
+.phonePopupText.show {
+    visibility: visible;
+}
+.phoneTitle {
+    text-align: right;
+}
+.phoneInfo {
+    width: 75%;
+}
+.attachmentInfo {
+    width: 75%;
+}
+.attachmentPopupText {
+    visibility: hidden;
+    position: absolute;
+    left: 80%;
+    right: 5%;
+    border: outset 3px;
+    height: 25%;
+    width: 18%;
+    text-align: center;
+}
+.attachmentPopupText.show {
+    visibility: visible;
+}
+.attachmentTitle {
+    text-align: right;
+}

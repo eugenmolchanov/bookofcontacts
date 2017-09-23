@@ -30,7 +30,7 @@ public class RedirectCommand implements ActionCommand {
                 case search :
                     return page = ConfigurationManager.getProperty("search");
                 case sendEmail :
-                    String[] emails = req.getParameterMap().get("id");
+                    String[] emails = req.getParameterMap().get("email");
                     req.setAttribute("emails", emails);
                     return page = ConfigurationManager.getProperty("send_email");
                 default:

@@ -15,7 +15,7 @@
 <head>
     <title><fmt:message key="send_email"/></title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assests/css/style.css?v=1">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=1" ></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=3"></script>
 </head>
 <body>
 <jsp:include page="language.jsp"/>
@@ -25,16 +25,17 @@
           onsubmit="return sendEmail()">
         <input type="hidden" name="command" value="sendEmail"/>
         <label for="addressees"><fmt:message key="to_whom"/> </label><br>
-        <input type="email" id="addressees" name="addressees"
-               value="<c:forEach var="emails" items="${requestScope.emails}">
-        ${emails}
-</c:forEach>" multiple/><br>
+        <input type="text" id="addressees" name="addressees"
+               value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>"/><br>
         <label for="topic"><fmt:message key="topic"/> </label><br>
         <input type="text" id="topic" name="topic" placeholder="<fmt:message key="topic"/> "/><br>
-        <select onchange="this.form.submit()">
-            <option value="">1</option>
+        <select id="template" name="template" onchange="chooseTemplate()">
+            <option selected disabled><fmt:message key="choose_template"/> </option>
+            <option value="birthday"><fmt:message key="birthday_congratulations"/></option>
+            <option value="newYear"><fmt:message key="new_year_congratulations"/> </option>
         </select>
-    </form><br>
+    </form>
+    <br>
     <label for="message"><fmt:message key="message"/> </label><br>
     <textarea name="message" id="message" form="emailForm" rows="10" cols="100"></textarea><br>
     <input type="submit" onclick="sendEmail() " value="<fmt:message key="send"/> " form="emailForm"/>

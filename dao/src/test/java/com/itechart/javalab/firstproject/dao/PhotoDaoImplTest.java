@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 public class PhotoDaoImplTest {
     private GenericDao<Photo> photoDao = PhotoDaoImpl.getInstance();
-    private ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
+    private ContactDao contactDao = ContactDaoImpl.getInstance();
     private Photo photo;
     private Connection connection;
 

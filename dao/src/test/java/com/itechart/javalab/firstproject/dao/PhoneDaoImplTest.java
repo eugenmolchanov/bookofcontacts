@@ -1,7 +1,6 @@
 package com.itechart.javalab.firstproject.dao;
 
 import com.itechart.javalab.firstproject.dao.database.Database;
-import com.itechart.javalab.firstproject.dao.impl.AddressDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.ContactDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.PhoneDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
@@ -24,15 +23,23 @@ import java.util.UUID;
  */
 public class PhoneDaoImplTest {
 
-    private PhoneDao<Phone> phoneDao = PhoneDaoImpl.getInstance();
-    private ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
+    private PhoneDao phoneDao = PhoneDaoImpl.getInstance();
+    private ContactDao contactDao = ContactDaoImpl.getInstance();
+    private PhotoDao photoDao = PhotoDaoImpl.getInstance();
     private Connection connection;
     private Phone phone;
+    private long contactId;
 
     @Before
     public void beforeTesting() throws SQLException {
         connection = Database.getConnection();
-        phone = new Phone(0, 1, 375, 222222222, "mobile", "actual number");
+        Photo photo = new Photo();
+        long photoId = photoDao.save(photo, connection);
+        photo.setId(photoId);
+        Contact contact = new Contact(0, "name", "surname", null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
+                photo);
+        contactId = contactDao.save(contact, connection);
+        phone = new Phone(0, 1, 375, 222222222, "домашний", "actual number", contactId);
     }
 
     @After
@@ -76,26 +83,8 @@ public class PhoneDaoImplTest {
 
     @Test
     public void shouldGetAllAttachmentsOfContact() throws SQLException {
-        Photo photo = new Photo(0, "path", UUID.randomUUID().toString());
-        Phone mobilePhone = new Phone(0, 1, 375, 222222222, "mobile", "actual number");
-        Phone homePhone = new Phone(0, 1, 209, 32312312, "home", "some comment");
-        Set<Phone> phones = new HashSet<>();
-        phones.add(mobilePhone);
-        phones.add(homePhone);
-        Address address = new Address(0, "Belarus", "city", "street", 10, 10, 10);
-        AddressDao<Address> addressDao = AddressDaoImpl.getInstance();
-        PhotoDao<Photo> photoDao = PhotoDaoImpl.getInstance();
-        photo.setId(photoDao.save(photo, connection));
-        address.setId(addressDao.save(address, connection));
-        Contact contact = new Contact(0, "FirstName", "LastName", "MiddleName", Date.valueOf(LocalDate.of(1980, 10, 10)), "gender", "nationality", "maritalStatus", "webSite", "email",
-                "employmentPlace", address, phones, new HashSet<>(), photo);
-        ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
-        long contactId = contactDao.save(contact, connection);
-        long mobilePhoneId = phoneDao.save(mobilePhone, connection);
-        long homePhoneId = phoneDao.save(homePhone, connection);
-        contactDao.addDependenceFromPhone(contactId, mobilePhoneId, connection);
-        contactDao.addDependenceFromPhone(contactId, homePhoneId, connection);
-        Set<Phone> contactPhones = phoneDao.getAllPhonesOfContact(1, connection);
-        Assert.assertEquals(2, contactPhones.size());
+        phoneDao.save(phone, connection);
+        Set<Phone> phones = phoneDao.getAllPhonesOfContact(contactId, connection);
+        Assert.assertEquals(1, phones.size());
     }
 }
