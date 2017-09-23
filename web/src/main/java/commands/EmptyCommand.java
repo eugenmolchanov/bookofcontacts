@@ -26,7 +26,7 @@ public class EmptyCommand implements ActionCommand {
         long numberOfContacts;
         try {
             contacts = service.getSetOfContacts(0, 10);
-            numberOfContacts = service.countContacts();
+            numberOfContacts = service.getNumberOfContacts();
         } catch (SQLException e) {
             logger.error(e);
             req.setAttribute("message", MessageManager.getProperty(""));

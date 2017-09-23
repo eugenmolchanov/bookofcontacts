@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class PhoneDaoImpl implements PhoneDao {
 
-    private static volatile PhoneDaoImpl instance;
+    private static PhoneDaoImpl instance;
 
     private PhoneDaoImpl() {
     }

@@ -15,11 +15,10 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 11.09.2017.
  */
-public class ContactServiceImpl implements ContactService<Contact> {
+public class ContactServiceImpl implements ContactService {
 
-    private static volatile ContactServiceImpl INSTANCE;
-    private ContactDao<Contact> contactDao = ContactDaoImpl.getInstance();
-    private AddressServiceImpl addressService = AddressServiceImpl.getInstance();
+    private static ContactServiceImpl instance;
+    private ContactDao contactDao = ContactDaoImpl.getInstance();
     private PhotoServiceImpl photoService = PhotoServiceImpl.getInstance();
     private AttachmentServiceImpl attachmentService = AttachmentServiceImpl.getInstance();
     private PhoneServiceImpl phoneService = PhoneServiceImpl.getInstance();
@@ -27,15 +26,11 @@ public class ContactServiceImpl implements ContactService<Contact> {
     private ContactServiceImpl() {
     }
 
-    public static ContactService<Contact> getInstance() {
-        if (INSTANCE == null) {
-            synchronized (ContactServiceImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new ContactServiceImpl();
-                }
-            }
+    public static ContactService getInstance() {
+        if (instance == null) {
+            instance = new ContactServiceImpl();
         }
-        return INSTANCE;
+        return instance;
     }
 
     @Override
@@ -43,8 +38,6 @@ public class ContactServiceImpl implements ContactService<Contact> {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);
         try {
-            contactDao.deleteDependenceFromAttachment(id, connection);
-            contactDao.deleteDependenceFromPhone(id, connection);
             contactDao.delete(id, connection);
             connection.commit();
         } catch (SQLException e) {
@@ -56,25 +49,20 @@ public class ContactServiceImpl implements ContactService<Contact> {
     }
 
     @Override
-    public void create(Contact entity) throws SQLException {
+    public void create(Contact contact) throws SQLException {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);
         try {
-            long addressId = addressService.checkAddress(entity.getAddress(), connection);
-            if (addressId == 0) {
-                addressId = addressService.create(entity.getAddress(), connection);
-                entity.getAddress().setId(addressId);
+            long photoId = photoService.create(contact.getPhoto(), connection);
+            contact.getPhoto().setId(photoId);
+            long contactId = contactDao.save(contact, connection);
+            for (Attachment attachment : contact.getAttachments()) {
+                attachment.setContactId(contactId);
+                attachmentService.create(attachment, connection);
             }
-            long photoId = photoService.create(entity.getPhoto(), connection);
-            entity.getPhoto().setId(photoId);
-            long contactId = contactDao.save(entity, connection);
-            for (Attachment attachment : entity.getAttachments()) {
-                long attachmentId = attachmentService.create(attachment, connection);
-                contactDao.addDependenceFromAttachment(contactId, attachmentId, connection);
-            }
-            for (Phone phone : entity.getPhones()) {
-                long phoneId = phoneService.create(phone, connection);
-                contactDao.addDependenceFromPhone(contactId, phoneId, connection);
+            for (Phone phone : contact.getPhones()) {
+                phone.setContactId(contactId);
+                phoneService.create(phone, connection);
             }
             connection.commit();
         } catch (SQLException e) {
@@ -94,19 +82,14 @@ public class ContactServiceImpl implements ContactService<Contact> {
     }
 
     @Override
-    public void update(Contact entity) throws SQLException {
+    public void update(Contact contact) throws SQLException {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);
         try {
-            contactDao.update(entity, connection);
-            if (entity.getAddress().getId() != 0) {
-                addressService.update(entity.getAddress(), connection);
-            } else {
-                addressService.create(entity.getAddress(), connection);
-            }
-            Set<Attachment> attachments = attachmentService.getAllAttachmentsOfContact(entity.getId(), connection);
+            contactDao.update(contact, connection);
+            Set<Attachment> attachments = attachmentService.getAllAttachmentsOfContact(contact.getId(), connection);
             if (attachments.size() != 0) {
-                Iterator<Attachment> entityIterator = entity.getAttachments().iterator();
+                Iterator<Attachment> entityIterator = contact.getAttachments().iterator();
                 while (entityIterator.hasNext()) {
                     Attachment potentialNewcomer = entityIterator.next();
                     Iterator<Attachment> databaseContactIterator = attachments.iterator();
@@ -118,19 +101,19 @@ public class ContactServiceImpl implements ContactService<Contact> {
                         }
                     }
                 }
-                for (Attachment attachment : entity.getAttachments()) {
-                    long attachmentId = attachmentService.create(attachment, connection);
-                    contactDao.addDependenceFromAttachment(entity.getId(), attachmentId, connection);
+                for (Attachment attachment : contact.getAttachments()) {
+                    attachment.setContactId(contact.getId());
+                    attachmentService.create(attachment, connection);
                 }
-            } else if (entity.getAttachments().size() != 0) {
-                for (Attachment attachment : entity.getAttachments()) {
-                    long attachmentId = attachmentService.create(attachment, connection);
-                    contactDao.addDependenceFromAttachment(entity.getId(), attachmentId, connection);
+            } else if (contact.getAttachments().size() != 0) {
+                for (Attachment attachment : contact.getAttachments()) {
+                    attachment.setContactId(contact.getId());
+                    attachmentService.create(attachment, connection);
                 }
             }
-            Set<Phone> phones = phoneService.getAllPhonesOfContact(entity.getId(), connection);
+            Set<Phone> phones = phoneService.getAllPhonesOfContact(contact.getId(), connection);
             if (phones.size() != 0) {
-                Iterator<Phone> entityIterator = entity.getPhones().iterator();
+                Iterator<Phone> entityIterator = contact.getPhones().iterator();
                 while (entityIterator.hasNext()) {
                     Phone potentialNewcomer = entityIterator.next();
                     Iterator<Phone> databaseContactIterator = phones.iterator();
@@ -142,20 +125,20 @@ public class ContactServiceImpl implements ContactService<Contact> {
                         }
                     }
                 }
-                for (Phone phone : entity.getPhones()) {
-                    long phoneId = phoneService.create(phone, connection);
-                    contactDao.addDependenceFromPhone(entity.getId(), phoneId, connection);
+                for (Phone phone : contact.getPhones()) {
+                    phone.setContactId(contact.getId());
+                    phoneService.create(phone, connection);
                 }
-            } else if (entity.getPhones().size() != 0) {
-                for (Phone phone : entity.getPhones()) {
-                    long phoneId = phoneService.create(phone, connection);
-                    contactDao.addDependenceFromPhone(entity.getId(), phoneId, connection);
+            } else if (contact.getPhones().size() != 0) {
+                for (Phone phone : contact.getPhones()) {
+                    phone.setContactId(contact.getId());
+                    phoneService.create(phone, connection);
                 }
             }
-            if (entity.getPhoto().getId() != 0) {
-                photoService.update(entity.getPhoto(), connection);
+            if (contact.getPhoto().getId() != 0) {
+                photoService.update(contact.getPhoto(), connection);
             } else {
-                photoService.create(entity.getPhoto(), connection);
+                photoService.create(contact.getPhoto(), connection);
             }
             connection.commit();
         } catch (SQLException e) {
@@ -175,17 +158,17 @@ public class ContactServiceImpl implements ContactService<Contact> {
     }
 
     @Override
-    public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException {
+    public Set<Contact> searchContacts(Contact contact, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException {
         Connection connection = Database.getConnection();
-        Set<Contact> contacts = contactDao.searchContacts(entity, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
+        Set<Contact> contacts = contactDao.searchContacts(contact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
         connection.close();
         return contacts;
     }
 
     @Override
-    public long getCountOfSearchContacts(Contact entity, Date lowerLimit, Date upperLimit) throws SQLException {
+    public long getNumberOfSearchContacts(Contact contact, Date lowerLimit, Date upperLimit) throws SQLException {
         Connection connection = Database.getConnection();
-        long totalQuantity = contactDao.getNumberOfSearchContacts(entity, lowerLimit, upperLimit, connection);
+        long totalQuantity = contactDao.getNumberOfSearchContacts(contact, lowerLimit, upperLimit, connection);
         connection.close();
         return totalQuantity;
     }
@@ -196,8 +179,6 @@ public class ContactServiceImpl implements ContactService<Contact> {
         connection.setAutoCommit(false);
         try {
             for (Long id : contactIds) {
-                contactDao.deleteDependenceFromAttachment(id, connection);
-                contactDao.deleteDependenceFromPhone(id, connection);
                 contactDao.delete(id, connection);
             }
             connection.commit();
@@ -210,22 +191,10 @@ public class ContactServiceImpl implements ContactService<Contact> {
     }
 
     @Override
-    public long countContacts() throws SQLException {
+    public long getNumberOfContacts() throws SQLException {
         Connection connection = Database.getConnection();
         long number = contactDao.getNumberOfContacts(connection);
         connection.close();
         return number;
-    }
-
-    protected void deleteAll() throws SQLException {
-        Connection connection = Database.getConnection();
-        connection.setAutoCommit(false);
-        try {
-            contactDao.deleteAll(connection);
-        } catch (SQLException e) {
-            connection.rollback();
-        } finally {
-            connection.close();
-        }
     }
 }

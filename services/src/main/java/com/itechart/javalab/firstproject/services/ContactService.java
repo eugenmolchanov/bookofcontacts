@@ -1,5 +1,7 @@
 package com.itechart.javalab.firstproject.services;
 
+import com.itechart.javalab.firstproject.entities.Contact;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Set;
@@ -7,50 +9,79 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 11.09.2017.
  */
-public interface ContactService<T> extends GenericService<T> {
+public interface ContactService extends GenericService<Contact> {
     /**
-     * Method saves entity in util.
-     * @param entity
+     * Method saves contact in data base. Method also saves all phones, attachments and photo of this contact.
+     *
+     * @param contact contact which should be created
      * @throws SQLException
      */
-    void create(T entity) throws SQLException;
+    void create(Contact contact) throws SQLException;
 
     /**
-     * Method finds entity by id.
-     * @param id
-     * @return
+     * Method finds contact object by id with all of it's phones, attachments and photo.
+     *
+     * @param id id of contact
+     * @return contact object
      * @throws SQLException
      */
-    T findById(long id) throws SQLException;
+    Contact findById(long id) throws SQLException;
 
     /**
-     * Method updates entity.
-     * @param entity
+     * Method updates contact and all phones, attachments and photo which belong to it.
+     *
+     * @param contact
      * @throws SQLException
      */
-    void update(T entity) throws SQLException;
+    void update(Contact contact) throws SQLException;
 
     /**
      * Method is used for pagination and returns certain set of contacts.
-     * @param startContactNumber
-     * @param quantityOfContacts
-     * @return Set of contacts
+     *
+     * @param startContactNumber the first id number of collection for pagination will start after this parameter
+     * @param quantityOfContacts the quantity of contacts which is necessary for pagination
+     * @return collection of contacts
      * @throws SQLException
      */
-    Set<T> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
+    Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
 
     /**
-     * Method searches necessary contacts.
-     * @param entity
-     * @param lowerLimit
-     * @param upperLimit
-     * @param startContactNumber
-     * @param quantityOfContacts
-     * @return Set of contacts
+     * Method searches contacts which are required for user and are corresponded to search filter.
+     *
+     * @param contact            contact object with fields for specific search
+     * @param lowerLimit         date of birth from which contact object will satisfy search inquiry
+     * @param upperLimit         date of birth up to which contact object will satisfy search inquiry
+     * @param startContactNumber the first id number of collection for pagination will start after this parameter
+     * @param quantityOfContacts the quantity of contacts which is necessary for pagination
+     * @return collection of contact objects
      * @throws SQLException
      */
-    Set<T> searchContacts(T entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException;
-    long getCountOfSearchContacts(T entity, Date lowerLimit, Date upperLimit) throws SQLException;
+    Set<Contact> searchContacts(Contact contact, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException;
+
+    /**
+     * Method returns number of contacts which are required for user and are corresponded to search filter. Used for pagination.
+     *
+     * @param contact    contact object which has fields for specific search
+     * @param lowerLimit date of birth from which contact object will satisfy search inquiry
+     * @param upperLimit date of birth up to which contact object will satisfy search inquiry
+     * @return number of searched contact objects
+     * @throws SQLException
+     */
+    long getNumberOfSearchContacts(Contact contact, Date lowerLimit, Date upperLimit) throws SQLException;
+
+    /**
+     * Method deletes contacts by their ids.
+     *
+     * @param contactIds ids of contact objects
+     * @throws SQLException
+     */
     void deleteContacts(Set<Long> contactIds) throws SQLException;
-    long countContacts() throws SQLException;
+
+    /**
+     * Method returns number of all contacts in database. Used for pagination.
+     *
+     * @return number of contact objects
+     * @throws SQLException
+     */
+    long getNumberOfContacts() throws SQLException;
 }

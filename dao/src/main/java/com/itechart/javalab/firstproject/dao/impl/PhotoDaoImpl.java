@@ -11,7 +11,7 @@ import java.sql.*;
  */
 public class PhotoDaoImpl implements PhotoDao {
 
-    private static volatile PhotoDaoImpl INSTANCE;
+    private static PhotoDaoImpl INSTANCE;
 
     private PhotoDaoImpl() {
     }

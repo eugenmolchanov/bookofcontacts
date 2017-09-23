@@ -51,7 +51,7 @@ CREATE TABLE attachment (
   record_date TIMESTAMP,
   path        VARCHAR(255),
   uuid        VARCHAR(255),
-  contact_id  BIGINT UNSIGNED,
+  contact_id  BIGINT UNSIGNED not null,
   PRIMARY KEY (id),
   FOREIGN KEY (contact_id) REFERENCES contact (id)
 )
@@ -64,7 +64,7 @@ CREATE TABLE phone (
   phone_number  BIGINT,
   phone_type    ENUM ('Домашний', 'Рабочий', 'Сотовый'),
   commentary    VARCHAR(255),
-  contact_id    BIGINT UNSIGNED,
+  contact_id    BIGINT UNSIGNED not null,
   PRIMARY KEY (id),
   FOREIGN KEY (contact_id) REFERENCES contact (id)
 )

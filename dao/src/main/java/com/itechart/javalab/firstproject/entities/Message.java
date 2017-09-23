@@ -12,7 +12,7 @@ import java.util.Set;
  * Created by Yauhen Malchanau on 06.09.2017.
  */
 @Data
-@EqualsAndHashCode(exclude = {"id"})
+@EqualsAndHashCode
 @AllArgsConstructor
 public class Message {
     private long id;

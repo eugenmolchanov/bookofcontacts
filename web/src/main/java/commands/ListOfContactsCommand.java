@@ -45,7 +45,7 @@ public class ListOfContactsCommand implements ActionCommand {
             long numberOfContacts;
             try {
                 contacts = service.getSetOfContacts(startContactNumber, quantityOfContacts);
-                numberOfContacts = service.countContacts();
+                numberOfContacts = service.getNumberOfContacts();
             } catch (SQLException e) {
                 logger.error(e);
                 req.setAttribute("message", MessageManager.getProperty(""));

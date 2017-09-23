@@ -13,23 +13,19 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 11.09.2017.
  */
-public class AttachmentServiceImpl implements AttachmentService<Attachment> {
+public class AttachmentServiceImpl implements AttachmentService {
 
-    private static AttachmentServiceImpl INSTANCE;
-    private AttachmentDao<Attachment> attachmentDao = AttachmentDaoImpl.getInstance();
+    private static AttachmentServiceImpl instance;
+    private AttachmentDao attachmentDao = AttachmentDaoImpl.getInstance();
 
     private AttachmentServiceImpl() {
     }
 
     public static AttachmentServiceImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (AttachmentServiceImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AttachmentServiceImpl();
-                }
-            }
+        if (instance == null) {
+            instance = new AttachmentServiceImpl();
         }
-        return INSTANCE;
+        return instance;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.itechart.javalab.firstproject.services.impl;
 
 import com.itechart.javalab.firstproject.dao.PhotoDao;
-import com.itechart.javalab.firstproject.dao.impl.PhoneDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
 import com.itechart.javalab.firstproject.entities.Photo;
 import com.itechart.javalab.firstproject.services.PhotoService;
@@ -13,21 +12,17 @@ import java.sql.SQLException;
 /**
  * Created by Yauhen Malchanau on 11.09.2017.
  */
-public class PhotoServiceImpl implements PhotoService<Photo> {
+public class PhotoServiceImpl implements PhotoService {
 
-    private static volatile PhotoServiceImpl instance;
-    private PhotoDao<Photo> photoDao = PhotoDaoImpl.getInstance();
+    private static PhotoServiceImpl instance;
+    private PhotoDao photoDao = PhotoDaoImpl.getInstance();
 
     private PhotoServiceImpl() {
     }
 
     public static PhotoServiceImpl getInstance() {
         if (instance == null) {
-            synchronized (PhotoServiceImpl.class) {
-                if (instance == null) {
-                    instance = new PhotoServiceImpl();
-                }
-            }
+            instance = new PhotoServiceImpl();
         }
         return instance;
     }

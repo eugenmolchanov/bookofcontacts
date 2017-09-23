@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class ContactDaoImpl implements ContactDao {
 
-    private static volatile ContactDaoImpl instance;
+    private static ContactDaoImpl instance;
 
     private ContactDaoImpl() {
     }
@@ -131,9 +131,15 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void delete(long id, Connection connection) throws SQLException {
         final String DELETE_CONTACT = "delete from contact where id = ?;";
-        PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT);
+        final String DELETE_CONTACT_MESSAGE = "delete from contact_message where contact_id = ?;";
+        PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT_MESSAGE);
         statement.setLong(1, id);
         statement.executeUpdate();
+
+        statement = connection.prepareStatement(DELETE_CONTACT);
+        statement.setLong(1, id);
+        statement.executeUpdate();
+
         statement.close();
     }
 
@@ -309,7 +315,7 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public long getNumberOfContacts(Connection connection) throws SQLException {
-        final String countContacts = "select count(id) from contact;";
+        final String countContacts = "select count(id) from contact group by id;";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(countContacts);
         long number = 0;

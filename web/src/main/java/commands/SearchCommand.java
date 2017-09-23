@@ -109,7 +109,7 @@ public class SearchCommand implements ActionCommand {
             contact.setAddress(address);
             try {
                 contacts = service.searchContacts(contact, birthdayFrom, birthdayTo, startContact, step);
-                numberOfContacts = service.getCountOfSearchContacts(contact, birthdayFrom, birthdayTo);
+                numberOfContacts = service.getNumberOfSearchContacts(contact, birthdayFrom, birthdayTo);
             } catch (Exception e) {
                 logger.error(e);
             }

@@ -63,7 +63,7 @@ public interface ContactDao extends GenericDao<Contact> {
      * Method returns number of all contacts in database. Used for pagination.
      *
      * @param connection number of all contact objects
-     * @return number of all contact objects
+     * @return number of contact objects
      * @throws SQLException
      */
     long getNumberOfContacts(Connection connection) throws SQLException;

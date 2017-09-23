@@ -13,21 +13,17 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 11.09.2017.
  */
-public class PhoneServiceImpl implements PhoneService<Phone> {
+public class PhoneServiceImpl implements PhoneService {
 
-    private static volatile PhoneServiceImpl instance;
-    private PhoneDao<Phone> phoneDao = PhoneDaoImpl.getInstance();
+    private static PhoneServiceImpl instance;
+    private PhoneDao phoneDao = PhoneDaoImpl.getInstance();
 
     private PhoneServiceImpl() {
     }
 
     public static PhoneServiceImpl getInstance() {
         if (instance == null) {
-            synchronized (PhoneServiceImpl.class) {
-                if (instance == null) {
-                    instance = new PhoneServiceImpl();
-                }
-            }
+            instance = new PhoneServiceImpl();
         }
         return instance;
     }
