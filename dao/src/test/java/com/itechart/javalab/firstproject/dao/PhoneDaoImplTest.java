@@ -39,7 +39,7 @@ public class PhoneDaoImplTest {
         Contact contact = new Contact(0, "name", "surname", null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
                 photo);
         contactId = contactDao.save(contact, connection);
-        phone = new Phone(0, 1, 375, 222222222, "домашний", "actual number", contactId);
+        phone = new Phone(0, "1-1", 375, 222222222, "домашний", "actual number", contactId);
     }
 
     @After

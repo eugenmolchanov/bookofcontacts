@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +33,7 @@ public class CreateNewContactCommand implements ActionCommand {
         if (true) {
             Map<String, Object> parameters;
             try {
-                parameters = Data.uploadImage(req);
+                parameters = Data.upload(req);
                 String firstName = (String) parameters.get("firstName");
                 String lastName = (String) parameters.get("lastName");
                 String middleName = (String) parameters.get("middleName");
@@ -45,15 +44,23 @@ public class CreateNewContactCommand implements ActionCommand {
                 String webSite = (String) parameters.get("webSite");
                 String email = (String) parameters.get("email");
                 String employmentPlace = (String) parameters.get("employmentPlace");
+                String contactGroup = (String) parameters.get("contactGroup");
                 String country = (String) parameters.get("country");
                 String city = (String) parameters.get("city");
                 String street = (String) parameters.get("street");
-                int houseNumber = Integer.parseInt(String.valueOf(parameters.get("houseNumber")));
+                String houseNumber = String.valueOf(parameters.get("houseNumber"));
                 int flatNumber = Integer.parseInt(String.valueOf(parameters.get("flatNumber")));
-                int postalIndex = Integer.parseInt(String.valueOf(parameters.get("postcode")));
-                Photo photo = (Photo) parameters.get("image");
-//                Contact contact = new Contact(0, firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace, null,
-//                        phones, attachments, photo);
+                int postalIndex = Integer.parseInt(String.valueOf(parameters.get("postalIndex")));
+                int countryCode = Integer.parseInt(String.valueOf(parameters.get("countryCode")));
+                int operatorCode = Integer.parseInt(String.valueOf(parameters.get("operatorCode")));
+                int number = Integer.parseInt(String.valueOf(parameters.get("number")));
+                String type = (String) parameters.get("type");
+                String comment = (String) parameters.get("comment");
+                String attachmentTitle = (String) parameters.get("attachmentTitle");
+
+//                Photo photo = (Photo) parameters.get("image");
+//                Contact contact = new Contact(0, firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace, contactGroup,
+//                        country, city, street, houseNumber, flatNumber, postalIndex, , , photo);
 //                try {
 //                    service.create(contact);
 //                } catch (SQLException e) {

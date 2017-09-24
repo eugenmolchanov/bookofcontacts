@@ -15,12 +15,10 @@
 <html>
 <head>
     <title><fmt:message key="create_contact"/></title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assests/css/style.css?v=42">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=58"></script>
 </head>
-<body>
+<body class="create_contact_body">
 <jsp:include page="header.jsp"/>
-<div><p>${requestScope.message}</p></div>
+<%--<div><p>${requestScope.message}</p></div>--%>
 <div class="contact_form">
     <form action="/controller?command=createNewContact" method="post" name="createForm" onsubmit="createContact()"
           enctype="multipart/form-data">
@@ -50,6 +48,8 @@
         <label for="employmentPlace"><fmt:message key="employment_place"/> </label><br>
         <input type="text" name="employmentPlace" id="employmentPlace"
                placeholder="<fmt:message key="employment_place"/> "/><br>
+        <label for="contactGroup"><fmt:message key="contact_group"/> </label><br>
+        <input type="text" name="contactGroup" id="contactGroup" placeholder="<fmt:message key="contact_group"/> "/><br>
         <div class="addressInfo"><fmt:message key="address"/></div>
         <label for="country"><fmt:message key="country"/> </label><br>
         <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "/><br>
@@ -67,7 +67,7 @@
                placeholder="<fmt:message key="postcode"/> "
                pattern="[0-9]" title="Only digits"/><br>
         <div class="phoneInfo">
-            <table>
+            <table class="table table-bordered">
                 <caption class="phoneTitle">
                     <div class="phonePopup"><input type="button" name="phonePopup" onclick="addPhones()" value="<fmt:message key="create"/> "/>
                         <input type="button" name="deletePhone" onclick="deletePhoneFromTable()" value="<fmt:message key="delete"/> "/>
@@ -104,7 +104,7 @@
             </table>
         </div>
         <div class="attachmentInfo">
-            <table>
+            <table class="table table-bordered">
                 <caption class="attachmentTitle">
                     <div class="attachmentPopup"><input type="button" name="attachmentPopup" onclick="addAttachments()" value="<fmt:message key="create"/> "/>
                         <input type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()" value="<fmt:message key="delete"/> "/>
@@ -112,7 +112,7 @@
                             <form id="attachmentForm" class="attachmentForm">
                                 <label for="image"><fmt:message key="choose_photo"/> </label><br>
                                 <input type="file" name="attachment" id="attachment"/><br>
-                                <input type="text" id="attachmentTitle" name="attachmentTitle" placeholder="<fmt:message key="title"/> "/><br>
+                                <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="title"/> "/><br>
                                 <input type="button" id="saveAttachment" onclick="addAttachmentTable()" value="<fmt:message key="save"/>"/>
                                 <input type="button" id="cancelAttachment" onclick="addAttachments()" value="<fmt:message key="cancel"/> ">
                             </form>
@@ -122,8 +122,8 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th><fmt:message key="title"/></th>
                     <th><fmt:message key="attachment"/></th>
+                    <th><fmt:message key="comment"/></th>
                 </tr>
                 </thead>
                 <tbody id="attachmentRows">

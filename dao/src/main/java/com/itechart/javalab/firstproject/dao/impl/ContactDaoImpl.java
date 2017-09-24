@@ -66,7 +66,7 @@ public class ContactDaoImpl implements ContactDao {
         ResultSet resultSet = statement.executeQuery();
         Contact contact = new Contact();
         while (resultSet.next()) {
-            Phone phone = new Phone(resultSet.getLong("pe.id"), resultSet.getInt("pe.country_code"), resultSet.getInt("pe.operator_code"), resultSet.getLong("pe.phone_number"),
+            Phone phone = new Phone(resultSet.getLong("pe.id"), resultSet.getString("pe.country_code"), resultSet.getInt("pe.operator_code"), resultSet.getLong("pe.phone_number"),
                     resultSet.getString("pe.phone_type"), resultSet.getString("pe.commentary"), resultSet.getLong("c.id"));
 
             Attachment attachment = new Attachment(resultSet.getLong("att.id"), resultSet.getString("att.file_name"), resultSet.getString("att.commentary"),

@@ -158,10 +158,10 @@ function addAttachments() {
 }
 
 function addAttachmentTable() {
-    var attachmentTitleName = "attachmentTitle";
+    var commentName = "attachComment";
     var attachmentName = "attachment";
 
-    var attachmentTitle = document.getElementById(attachmentTitleName).value;
+    var comment = document.getElementById(commentName).value;
     var attachment = document.getElementById(attachmentName).value;
 
 
@@ -175,16 +175,6 @@ function addAttachmentTable() {
     checkTd.appendChild(checkInput);
     tr.appendChild(checkTd);
 
-    var titleTd = document.createElement("td");
-    var titleInput = document.createElement("input");
-    titleInput.setAttribute("readonly", "readonly");
-    titleInput.setAttribute("type", "text");
-    titleInput.setAttribute("name", attachmentTitleName);
-    titleInput.setAttribute("style", "border: none");
-    titleInput.setAttribute("value", attachmentTitle);
-    titleTd.appendChild(titleInput);
-    tr.appendChild(titleTd);
-
     var attachmentTd = document.createElement("td");
     var attachmentInput = document.createElement("input");
     attachmentInput.setAttribute("readonly", "readonly");
@@ -194,6 +184,17 @@ function addAttachmentTable() {
     attachmentInput.setAttribute("value", attachment);
     attachmentTd.appendChild(attachmentInput);
     tr.appendChild(attachmentTd);
+
+    var titleTd = document.createElement("td");
+    var titleInput = document.createElement("input");
+    titleInput.setAttribute("readonly", "readonly");
+    titleInput.setAttribute("type", "text");
+    titleInput.setAttribute("name", commentName);
+    titleInput.setAttribute("style", "border: none");
+    titleInput.setAttribute("value", comment);
+    titleTd.appendChild(titleInput);
+
+    tr.appendChild(titleTd);
 
 
     body.appendChild(tr);

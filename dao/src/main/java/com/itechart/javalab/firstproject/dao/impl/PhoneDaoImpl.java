@@ -29,7 +29,7 @@ public class PhoneDaoImpl implements PhoneDao {
     public long save(Phone entity, Connection connection) throws SQLException {
         final String SAVE_PHONE = "insert into phone (country_code, operator_code, phone_number, phone_type, commentary, contact_id) values (?, ?, ?, ?, ?, ?);";
         PreparedStatement statement = connection.prepareStatement(SAVE_PHONE, Statement.RETURN_GENERATED_KEYS);
-        statement.setInt(1, entity.getCountryCode());
+        statement.setString(1, entity.getCountryCode());
         statement.setInt(2, entity.getOperatorCode());
         statement.setLong(3, entity.getNumber());
         statement.setString(4, entity.getType());
@@ -49,7 +49,7 @@ public class PhoneDaoImpl implements PhoneDao {
         Phone phone = null;
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-            phone = new Phone(resultSet.getLong("id"), resultSet.getInt("country_code"), resultSet.getInt("operator_code"), resultSet.getLong("phone_number"),
+            phone = new Phone(resultSet.getLong("id"), resultSet.getString("country_code"), resultSet.getInt("operator_code"), resultSet.getLong("phone_number"),
                     resultSet.getString("phone_type"), resultSet.getString("commentary"), resultSet.getLong("contact_id"));
         }
         statement.close();
@@ -60,7 +60,7 @@ public class PhoneDaoImpl implements PhoneDao {
     public void update(Phone entity, Connection connection) throws SQLException {
         final String UPDATE_PHONE = "update phone set country_code = ?, operator_code = ?, phone_number = ?, phone_type = ?, commentary = ? where id = ?;";
         PreparedStatement statement = connection.prepareStatement(UPDATE_PHONE);
-        statement.setInt(1, entity.getCountryCode());
+        statement.setString(1, entity.getCountryCode());
         statement.setInt(2, entity.getOperatorCode());
         statement.setLong(3, entity.getNumber());
         statement.setString(4, entity.getType());
@@ -88,7 +88,7 @@ public class PhoneDaoImpl implements PhoneDao {
         Phone phone;
         Set<Phone> phones = new HashSet<>();
         while (resultSet.next()) {
-            phone = new Phone(resultSet.getLong("id"), resultSet.getInt("country_code"), resultSet.getInt("operator_code"), resultSet.getLong("phone_number"),
+            phone = new Phone(resultSet.getLong("id"), resultSet.getString("country_code"), resultSet.getInt("operator_code"), resultSet.getLong("phone_number"),
                     resultSet.getString("phone_type"), resultSet.getString("commentary"), contactId);
             phones.add(phone);
         }

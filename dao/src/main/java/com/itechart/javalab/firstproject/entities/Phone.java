@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Phone {
     private long id;
-    private int countryCode;
+    private String countryCode;
     private int operatorCode;
     private long number;
     private String type;

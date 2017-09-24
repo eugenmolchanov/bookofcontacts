@@ -8,6 +8,14 @@ a[tabindex]:hover {
 }
 .header {
     background-color: #609a76;
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+}
+.contact_form {
+    padding-left: 3%;
+    padding-top: 5%;
+    position: relative;
 }
 .delete_form {
     border: none;
@@ -19,10 +27,11 @@ input {
     display: inline-block;
 }
 .main {
-    padding-top: 2%;
     padding-left: 3%;
+    padding-top: 5%;
+    position: relative;
 }
-.mainBody {
+.mainBody, .create_contact_body {
     background-color: #f0f0f0;
 }
 .mainPagePagination {
