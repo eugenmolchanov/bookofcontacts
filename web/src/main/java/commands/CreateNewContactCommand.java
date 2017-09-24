@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Created by Yauhen Malchanau on 15.09.2017.
@@ -25,7 +24,7 @@ import java.util.UUID;
 public class CreateNewContactCommand implements ActionCommand {
 
     private static Logger logger = Logger.getLogger(CreateNewContactCommand.class);
-    private ContactService<Contact> service = ContactServiceImpl.getInstance();
+    private ContactService service = ContactServiceImpl.getInstance();
     private Set<Phone> phones = new HashSet<>();
     private Set<Attachment> attachments = new HashSet<>();
     private String page;
@@ -52,15 +51,14 @@ public class CreateNewContactCommand implements ActionCommand {
                 int houseNumber = Integer.parseInt(String.valueOf(parameters.get("houseNumber")));
                 int flatNumber = Integer.parseInt(String.valueOf(parameters.get("flatNumber")));
                 int postalIndex = Integer.parseInt(String.valueOf(parameters.get("postcode")));
-                Address address = new Address(0, country, city, street, houseNumber, flatNumber, postalIndex);
                 Photo photo = (Photo) parameters.get("image");
-                Contact contact = new Contact(0, firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace, address,
-                        phones, attachments, photo);
-                try {
-                    service.create(contact);
-                } catch (SQLException e) {
-                    logger.error(e);
-                }
+//                Contact contact = new Contact(0, firstName, lastName, middleName, birthday, gender, nationality, maritalStatus, webSite, email, employmentPlace, null,
+//                        phones, attachments, photo);
+//                try {
+//                    service.create(contact);
+//                } catch (SQLException e) {
+//                    logger.error(e);
+//                }
                 req.setAttribute("message", MessageManager.getProperty("successful_create"));
                 return page = ConfigurationManager.getProperty("create_contact");
             } catch (IOException | ServletException | FileUploadException e) {

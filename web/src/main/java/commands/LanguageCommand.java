@@ -1,12 +1,13 @@
 package commands;
 
 import org.apache.log4j.Logger;
-import resources.ConfigurationManager;
+import resources.MessageManager;
 import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by Yauhen Malchanau on 18.09.2017.
@@ -14,7 +15,6 @@ import java.util.Locale;
 public class LanguageCommand implements ActionCommand {
 
     private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
-    private String page;
 
     @Override
     public String execute(HttpServletRequest req) {
@@ -33,6 +33,7 @@ public class LanguageCommand implements ActionCommand {
                     Locale.setDefault(belorussian);
                     break;
             }
+            MessageManager.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
             HttpSession session = req.getSession(true);
             session.setAttribute("language", language);
             return new EmptyCommand().execute(req);

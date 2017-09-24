@@ -3,6 +3,7 @@ package servlet;
 import commands.ActionCommand;
 import commands.factory.ActionFactory;
 import resources.ConfigurationManager;
+import resources.MessageManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +18,9 @@ import java.io.IOException;
  */
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
+
+    private String errorPage = ConfigurationManager.getProperty("error");
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp);
@@ -30,14 +34,21 @@ public class Controller extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String page;
         ActionFactory client = new ActionFactory();
-        ActionCommand command = client.defineCommand(req);
-        page = command.execute(req);
+        ActionCommand command = null;
+        try {
+            command = client.defineCommand(req);
+        } catch (IllegalArgumentException e) {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
+            dispatcher.forward(req, resp);
+        }
+        page = command != null ? command.execute(req) : null;
         if (page != null) {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(req, resp);
         } else {
-            page = ConfigurationManager.getProperty("index");
-            resp.sendRedirect(req.getContextPath() + page);
+            req.setAttribute("message", MessageManager.getProperty("error"));
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
+            dispatcher.forward(req, resp);
         }
     }
 }

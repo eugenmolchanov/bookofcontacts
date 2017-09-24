@@ -1,6 +1,5 @@
 package commands;
 
-import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.services.ContactService;
 import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Logger;
@@ -18,7 +17,7 @@ import java.util.Set;
  */
 public class DeleteContacts implements ActionCommand {
 
-    private ContactService<Contact> service = ContactServiceImpl.getInstance();
+    private ContactService service = ContactServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
     private String page;
 

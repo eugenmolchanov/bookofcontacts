@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class ListOfContactsCommand implements ActionCommand {
 
-    private ContactService<Contact> service = ContactServiceImpl.getInstance();
+    private ContactService service = ContactServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
 
     @Override

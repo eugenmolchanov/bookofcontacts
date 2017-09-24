@@ -1,9 +1,13 @@
-table, th, td {
-    border: solid 1px;
-    padding: 5px;
+a:active, a:visited {
+    text-decoration: none;
+    color: #ffffff;
 }
-table {
-    margin-top: 10px;
+a[tabindex]:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+.header {
+    background-color: #609a76;
 }
 .delete_form {
     border: none;
@@ -11,15 +15,46 @@ table {
 input {
     margin-bottom: 5px;
 }
-#previous, #pageNumbers, #next, #pageInfo, #ru, #by, #en, .main{
+#previous, #pageNumbers, #next, #pageInfo, .ru, .by, .en, .main_page, .language {
+    display: inline-block;
+}
+.main {
+    padding-top: 2%;
+    padding-left: 3%;
+}
+.mainBody {
+    background-color: #f0f0f0;
+}
+.mainPagePagination {
     display: inline;
 }
-#en, #ru, #by {
-    margin-left: 10px;
-    margin-right: 10px;
+.main_page {
+    display: inline-block;
+    margin: 0 0 0 5%;
+    padding: 1% 1% 1% 1%;
 }
+.main_page:hover, .messages:hover, .createContact:hover, .search:hover {
+    background-color: #000000;
+}
+.messages, .createContact, .search {
+    display: inline-block;
+    margin: 0 0 0 0;
+    padding: 1% 1% 1% 1%;
+}
+.en, .ru, .by {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+
 .language {
-    text-align: right;
+    text-align: center;
+    padding: 1% 1% 1% 1%;
+    margin: 0;
+    position: absolute;
+    width: 15%;
+    left: 80%;
+    right: 5%;
 }
 .phonePopupText {
     visibility: hidden;

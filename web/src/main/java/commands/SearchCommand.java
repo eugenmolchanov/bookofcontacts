@@ -20,11 +20,10 @@ import java.util.Set;
 public class SearchCommand implements ActionCommand {
 
     private static Logger logger = Logger.getLogger(CreateNewContactCommand.class);
-    private ContactService<Contact> service = ContactServiceImpl.getInstance();
+    private ContactService service = ContactServiceImpl.getInstance();
     private Set<Contact> contacts;
     private long numberOfContacts;
     private Contact contact = new Contact();
-    private Address address = new Address();
 
     @Override
     public String execute(HttpServletRequest req) {
@@ -58,38 +57,38 @@ public class SearchCommand implements ActionCommand {
             String nationality = req.getParameter("nationality");
             String maritalStatus = req.getParameter("maritalStatus");
             String country = req.getParameter("country");
-            if (!Objects.equals(country, "")) {
-                address.setCountry(country);
-            }
-            String city = req.getParameter("city");
-            if (!Objects.equals(city, "")) {
-                address.setCity(city);
-            }
-            String street = req.getParameter("street");
-            if (!Objects.equals(street, "")) {
-                address.setStreet(street);
-            }
-            int houseNumber = 0;
-            try {
-                houseNumber = Integer.parseInt(req.getParameter("houseNumber"));
-            } catch (Exception e) {
-                logger.debug(e);
-            }
-            address.setHouseNumber(houseNumber);
-            int flatNumber = 0;
-            try {
-                flatNumber = Integer.parseInt(req.getParameter("flatNumber"));
-            } catch (Exception e) {
-                logger.debug(e);
-            }
-            address.setFlatNumber(flatNumber);
-            int postalIndex = 0;
-            try {
-                postalIndex = Integer.parseInt(req.getParameter("postcode"));
-            } catch (Exception e) {
-                logger.debug(e);
-            }
-            address.setPostalIndex(postalIndex);
+//            if (!Objects.equals(country, "")) {
+//                address.setCountry(country);
+//            }
+//            String city = req.getParameter("city");
+//            if (!Objects.equals(city, "")) {
+//                address.setCity(city);
+//            }
+//            String street = req.getParameter("street");
+//            if (!Objects.equals(street, "")) {
+//                address.setStreet(street);
+//            }
+//            int houseNumber = 0;
+//            try {
+//                houseNumber = Integer.parseInt(req.getParameter("houseNumber"));
+//            } catch (Exception e) {
+//                logger.debug(e);
+//            }
+//            address.setHouseNumber(houseNumber);
+//            int flatNumber = 0;
+//            try {
+//                flatNumber = Integer.parseInt(req.getParameter("flatNumber"));
+//            } catch (Exception e) {
+//                logger.debug(e);
+//            }
+//            address.setFlatNumber(flatNumber);
+//            int postalIndex = 0;
+//            try {
+//                postalIndex = Integer.parseInt(req.getParameter("postcode"));
+//            } catch (Exception e) {
+//                logger.debug(e);
+//            }
+//            address.setPostalIndex(postalIndex);
             if (!Objects.equals(firstName, "")) {
                 contact.setFirstName(firstName);
             }
@@ -106,7 +105,7 @@ public class SearchCommand implements ActionCommand {
             if (!Objects.equals(maritalStatus, "")) {
                 contact.setMaritalStatus(maritalStatus);
             }
-            contact.setAddress(address);
+//            contact.setAddress(address);
             try {
                 contacts = service.searchContacts(contact, birthdayFrom, birthdayTo, startContact, step);
                 numberOfContacts = service.getNumberOfSearchContacts(contact, birthdayFrom, birthdayTo);

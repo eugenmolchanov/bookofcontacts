@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class EmptyCommand implements ActionCommand {
 
-    private ContactService<Contact> service = ContactServiceImpl.getInstance();
+    private ContactService service = ContactServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
 
     @Override
@@ -29,7 +29,7 @@ public class EmptyCommand implements ActionCommand {
             numberOfContacts = service.getNumberOfContacts();
         } catch (SQLException e) {
             logger.error(e);
-            req.setAttribute("message", MessageManager.getProperty(""));
+            req.setAttribute("message", MessageManager.getProperty("error"));
             return ConfigurationManager.getProperty("error");
         }
         HttpSession session = req.getSession(true);

@@ -19,7 +19,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=58"></script>
 </head>
 <body>
-<jsp:include page="language.jsp"/>
+<jsp:include page="header.jsp"/>
 <div><p>${requestScope.message}</p></div>
 <div class="contact_form">
     <form action="/controller?command=createNewContact" method="post" name="createForm" onsubmit="createContact()"
@@ -62,9 +62,9 @@
         <label for="flatNumber"><fmt:message key="flat_number"/> </label><br>
         <input type="number" min="1" name="flatNumber" id="flatNumber" placeholder="<fmt:message key="flat_number"/> "
                pattern="[0-9]" title="Only digits"/><br>
-        <label for="postalIndex"><fmt:message key="postal_index"/> </label><br>
+        <label for="postalIndex"><fmt:message key="postcode"/> </label><br>
         <input type="number" min="1" name="postalIndex" id="postalIndex"
-               placeholder="<fmt:message key="postal_index"/> "
+               placeholder="<fmt:message key="postcode"/> "
                pattern="[0-9]" title="Only digits"/><br>
         <div class="phoneInfo">
             <table>

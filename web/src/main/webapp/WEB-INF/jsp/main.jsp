@@ -8,27 +8,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
     <title><fmt:message key="contacts"/></title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assests/css/style.css?v=2">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=10"></script>
 </head>
-<body>
-<jsp:include page="language.jsp"/>
+<body class="mainBody">
+<jsp:include page="header.jsp"/>
 <div class="main">
-    <form action="/controller?command=deleteContacts" method="post" name="deleteForm" onsubmit="return deleteContacts()">
+    <form action="/controller?command=deleteContacts" method="post" name="deleteForm"
+          onsubmit="return deleteContacts()">
         <input type="checkbox" onclick="toggle(this)" id="chooseAll"/>
         <input type="submit" value="<fmt:message key="delete"/>" class="button" onclick="deleteContacts()"/>
-        <a href="/controller?command=redirect&form=createContact"><fmt:message key="create_contact"/></a>
-        <a href="/controller?command=redirect&form=search"><fmt:message key="search"/></a>
-        <input type="submit" value="<fmt:message key="send_email"/> " formaction="/controller?command=redirect&form=sendEmail" onclick="return chooseEmail()">
-        <a href="/controller?command=redirect&form=sendEmail"><fmt:message key="send_email"/></a>
-        <%--<input type="button" value="<fmt:message key="create_contact"/>" class="button" onclick="goToCreateForm()"/>--%>
-        <table>
+        <input type="submit" value="<fmt:message key="send_email"/> "
+               formaction="/controller?command=redirect&form=sendEmail" onclick="return chooseEmail()">
+        <table class="table table-bordered">
             <thead>
             <tr>
                 <th></th>
@@ -39,7 +37,9 @@
                 <th><fmt:message key="street"/></th>
                 <th><fmt:message key="house_number"/></th>
                 <th><fmt:message key="flat_number"/></th>
+                <th><fmt:message key="postcode"/></th>
                 <th><fmt:message key="employment_place"/></th>
+                <th><fmt:message key="contact_group"/></th>
             </tr>
             </thead>
             <tbody>
@@ -63,48 +63,60 @@
             </tbody>
         </table>
     </form>
-</div>
-<div class="pagination">
-    <c:set var="start" value="${requestScope.startContactNumber}"/>
-    <c:set var="step" value="${requestScope.quantityOfContacts}"/>
-    <c:set var="count" value="${requestScope.numberOfContacts}"/>
-    <c:set var="maxPage"/>
-    <c:choose>
-        <c:when test="${count % step != 0}">
-            <c:set var="maxPage" value="${count / step}"/>
-             </c:when>
-        <c:otherwise>
-            <c:set var="maxPage" value="${(count / step) + 1}"/>
-        </c:otherwise>
-    </c:choose>
+    <div class="mainPagePagination">
+        <c:set var="start" value="${requestScope.startContactNumber}"/>
+        <c:set var="step" value="${requestScope.quantityOfContacts}"/>
+        <c:set var="count" value="${requestScope.numberOfContacts}"/>
+        <c:set var="size" value="${fn:length(requestScope.contacts)}"/>
+        <c:set var="maxPage"/>
+        <c:choose>
+            <c:when test="${count / step > 1}">
+                <fmt:parseNumber var="maxPage" type="number" value="${count / step}"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="maxPage" value="${1}"/>
+            </c:otherwise>
+        </c:choose>
 
-    <div id="pageInfo">${start + 1}${" - "}${start + step}${" "}
-        <fmt:message key="from"/>
-        ${" "}${count}</div>
-    <c:if test="${start != 0}">
-        <div id="previous"><a
-                href="/controller?command=${requestScope.command}&startContactNumber=${start - step}&quantityOfContacts=${step}">
-            <fmt:message key="previous"/></a></div>
-    </c:if>
-    <div id="pageNumbers">
-        <c:forEach var="i" begin="0" end="4">
-            <c:if test="${((start + step) / step + i - 2) > 0 && ((start + step) / step + i - 2) <= maxPage + 1}">
-                <c:choose>
-                    <c:when test="${i != 2}">
-                        <fmt:parseNumber var = "page" type = "number" value = "${(start + step) / step + i - 2}" />
-                        <a href="/controller?command=${requestScope.command}&startContactNumber=${start + step * (i - 2)}&quantityOfContacts=${step}">
-                                ${page}</a> </c:when>
-                    <c:otherwise>
-                        <fmt:parseNumber var = "presentPage" type = "number" value = "${(start + step) / step}" />
-                        ${presentPage}${" "}
-                    </c:otherwise>
-                </c:choose>
-            </c:if>
-        </c:forEach>
+        <div id="pageInfo">
+            <c:choose>
+                <c:when test="${size != 0}">
+                    ${start + 1}
+                </c:when>
+                <c:otherwise>
+                    ${0}
+                </c:otherwise>
+            </c:choose>
+            ${" - "}${start + size}${" "}
+            <fmt:message key="from"/>
+            ${" "}${count}</div>
+        <c:if test="${start != 0}">
+            <div id="previous"><a
+                    href="/controller?command=${requestScope.command}&startContactNumber=${start - step}&quantityOfContacts=${step}">
+                <fmt:message key="previous"/></a></div>
+        </c:if>
+        <div id="pageNumbers">
+            <c:forEach var="i" begin="0" end="4">
+                <c:if test="${((start + step) / step + i - 2) > 0 && ((start + step) / step + i - 2) <= maxPage}">
+                    <c:choose>
+                        <c:when test="${i != 2}">
+                            <fmt:parseNumber var="page" type="number" value="${(start + step) / step + i - 2}"/>
+                            <a href="/controller?command=${requestScope.command}&startContactNumber=${start + step * (i - 2)}&quantityOfContacts=${step}">
+                                    ${page}</a> </c:when>
+                        <c:otherwise>
+                            <fmt:parseNumber var="presentPage" type="number" value="${(start + step) / step}"/>
+                            ${presentPage}${" "}
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+            </c:forEach>
+        </div>
+        <c:if test="${(count - start) gt step}">
+            <div id="next"><a
+                    href="/controller?command=${requestScope.command}&startContactNumber=${start + step}&quantityOfContacts=${step}"><fmt:message
+                    key="next"/></a></div>
+        </c:if>
     </div>
-    <c:if test="${(count - start) gt step}">
-        <div id="next"><a href="/controller?command=${requestScope.command}&startContactNumber=${start + step}&quantityOfContacts=${step}"><fmt:message key="next"/></a></div>
-    </c:if>
 </div>
 </body>
 </html>

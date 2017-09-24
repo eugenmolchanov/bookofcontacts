@@ -18,7 +18,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=1"></script>
 </head>
 <body>
-<jsp:include page="language.jsp"/>
+<jsp:include page="header.jsp"/>
 <div><p>${requestScope.message}</p></div>
 <div class="search">
 <form class="searchForm" action="/controller" method="post" onsubmit="return search()">
@@ -50,8 +50,8 @@
     <input type="text" id="houseNumber" name="houseNumber" placeholder="<fmt:message key="house_number"/> "/><br>
     <label for="flatNumber"><fmt:message key="flat_number"/> </label><br>
     <input type="number" id="flatNumber" name="flatNumber" placeholder="<fmt:message key="flat_number"/> "/><br>
-    <label for="postalIndex"><fmt:message key="postal_index"/> </label><br>
-    <input type="number" id="postalIndex" name="postalIndex" placeholder="<fmt:message key="postal_index"/> "/><br>
+    <label for="postalIndex"><fmt:message key="postcode"/> </label><br>
+    <input type="number" id="postalIndex" name="postalIndex" placeholder="<fmt:message key="postcode"/> "/><br>
     <input type="submit" value="<fmt:message key="search"/> " onclick="search()"/>
 </form>
 </div>

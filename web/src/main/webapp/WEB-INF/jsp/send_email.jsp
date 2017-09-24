@@ -18,7 +18,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=3"></script>
 </head>
 <body>
-<jsp:include page="language.jsp"/>
+<jsp:include page="header.jsp"/>
 <div class="message">${requestScope.message}</div>
 <div class="sendEmail">
     <form class="emailForm" id="emailForm" name="emailForm" action="/controller" method="post"
