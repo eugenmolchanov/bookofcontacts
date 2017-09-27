@@ -126,8 +126,11 @@
         <div class="attachmentInfo" id="attachmentInfo">
             <table class="attachmentTable">
                 <caption class="attachmentTitle">
-                    <div class="attachmentPopup"><button type="button" name="attachmentPopup" onclick="addAttachments()" class="btn btn-primary"><fmt:message key="create"/></button>
-                        <button type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()" class="btn btn-primary"><fmt:message key="delete"/></button>
+                    <div class="attachmentPopup">
+                        <button type="button" name="attachmentPopup" onclick="addAttachments()" class="btn btn-primary">
+                            <fmt:message key="create"/></button>
+                        <button type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()"
+                                class="btn btn-primary"><fmt:message key="delete"/></button>
                     </div>
                 </caption>
                 <thead>
@@ -143,7 +146,8 @@
             </table>
         </div>
         <br>
-        <input type="submit" onclick="createContact()" value="<fmt:message key="create"/> " class="btn btn-primary btn-lg btn-block"/>
+        <input type="submit" onclick="createContact()" value="<fmt:message key="create"/> "
+               class="btn btn-primary btn-lg btn-block"/>
     </form>
 </div>
 <div class="phonePopupText" id="phonePopup">
@@ -192,10 +196,11 @@
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
             <div class="attachments_buttons">
-            <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
-                <fmt:message key="save"/></button>
-            <button type="button" id="cancelAttachment" onclick="addAttachments()" class="btn btn-success"><fmt:message
-                    key="exit"/></button>
+                <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
+                    <fmt:message key="save"/></button>
+                <button type="button" id="cancelAttachment" onclick="addAttachments()" class="btn btn-success">
+                    <fmt:message
+                            key="exit"/></button>
             </div>
         </form>
     </div>
