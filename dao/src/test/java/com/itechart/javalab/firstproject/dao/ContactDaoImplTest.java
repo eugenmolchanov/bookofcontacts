@@ -35,7 +35,7 @@ public class ContactDaoImplTest {
         Photo photo = new Photo();
         long photoId = photoDao.save(photo, connection);
         photo.setId(photoId);
-        contact = new Contact(0, "name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
+        contact = new Contact(0, "name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), "Мужчина", null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
                 photo);
     }
 
@@ -54,7 +54,7 @@ public class ContactDaoImplTest {
     @Test
     public void shouldCountContacts() throws SQLException {
         dao.save(contact, connection);
-        Assert.assertEquals(1, dao.getNumberOfContacts(connection));
+        Assert.assertEquals(2, dao.getNumberOfContacts(connection));
     }
 
     @Test

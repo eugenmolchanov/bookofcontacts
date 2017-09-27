@@ -33,12 +33,12 @@ public class Data {
         Set<Attachment> attachments = new HashSet<>();
         Attachment attachment = new Attachment();
         Phone phone = new Phone();
-        String pathToFolder = "D:\\IndividualProject\\";
+        String pathToFolder = "D:\\IndividualProject\\contacts\\";
         String folder = pathToFolder.concat(LocalDate.now().toString()).concat(UUID.randomUUID().toString()).concat("\\");
         for (FileItem item : items) {
             if (item.isFormField()) {
                 String fieldName = item.getFieldName();
-                String fieldValue = item.getString();
+                String fieldValue = item.getString("UTF-8");
                 if (!fieldValue.equals("")) {
                     if (!fieldName.equals("attachComment") && !fieldName.equals("countryCode") && !fieldName.equals("operatorCode") &&
                             !fieldName.equals("number") && !fieldName.equals("type") && !fieldName.equals("comment")) {
@@ -72,25 +72,27 @@ public class Data {
             } else {
                 String fieldName = item.getFieldName();
                 String fileName = FilenameUtils.getName(item.getName());
-                InputStream fileContent = item.getInputStream();
-                String[] array = fileName.split("\\.");
-                String format = array[1];
-                if (fieldName.equals("image")) {
-                    String uuid = UUID.randomUUID().toString();
-                    String fileTitle = uuid.concat(".").concat(format);
-                    File file = new File(folder.concat(fileTitle));
-                    FileUtils.copyInputStreamToFile(fileContent, file);
-                    Photo photo = new Photo(0, folder, fileTitle);
-                    parameters.put(fieldName, photo);
-                } else if (fieldName.equals("attachment")) {
-                    String uuid = UUID.randomUUID().toString();
-                    String fileTitle = uuid.concat(".").concat(format);
-                    File file = new File(folder.concat(fileTitle));
-                    FileUtils.copyInputStreamToFile(fileContent, file);
-                    attachment.setFileName(fileName);
-                    attachment.setPathToFile(folder);
-                    attachment.setUuid(fileTitle);
-                    attachment.setDate(Timestamp.valueOf(LocalDateTime.now()));
+                if (!fileName.equals("")) {
+                    InputStream fileContent = item.getInputStream();
+                    String[] array = fileName.split("\\.");
+                    String format = array[1];
+                    if (fieldName.equals("image")) {
+                        String uuid = UUID.randomUUID().toString();
+                        String fileTitle = uuid.concat(".").concat(format);
+                        File file = new File(folder.concat(fileTitle));
+                        FileUtils.copyInputStreamToFile(fileContent, file);
+                        Photo photo = new Photo(0, folder, fileTitle);
+                        parameters.put(fieldName, photo);
+                    } else if (fieldName.equals("attachment")) {
+                        String uuid = UUID.randomUUID().toString();
+                        String fileTitle = uuid.concat(".").concat(format);
+                        File file = new File(folder.concat(fileTitle));
+                        FileUtils.copyInputStreamToFile(fileContent, file);
+                        attachment.setFileName(fileName);
+                        attachment.setPathToFile(folder);
+                        attachment.setUuid(fileTitle);
+                        attachment.setDate(Timestamp.valueOf(LocalDateTime.now()));
+                    }
                 }
             }
         }

@@ -13,9 +13,9 @@
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=31">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=40">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=11"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=18"></script>
 </head>
 <body>
 <div class="header">
@@ -32,9 +32,9 @@
         <a href="/controller?command=redirect&form=search" tabindex="1"><fmt:message key="search"/></a>
     </div>
     <div class="language">
-        <div class="en"><a href="/controller?command=language&language=en_US">En</a></div>
-        <div class="ru"><a href="/controller?command=language&language=ru_RU">Ru</a></div>
-        <div class="by"><a href="/controller?command=language&language=be_BY">By</a></div>
+        <div class="en"><a href="/controller?command=language&language=en_US" tabindex="1">En</a></div>
+        <div class="ru"><a href="/controller?command=language&language=ru_RU" tabindex="1">Ru</a></div>
+        <div class="by"><a href="/controller?command=language&language=be_BY" tabindex="1">By</a></div>
     </div>
 </div>
 </body>

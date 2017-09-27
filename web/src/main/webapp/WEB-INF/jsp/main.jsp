@@ -52,12 +52,14 @@
                         <a href="controller?command=redirect&form=contact">${contact.lastName} ${" "} ${contact.firstName}</a>
                     </td>
                     <td>${contact.birthday}</td>
-                    <td>${contact.address.country}</td>
-                    <td>${contact.address.city}</td>
-                    <td>${contact.address.street}</td>
-                    <td>${contact.address.houseNumber}</td>
-                    <td>${contact.address.flatNumber}</td>
+                    <td>${contact.country}</td>
+                    <td>${contact.city}</td>
+                    <td>${contact.street}</td>
+                    <td>${contact.houseNumber}</td>
+                    <td>${contact.flatNumber}</td>
+                    <td>${contact.postcode}</td>
                     <td>${contact.employmentPlace}</td>
+                    <td>${contact.contactGroup}</td>
                 </tr>
             </c:forEach>
             </tbody>

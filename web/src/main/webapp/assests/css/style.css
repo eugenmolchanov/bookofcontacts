@@ -1,18 +1,14 @@
-a:active, a:visited {
-    text-decoration: none;
-    color: #ffffff;
-}
-a[tabindex]:hover {
+a[tabindex = '1']:hover, a[tabindex = '1']:active, a[tabindex = '1']:visited {
     color: #ffffff;
     text-decoration: none;
 }
 .header {
     background-color: #609a76;
-    z-index: 1;
+    z-index: 10;
     position: fixed;
     width: 100%;
 }
-.contact_form {
+.sendEmail {
     padding-left: 3%;
     padding-top: 5%;
     position: relative;
@@ -23,7 +19,7 @@ a[tabindex]:hover {
 input {
     margin-bottom: 5px;
 }
-#previous, #pageNumbers, #next, #pageInfo, .ru, .by, .en, .main_page, .language {
+#previous, #pageNumbers, #next, #pageInfo, .ru, .by, .en, .main_page, .language, .nameMessage {
     display: inline-block;
 }
 .main {
@@ -66,17 +62,23 @@ input {
     right: 5%;
 }
 .phonePopupText {
+    background-color: #ffffff;
     visibility: hidden;
-    position: absolute;
-    left: 80%;
-    right: 5%;
+    position: fixed;
+    top: 20%;
+    height: 60%;
+    bottom: 25%;
+    left: 25%;
+    width: 50%;
     border: outset 3px;
-    height: 25%;
-    width: 18%;
-    text-align: center;
+    z-index: 1;
 }
 .phonePopupText.show {
     visibility: visible;
+}
+.contact_form.roll {
+    opacity: 0.3;
+    pointer-events: none;
 }
 .phoneTitle {
     text-align: right;
@@ -88,18 +90,125 @@ input {
     width: 75%;
 }
 .attachmentPopupText {
+    background-color: #ffffff;
     visibility: hidden;
-    position: absolute;
-    left: 80%;
-    right: 5%;
+    position: fixed;
+    top: 20%;
+    height: 60%;
+    bottom: 25%;
+    left: 25%;
+    width: 50%;
     border: outset 3px;
-    height: 25%;
-    width: 18%;
-    text-align: center;
+    z-index: 1;
 }
 .attachmentPopupText.show {
     visibility: visible;
 }
 .attachmentTitle {
     text-align: right;
+}
+.contactTitle {
+    text-align: center;
+    padding-bottom: 1%;
+}
+.generalInfo {
+}
+.contact_form {
+    background-color: #ffffff;
+    padding-left: 3%;
+    padding-right: 1%;
+    position: relative;
+    border: solid 1px;
+    border-radius: 8px;
+    top: 10%;
+    left: 18%;
+    width: 64%;
+}
+#full-name>input, #secondLine>input, #thirdLine>input, #fourthLine>input, #full-name>.nameMessage, #secondLine>.nameMessage, #thirdLine>.nameMessage, #fourthLine>.nameMessage,
+#fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage {
+    width: 30%;
+    margin-right: 2%;
+}
+#secondLine, #thirdLine, #fourthLine, #sixthLine {
+    padding-top: 1.5%;
+}
+.phoneTable, .attachmentTable {
+    table-layout: fixed;
+    width: 130%;
+}
+.phoneCheckbox, .attachmentCheckbox {
+    width: 3%;
+    border-bottom: 1px solid #ddd;
+}
+.phoneCountryCode {
+    width: 11%;
+    border-bottom: 1px solid #ddd;
+}
+.phoneOperatorCode {
+    width: 12%;
+    border-bottom: 1px solid #ddd;
+
+}
+.phoneNumber {
+    width: 25%;
+    border-bottom: 1px solid #ddd;
+}
+.phoneType {
+    width: 12%;
+    border-bottom: 1px solid #ddd;
+}
+.phoneComment {
+    width: 36%;
+    border-bottom: 1px solid #ddd;
+}
+.attachmentFile {
+    width: 49%;
+    border-bottom: 1px solid #ddd;
+}
+.attachmentComment {
+    width: 48%;
+    border-bottom: 1px solid #ddd;
+}
+#phoneRows>td {
+    border-bottom: 1px solid #ddd;
+}
+.phoneImage {
+    position: fixed;
+    text-align: left;
+    left: 27%;
+    top: 36%;
+}
+.fileImage {
+    position: fixed;
+    text-align: left;
+    left: 27%;
+    top: 36%;
+}
+.phoneForm {
+    position: fixed;
+    left: 43%;
+    top: 20%;
+}
+.attachmentForm {
+    position: fixed;
+    left: 43%;
+    top: 35%;
+}
+#phonePopup input, #phonePopup select {
+    width: 180%;
+}
+#countryCodeMessage, #operatorCodeMessage, #numberMessage, #typeMessage, #commentMessage {
+    padding-top: 14%;
+}
+#phone_buttons input {
+    width: 50%;
+}
+#attachmentMessage, #attachCommentMessage {
+    padding-top: 10%;
+}
+.attachments_buttons {
+    padding-top: 35%;
+}
+#attachmentPopup input {
+    width: 120%;
 }

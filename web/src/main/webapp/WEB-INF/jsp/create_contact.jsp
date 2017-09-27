@@ -19,120 +19,186 @@
 <body class="create_contact_body">
 <jsp:include page="header.jsp"/>
 <%--<div><p>${requestScope.message}</p></div>--%>
-<div class="contact_form">
-    <form action="/controller?command=createNewContact" method="post" name="createForm" onsubmit="createContact()"
-          enctype="multipart/form-data">
-        <div class="photoTitle"><fmt:message key="contact_photo"/></div>
-        <label for="image"><fmt:message key="choose_photo"/> </label><br>
-        <input type="file" name="image" id="image"/><br>
-        <div class="generalInfo"><fmt:message key="general_info"/></div>
-        <label for="firstName"><fmt:message key="first_name"/></label><br>
-        <input type="text" name="firstName" id="firstName" placeholder="<fmt:message key="first_name"/> " required/><br>
-        <label for="lastName"><fmt:message key="last_name"/> </label><br>
-        <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>" required/><br>
-        <label for="middleName"><fmt:message key="middle_name"/> </label><br>
-        <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "/><br>
-        <label for="birthday"><fmt:message key="birthday"/> </label><br>
-        <input type="date" name="birthday" id="birthday" placeholder="<fmt:message key="birthday"/> "/><br>
-        <label for="gender"><fmt:message key="gender"/> </label><br>
-        <input type="text" name="gender" id="gender" placeholder="<fmt:message key="gender"/> "/><br>
-        <label for="nationality"><fmt:message key="nationality"/> </label><br>
-        <input type="text" name="nationality" id="nationality" placeholder="<fmt:message key="nationality"/> "/><br>
-        <label for="maritalStatus"><fmt:message key="marital_status"/> </label><br>
-        <input type="text" name="maritalStatus" id="maritalStatus"
-               placeholder="<fmt:message key="marital_status"/> "/><br>
-        <label for="webSite"><fmt:message key="website"/> </label><br>
-        <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "/><br>
-        <label for="email"><fmt:message key="email"/> </label><br>
-        <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "/><br>
-        <label for="employmentPlace"><fmt:message key="employment_place"/> </label><br>
-        <input type="text" name="employmentPlace" id="employmentPlace"
-               placeholder="<fmt:message key="employment_place"/> "/><br>
-        <label for="contactGroup"><fmt:message key="contact_group"/> </label><br>
-        <input type="text" name="contactGroup" id="contactGroup" placeholder="<fmt:message key="contact_group"/> "/><br>
-        <div class="addressInfo"><fmt:message key="address"/></div>
-        <label for="country"><fmt:message key="country"/> </label><br>
-        <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "/><br>
-        <label for="city"><fmt:message key="city"/> </label><br>
-        <input type="text" name="city" id="city" placeholder="<fmt:message key="city"/> "/><br>
-        <label for="street"><fmt:message key="street"/> </label><br>
-        <input type="text" name="street" id="street" placeholder="<fmt:message key="street"/> "/><br>
-        <label for="houseNumber"><fmt:message key="house_number"/> </label><br>
-        <input type="text" name="houseNumber" id="houseNumber" placeholder="<fmt:message key="house_number"/> "/><br>
-        <label for="flatNumber"><fmt:message key="flat_number"/> </label><br>
-        <input type="number" min="1" name="flatNumber" id="flatNumber" placeholder="<fmt:message key="flat_number"/> "
-               pattern="[0-9]" title="Only digits"/><br>
-        <label for="postalIndex"><fmt:message key="postcode"/> </label><br>
-        <input type="number" min="1" name="postalIndex" id="postalIndex"
-               placeholder="<fmt:message key="postcode"/> "
-               pattern="[0-9]" title="Only digits"/><br>
-        <div class="phoneInfo">
-            <table class="table table-bordered">
+<div class="contact_form" id="contact_form">
+    <div class="messageInfo">${requestScope.message}</div>
+    <form action="/controller?command=createNewContact" method="post" name="createForm"
+          onsubmit="return createContact()"
+          enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
+        <div class="contactTitle"><h2><fmt:message key="personal_data"/></h2></div>
+        <div class="photoInfo"><h3><fmt:message key="contact_photo"/></h3></div>
+        <input type="file" name="image" id="image" class="form-control"/><br>
+        <div class="generalInfo"><h3><fmt:message key="general_info"/></h3></div>
+        <div id="full-name">
+            <div class="nameMessage" id="firstNameMessage"></div>
+            <div class="nameMessage" id="secondNameMessage"></div>
+            <div class="nameMessage" id="middleNameMessage"></div>
+            <input type="text" name="firstName" id="firstName" placeholder="<fmt:message key="first_name"/> " required
+                   class="form-control"/>
+            <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>" required
+                   class="form-control"/>
+            <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
+                   class="form-control"/>
+        </div>
+        <div id="secondLine">
+            <div class="nameMessage" id="birthdayMessage"></div>
+            <div class="nameMessage" id="genderMessage"></div>
+            <div class="nameMessage" id="nationalityMessage"></div>
+            <input type="date" name="birthday" id="birthday" placeholder="<fmt:message key="birthday"/> "
+                   class="form-control"/>
+            <input type="text" name="gender" id="gender" placeholder="<fmt:message key="gender"/> "
+                   class="form-control"/>
+            <input type="text" name="nationality" id="nationality" placeholder="<fmt:message key="nationality"/>"
+                   class="form-control"/>
+        </div>
+        <div id="thirdLine">
+            <div class="nameMessage" id="maritalStatusMessage"></div>
+            <div class="nameMessage" id="websiteMessage"></div>
+            <div class="nameMessage" id="emailMessage"></div>
+            <input type="text" name="maritalStatus" id="maritalStatus"
+                   placeholder="<fmt:message key="marital_status"/> " class="form-control"/>
+            <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
+                   class="form-control"/>
+            <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> " class="form-control"/>
+        </div>
+        <div id="fourthLine">
+            <div class="nameMessage" id="employmentPlaceMessage"></div>
+            <div class="nameMessage" id="contactGroupMessage"></div>
+            <br>
+            <input type="text" name="employmentPlace" id="employmentPlace"
+                   placeholder="<fmt:message key="employment_place"/> " class="form-control"/>
+            <input type="text" name="contactGroup" id="contactGroup" placeholder="<fmt:message key="contact_group"/> "
+                   class="form-control"/>
+        </div>
+
+        <div class="addressInfo"><h3><fmt:message key="address"/></h3></div>
+        <div id="fifthLine">
+            <div class="nameMessage" id="countryMessage"></div>
+            <div class="nameMessage" id="cityMessage"></div>
+            <div class="nameMessage" id="streetMessage"></div>
+            <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "
+                   class="form-control"/>
+            <input type="text" name="city" id="city" placeholder="<fmt:message key="city"/> " class="form-control"/>
+            <input type="text" name="street" id="street" placeholder="<fmt:message key="street"/> "
+                   class="form-control"/>
+        </div>
+        <div id="sixthLine">
+            <div class="nameMessage" id="houseNumberMessage"></div>
+            <div class="nameMessage" id="flatNumberMessage"></div>
+            <div class="nameMessage" id="postalIndexMessage"></div>
+            <input type="text" name="houseNumber" id="houseNumber"
+                   placeholder="<fmt:message key="house_number"/> " class="form-control"/>
+            <input type="number" min="1" name="flatNumber" id="flatNumber"
+                   placeholder="<fmt:message key="flat_number"/> "
+                   pattern="[0-9]" title="Only digits" class="form-control"/>
+            <input type="number" min="1" name="postalIndex" id="postalIndex"
+                   placeholder="<fmt:message key="postcode"/> "
+                   pattern="[0-9]" title="Only digits" class="form-control"/>
+        </div>
+        <div class="phonesInfo"><h3><fmt:message key="phones"/></h3></div>
+        <div class="phoneInfo" id="phoneInfo">
+            <table class="phoneTable" id="phoneTable">
                 <caption class="phoneTitle">
-                    <div class="phonePopup"><input type="button" name="phonePopup" onclick="addPhones()" value="<fmt:message key="create"/> "/>
-                        <input type="button" name="deletePhone" onclick="deletePhoneFromTable()" value="<fmt:message key="delete"/> "/>
-                        <div class="phonePopupText" id="phonePopup">
-                            <form id="phoneForm" class="phoneForm">
-                                <input type="number" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "/><br>
-                                <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "/><br>
-                                <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "/><br>
-                                <select id="type" name="type" placeholder="<fmt:message key="type"/> ">
-                                    <option selected disabled><fmt:message key="type"/></option>
-                                    <option value="working"><fmt:message key="work_phone"/> </option>
-                                    <option value="domestic"><fmt:message key="home_phone"/> </option>
-                                </select><br>
-                                <input type="text" id="comment" name="comment" placeholder="<fmt:message key="comment"/> "/><br>
-                                <input type="button" id="savePhone" onclick="addPhoneTable()" value="<fmt:message key="save"/>"/>
-                                <input type="button" id="cancelPhone" onclick="addPhones()" value="<fmt:message key="cancel"/> ">
-                            </form>
-                        </div>
+                    <div class="phonePopup">
+                        <button type="button" name="phonePopup" onclick="addPhones()" class="btn btn-primary">
+                            <fmt:message key="create"/></button>
+                        <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
+                                class="btn btn-primary"><fmt:message key="delete"/></button>
                     </div>
                 </caption>
                 <thead>
                 <tr>
-                    <th></th>
-                    <th><fmt:message key="country_code"/></th>
-                    <th><fmt:message key="operator_code"/></th>
-                    <th><fmt:message key="phone_number"/></th>
-                    <th><fmt:message key="type"/></th>
-                    <th><fmt:message key="comment"/></th>
+                    <th class="phoneCheckbox"></th>
+                    <th class="phoneCountryCode"><fmt:message key="country_code"/></th>
+                    <th class="phoneOperatorCode"><fmt:message key="operator_code"/></th>
+                    <th class="phoneNumber"><fmt:message key="phone_number"/></th>
+                    <th class="phoneType"><fmt:message key="type"/></th>
+                    <th class="phoneComment"><fmt:message key="comment"/></th>
                 </tr>
                 </thead>
                 <tbody id="phoneRows">
 
                 </tbody>
             </table>
+
         </div>
-        <div class="attachmentInfo">
-            <table class="table table-bordered">
+        <br>
+        <div class="attachmentsInfo"><h3><fmt:message key="attachments"/></h3></div>
+        <div class="attachmentInfo" id="attachmentInfo">
+            <table class="attachmentTable">
                 <caption class="attachmentTitle">
-                    <div class="attachmentPopup"><input type="button" name="attachmentPopup" onclick="addAttachments()" value="<fmt:message key="create"/> "/>
-                        <input type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()" value="<fmt:message key="delete"/> "/>
-                        <div class="attachmentPopupText" id="attachmentPopup">
-                            <form id="attachmentForm" class="attachmentForm">
-                                <label for="image"><fmt:message key="choose_photo"/> </label><br>
-                                <input type="file" name="attachment" id="attachment"/><br>
-                                <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="title"/> "/><br>
-                                <input type="button" id="saveAttachment" onclick="addAttachmentTable()" value="<fmt:message key="save"/>"/>
-                                <input type="button" id="cancelAttachment" onclick="addAttachments()" value="<fmt:message key="cancel"/> ">
-                            </form>
-                        </div>
+                    <div class="attachmentPopup"><button type="button" name="attachmentPopup" onclick="addAttachments()" class="btn btn-primary"><fmt:message key="create"/></button>
+                        <button type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()" class="btn btn-primary"><fmt:message key="delete"/></button>
                     </div>
                 </caption>
                 <thead>
                 <tr>
-                    <th></th>
-                    <th><fmt:message key="attachment"/></th>
-                    <th><fmt:message key="comment"/></th>
+                    <th class="attachmentCheckbox"></th>
+                    <th class="attachmentFile"><fmt:message key="attachment"/></th>
+                    <th class="attachmentComment"><fmt:message key="comment"/></th>
                 </tr>
                 </thead>
                 <tbody id="attachmentRows">
 
                 </tbody>
             </table>
-        </div><br>
-        <input type="submit" onclick="createContact()" value="<fmt:message key="create"/> ">
+        </div>
+        <br>
+        <input type="submit" onclick="createContact()" value="<fmt:message key="create"/> " class="btn btn-primary btn-lg btn-block"/>
     </form>
+</div>
+<div class="phonePopupText" id="phonePopup">
+    <div class="phoneImage">
+        <img src="${pageContext.request.contextPath}/assests/images/phone.jpg">
+    </div>
+    <div class="phoneForm" id="phoneForm">
+        <form>
+            <div class="phoneMessage" id="countryCodeMessage"></div>
+            <input type="number" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
+                   class="form-control"/>
+            <div class="phoneMessage" id="operatorCodeMessage"></div>
+            <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
+                   class="form-control"/>
+            <div class="phoneMessage" id="numberMessage"></div>
+            <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
+                   class="form-control"/>
+            <div class="phoneMessage" id="typeMessage"></div>
+            <select id="type" name="type" placeholder="<fmt:message key="type"/> " class="form-control">
+                <option selected disabled><fmt:message key="type"/></option>
+                <option value="Рабочий"><fmt:message key="work_phone"/></option>
+                <option value="Домашний"><fmt:message key="home_phone"/></option>
+                <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
+            </select>
+            <div class="phoneMessage" id="commentMessage"></div>
+            <input type="text" id="comment" name="comment"
+                   placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
+            <div id="phone_buttons" class="phone_buttons">
+                <button type="button" id="savePhone" onclick="addPhoneTable()" class="btn btn-primary"><fmt:message
+                        key="save"/></button>
+                <button type="button" id="cancelPhone" onclick="addPhones()" class="btn btn-success"><fmt:message
+                        key="exit"/></button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="attachmentPopupText" id="attachmentPopup">
+    <div class="fileImage">
+        <img src="${pageContext.request.contextPath}/assests/images/file.jpg">
+    </div>
+    <div class="attachmentForm" id="attachmentForm">
+        <form>
+            <div class="attachmentMessage" id="attachmentMessage"></div>
+            <input type="file" name="attachment" id="attachment" class="form-control"/>
+            <div class="attachmentMessage" id="attachCommentMessage"></div>
+            <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
+                   class="form-control"/>
+            <div class="attachments_buttons">
+            <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
+                <fmt:message key="save"/></button>
+            <button type="button" id="cancelAttachment" onclick="addAttachments()" class="btn btn-success"><fmt:message
+                    key="exit"/></button>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

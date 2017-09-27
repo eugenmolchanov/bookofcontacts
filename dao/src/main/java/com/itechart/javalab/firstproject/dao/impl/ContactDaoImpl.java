@@ -272,7 +272,7 @@ public class ContactDaoImpl implements ContactDao {
         final String GET_CONTACTS = "select count(id) from contact where (first_name = ? or ? is null) and (last_name = ? or ? is null) and (middle_name = ? or ? is null) " +
                 "and (gender = ? or ? is null) and (marital_status = ? or ? is null) and (nationality = ? or ? is null) and (contact_group = ? or ? is null) " +
                 "and (country = ? or ? is null)and (city = ? or ? is null) and (street = ? or ? is null) and (house_number = ? or ? is null) and (flat_number = ? or ? = 0) " +
-                "and (postcode = ? or ? = 0) and birth_date between ? and ? group by id;";
+                "and (postcode = ? or ? = 0) and birth_date between ? and ?;";
 
         PreparedStatement statement = connection.prepareStatement(GET_CONTACTS);
         statement.setString(1, contact.getFirstName());
@@ -315,7 +315,7 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public long getNumberOfContacts(Connection connection) throws SQLException {
-        final String countContacts = "select count(id) from contact group by id;";
+        final String countContacts = "select count(id) from contact;";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(countContacts);
         long number = 0;

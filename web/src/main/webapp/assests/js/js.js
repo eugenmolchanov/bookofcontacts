@@ -39,30 +39,34 @@ function goToCreateForm() {
 
 function createContact() {
     var dataIsValid = true;
-    var firstName = document.forms["createForm"]["firstName"].value;
-    var lastName = document.forms["createForm"]["lastName"].value;
-    var middleName = document.forms["createForm"]["middleName"].value;
-    var birthday = document.forms["createForm"]["birthday"].value;
-    var gender = document.forms["createForm"]["gender"].value;
-    var nationality = document.forms["createForm"]["nationality"].value;
-    var maritalStatus = document.forms["createForm"]["maritalStatus"].value;
-    var webSite = document.forms["createForm"]["webSite"].value;
-    var email = document.forms["createForm"]["email"].value;
-    var employmentPlace = document.forms["createForm"]["employmentPlace"].value;
-    var country = document.forms["createForm"]["country"].value;
-    var city = document.forms["createForm"]["city"].value;
-    var street = document.forms["createForm"]["street"].value;
-    var houseNumber = document.forms["createForm"]["houseNumber"].value;
-    var flatNumber = document.forms["createForm"]["flatNumber"].value;
-    var postalIndex = document.forms["createForm"]["postalIndex"].value;
-    if (firstName == "" || firstName == null) {
+    var firstName = document.getElementById('firstName');
+    var lastName = document.getElementById('lastName');
+    var middleName = document.getElementById('middleName');
+    var birthday = document.getElementById('birthday');
+    var gender = document.getElementById('gender');
+    var nationality = document.getElementById('nationality');
+    var maritalStatus = document.getElementById('maritalStatus');
+    var webSite = document.getElementById('webSite');
+    var email = document.getElementById('email');
+    var employmentPlace = document.getElementById('employmentPlace');
+    var contactGroup = document.getElementById('contactGroup');
+    var country = document.getElementById('country');
+    var city = document.getElementById('city');
+    var street = document.getElementById('street');
+    var houseNumber = document.getElementById('houseNumber');
+    var flatNumber = document.getElementById('flatNumber');
+    var postalIndex = document.getElementById('postalIndex');
+    if (firstName == "" || firstName == null || firstName.length > 255 || firstName == /[^0-9~@#$%^&*()_+|?><":}!№;,\s]/) {
         dataIsValid = false;
-        document.getElementById("firstName").innerHTML = "Not valid";
+        document.getElementById("firstNameMessage").innerHTML = "Not valid";
     }
     if (lastName == "" || lastName == null) {
         dataIsValid = false;
     }
-
+    if (middleName == "" || middleName == null || firstName.length > 255 || middleName == /[^0-9~@#$%^&*()_+|?><":}!№;,\s]/) {
+        dataIsValid = false;
+        document.getElementById("middleNameMessage").innerHTML = "Not valid";
+    }
     return dataIsValid;
 }
 
@@ -100,6 +104,8 @@ function chooseEmail() {
 }
 
 function addPhones() {
+    var body = document.getElementById('contact_form');
+    body.classList.toggle("roll");
     var popup = document.getElementById("phonePopup");
     popup.classList.toggle("show");
 }
@@ -115,29 +121,73 @@ function addPhoneTable() {
     var number = document.getElementById(numberName).value;
     var type = document.getElementById(typeName).value;
     var comment = document.getElementById(commentName).value;
-    var params = [countryCode, operatorCode, number, type, comment];
-    var names = [countryCodeName, operatorCodeName, numberName, typeName, commentName];
     var body = document.getElementById("phoneRows");
-    for (var j = 1; j <= params.length; j++) {
-        var tr = document.createElement("tr");
-        var checkTd = document.createElement("td");
-        var checkInput = document.createElement("input");
-        checkInput.setAttribute("type", "checkbox");
-        checkInput.setAttribute("name", "phoneId");
-        checkTd.appendChild(checkInput);
-        tr.appendChild(checkTd);
-        for (var i = 0; i < params.length; i++) {
-            var td = document.createElement("td");
-            var input = document.createElement("input");
-            input.setAttribute("readonly", "readonly");
-            input.setAttribute("type", "text");
-            input.setAttribute("name", names[i]);
-            input.setAttribute("style", "border: none");
-            input.setAttribute("value", params[i]);
-            td.appendChild(input);
-            tr.appendChild(td);
-        }
-    }
+
+    var tr = document.createElement("tr");
+    tr.setAttribute("style", "line-height: 5%");
+    var checkTd = document.createElement("td");
+    checkTd.setAttribute("style", "width: 3%; border-bottom: 1px solid #ddd;");
+    var checkInput = document.createElement("input");
+    checkInput.setAttribute("type", "checkbox");
+    checkInput.setAttribute("name", "phoneId");
+    checkTd.appendChild(checkInput);
+    tr.appendChild(checkTd);
+
+    var countryCodeTd = document.createElement("td");
+    countryCodeTd.setAttribute("style", "width: 11%; border-bottom: 1px solid #ddd");
+    var countryCodeInput = document.createElement("input");
+    countryCodeInput.setAttribute("readonly", "readonly");
+    countryCodeInput.setAttribute("type", "text");
+    countryCodeInput.setAttribute("name", countryCodeName);
+    countryCodeInput.setAttribute("style", "border: none; width: 100%");
+    countryCodeInput.setAttribute("value", countryCode);
+    countryCodeTd.appendChild(countryCodeInput);
+    tr.appendChild(countryCodeTd);
+
+    var operatorCodeTd = document.createElement("td");
+    operatorCodeTd.setAttribute("style", "width: 12%; border-bottom: 1px solid #ddd");
+    var operatorCodeInput = document.createElement("input");
+    operatorCodeInput.setAttribute("readonly", "readonly");
+    operatorCodeInput.setAttribute("type", "text");
+    operatorCodeInput.setAttribute("name", operatorCodeName);
+    operatorCodeInput.setAttribute("style", "border: none; width: 100%");
+    operatorCodeInput.setAttribute("value", operatorCode);
+    operatorCodeTd.appendChild(operatorCodeInput);
+    tr.appendChild(operatorCodeTd);
+
+    var phoneNumberTd = document.createElement("td");
+    phoneNumberTd.setAttribute("style", "width: 25%; border-bottom: 1px solid #ddd");
+    var phoneNumberInput = document.createElement("input");
+    phoneNumberInput.setAttribute("readonly", "readonly");
+    phoneNumberInput.setAttribute("type", "text");
+    phoneNumberInput.setAttribute("name", numberName);
+    phoneNumberInput.setAttribute("style", "border: none; width: 100%");
+    phoneNumberInput.setAttribute("value", number);
+    phoneNumberTd.appendChild(phoneNumberInput);
+    tr.appendChild(phoneNumberTd);
+
+    var typeTd = document.createElement("td");
+    typeTd.setAttribute("style", "width: 12%; border-bottom: 1px solid #ddd");
+    var typeInput = document.createElement("input");
+    typeInput.setAttribute("readonly", "readonly");
+    typeInput.setAttribute("type", "text");
+    typeInput.setAttribute("name", typeName);
+    typeInput.setAttribute("style", "border: none; width: 100%");
+    typeInput.setAttribute("value", type);
+    typeTd.appendChild(typeInput);
+    tr.appendChild(typeTd);
+
+    var commentTd = document.createElement("td");
+    commentTd.setAttribute("style", "width: 36%; border-bottom: 1px solid #ddd");
+    var comentInput = document.createElement("input");
+    comentInput.setAttribute("readonly", "readonly");
+    comentInput.setAttribute("type", "text");
+    comentInput.setAttribute("name", commentName);
+    comentInput.setAttribute("style", "border: none; width: 100%");
+    comentInput.setAttribute("value", comment);
+    commentTd.appendChild(comentInput);
+    tr.appendChild(commentTd);
+
     body.appendChild(tr);
     addPhones();
 }
@@ -153,6 +203,8 @@ function deletePhoneFromTable() {
 }
 
 function addAttachments() {
+    var body = document.getElementById('contact_form');
+    body.classList.toggle("roll");
     var popup = document.getElementById("attachmentPopup");
     popup.classList.toggle("show");
 }
@@ -180,7 +232,7 @@ function addAttachmentTable() {
     attachmentInput.setAttribute("readonly", "readonly");
     attachmentInput.setAttribute("type", "file");
     attachmentInput.setAttribute("name", attachmentName);
-    attachmentInput.setAttribute("style", "border: none");
+    attachmentInput.setAttribute("style", "border: none; width: 100%");
     attachmentInput.setAttribute("value", attachment);
     attachmentTd.appendChild(attachmentInput);
     tr.appendChild(attachmentTd);
@@ -190,7 +242,7 @@ function addAttachmentTable() {
     titleInput.setAttribute("readonly", "readonly");
     titleInput.setAttribute("type", "text");
     titleInput.setAttribute("name", commentName);
-    titleInput.setAttribute("style", "border: none");
+    titleInput.setAttribute("style", "border: none; width: 100%");
     titleInput.setAttribute("value", comment);
     titleTd.appendChild(titleInput);
 

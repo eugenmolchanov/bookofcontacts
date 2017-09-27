@@ -56,15 +56,20 @@ public class ContactServiceImpl implements ContactService {
             long photoId = photoService.create(contact.getPhoto(), connection);
             contact.getPhoto().setId(photoId);
             long contactId = contactDao.save(contact, connection);
-            for (Attachment attachment : contact.getAttachments()) {
-                attachment.setContactId(contactId);
-                attachmentService.create(attachment, connection);
+            if (contact.getAttachments() != null) {
+                for (Attachment attachment : contact.getAttachments()) {
+                    attachment.setContactId(contactId);
+                    attachmentService.create(attachment, connection);
+                }
             }
-            for (Phone phone : contact.getPhones()) {
-                phone.setContactId(contactId);
-                phoneService.create(phone, connection);
+            if (contact.getPhones()!= null) {
+                for (Phone phone : contact.getPhones()) {
+                    phone.setContactId(contactId);
+                    phoneService.create(phone, connection);
+                }
             }
             connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             connection.rollback();
             throw e;
