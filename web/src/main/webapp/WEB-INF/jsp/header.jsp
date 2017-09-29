@@ -13,28 +13,32 @@
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=40">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=58">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=18"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=26"></script>
 </head>
 <body>
 <div class="header">
-    <div class="main_page">
-        <a href="/controller" tabindex="1"><fmt:message key="to_main_page"/></a>
+    <div class="main_page" onclick="toMainPage()">
+        <fmt:message key="to_main_page"/>
     </div>
-    <div class="messages">
-        <a href="/controller" tabindex="1"><fmt:message key="messages"/></a>
+    <div class="messages" onclick="toMessagePage()">
+        <fmt:message key="messages"/>
     </div>
-    <div class="createContact">
-        <a href="/controller?command=redirect&form=createContact" tabindex="1"><fmt:message key="create_contact"/></a>
+    <div class="createContact" onclick="toCreateContact()">
+        <fmt:message key="create_contact"/>
     </div>
-    <div class="search">
-        <a href="/controller?command=redirect&form=search" tabindex="1"><fmt:message key="search"/></a>
+    <div class="search" onclick="toSearchPage()">
+        <fmt:message key="search"/>
     </div>
-    <div class="language">
-        <div class="en"><a href="/controller?command=language&language=en_US" tabindex="1">En</a></div>
-        <div class="ru"><a href="/controller?command=language&language=ru_RU" tabindex="1">Ru</a></div>
-        <div class="by"><a href="/controller?command=language&language=be_BY" tabindex="1">By</a></div>
+    <div class="en" onclick="toEnglish()">
+        En
+    </div>
+    <div class="ru" onclick="toRussian()">
+        Ru
+    </div>
+    <div class="by" onclick="toBelorussian()">
+        By
     </div>
 </div>
 </body>

@@ -8,6 +8,7 @@ import resources.ConfigurationManager;
 import resources.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Set;
@@ -18,10 +19,10 @@ import java.util.Set;
 public class EmptyCommand implements ActionCommand {
 
     private ContactService service = ContactServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
+    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         Set<Contact> contacts;
         long numberOfContacts;
         try {

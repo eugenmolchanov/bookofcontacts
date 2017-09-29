@@ -8,6 +8,7 @@ import resources.MessageManager;
 import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,11 +19,11 @@ import java.util.Set;
 public class DeleteContacts implements ActionCommand {
 
     private ContactService service = ContactServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
+    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
     private String page;
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         if (Validation.deleteContactsDataIsValid(req, logger)) {
             String[] parameters = req.getParameterMap().get("id");
             Set<Long> ids = new HashSet<>();
@@ -37,10 +38,10 @@ public class DeleteContacts implements ActionCommand {
                 return page = ConfigurationManager.getProperty("error");
             }
             req.setAttribute("deleteMessage", MessageManager.getProperty("successful_delete"));
-            return new ListOfContactsCommand().execute(req);
+            return new ShowListOfContacts().execute(req, resp);
         } else {
 
-            return new ListOfContactsCommand().execute(req);
+            return new ShowListOfContacts().execute(req, resp);
         }
     }
 }

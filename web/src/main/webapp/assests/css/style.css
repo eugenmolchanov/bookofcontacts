@@ -1,15 +1,13 @@
-a[tabindex = '1']:hover, a[tabindex = '1']:active, a[tabindex = '1']:visited {
-    color: #ffffff;
-    text-decoration: none;
-}
 .header {
     background-color: #609a76;
     z-index: 10;
     position: fixed;
     width: 100%;
+    opacity: 1;
 }
 .sendEmail {
-    padding-left: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
     padding-top: 5%;
     position: relative;
 }
@@ -19,7 +17,7 @@ a[tabindex = '1']:hover, a[tabindex = '1']:active, a[tabindex = '1']:visited {
 input {
     margin-bottom: 5px;
 }
-#previous, #pageNumbers, #next, #pageInfo, .ru, .by, .en, .main_page, .language, .nameMessage {
+#previous, #pageNumbers, #next, #pageInfo, .ru, .by, .en, .main_page, .nameMessage {
     display: inline-block;
 }
 .main {
@@ -27,39 +25,40 @@ input {
     padding-top: 5%;
     position: relative;
 }
-.mainBody, .create_contact_body {
+.mainBody, .create_contact_body, .sendEmailBody {
     background-color: #f0f0f0;
 }
 .mainPagePagination {
     display: inline;
 }
 .main_page {
+    cursor: pointer;
+    color: #ffffff;
     display: inline-block;
     margin: 0 0 0 5%;
     padding: 1% 1% 1% 1%;
 }
-.main_page:hover, .messages:hover, .createContact:hover, .search:hover {
+.main_page:hover, .messages:hover, .createContact:hover, .search:hover, .en:hover, .ru:hover, .by:hover {
     background-color: #000000;
 }
-.messages, .createContact, .search {
+.messages, .createContact, .search, .en, .ru, .by {
+    cursor: pointer;
+    color: #ffffff;
     display: inline-block;
     margin: 0 0 0 0;
     padding: 1% 1% 1% 1%;
 }
-.en, .ru, .by {
-    margin-left: 2%;
-    margin-right: 2%;
+.en {
+    position: fixed;
+    left: 87.5%;
 }
-
-
-.language {
-    text-align: center;
-    padding: 1% 1% 1% 1%;
-    margin: 0;
-    position: absolute;
-    width: 15%;
-    left: 80%;
-    right: 5%;
+.ru {
+    position: fixed;
+    left: 91%;
+}
+.by {
+    position: fixed;
+    left: 94.5%;
 }
 .phonePopupText {
     background-color: #ffffff;
@@ -108,15 +107,18 @@ input {
     text-align: right;
 }
 .contactTitle {
+    padding-left: 38%;
+    display: inline-block;
+    position: relative;
     text-align: center;
-    padding-bottom: 1%;
+    padding-bottom: 3%;
 }
 .generalInfo {
 }
 .contact_form {
     background-color: #ffffff;
     padding-left: 3%;
-    padding-right: 1%;
+    padding-right: 3%;
     position: relative;
     border: solid 1px;
     border-radius: 8px;
@@ -125,7 +127,7 @@ input {
     width: 64%;
 }
 #full-name>input, #secondLine>input, #thirdLine>input, #fourthLine>input, #full-name>.nameMessage, #secondLine>.nameMessage, #thirdLine>.nameMessage, #fourthLine>.nameMessage,
-#fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage {
+#fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage, #secondLine>select, #thirdLine>select, #fourthLine>select {
     width: 30%;
     margin-right: 2%;
 }
@@ -134,32 +136,38 @@ input {
 }
 .phoneTable, .attachmentTable {
     table-layout: fixed;
-    width: 130%;
+    width: 133%;
 }
 .phoneCheckbox, .attachmentCheckbox {
     width: 3%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 }
 .phoneCountryCode {
     width: 11%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 }
 .phoneOperatorCode {
     width: 12%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 
 }
 .phoneNumber {
     width: 25%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 }
 .phoneType {
     width: 12%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 }
 .phoneComment {
     width: 36%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 }
 .attachmentFile {
     width: 49%;
@@ -211,4 +219,96 @@ input {
 }
 #attachmentPopup input {
     width: 120%;
+}
+.gender, .maritalStatus {
+    color: #999;
+}
+.emailSubmit, .deleteButton, .emailButton, .createButton, .editButton {
+    opacity: 1;
+    background-color: #ce9842;
+    color: #ffffff;
+    border: none;
+    border-radius: 4%;
+    padding: 1%;
+}
+.emailButton {
+    margin-left: 0.6%;
+}
+.deleteButton {
+    margin-left: 0.6%;
+    width: auto;
+}
+.mainCheckbox {
+    margin-left: 0.8%;
+    display: inline;
+}
+.bookImage {
+    display: inline;
+    position: fixed;
+    top: 9%;
+    left: 90.7%;
+}
+.photo {
+    /*margin-top: 4%;*/
+    display: inline-block;
+    width: 31%;
+    height: 40%;
+
+}
+.photoImage {
+    height: auto;
+    width: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+.fullName, .secondCol {
+    width: 31%;
+    margin-left: 3%;
+    display: inline-block;
+    vertical-align: top;
+}
+#fullName>input, #secondCol>input, #secondCol>select {
+    width: 100%;
+    margin-bottom: 3%;
+}
+.marStatus, .countryDiv, .houseNumberDiv {
+    width: 31%;
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3%;
+}
+.groupDiv, .employDiv, .cityDiv, .streetDiv, .flatNumberDiv, .postcodeDiv {
+    width: 31%;
+    margin-left: 3%;
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3%;
+}
+#marStatus>select, #websiteDiv>input, #emailDiv>input, #employDiv>input, #groupDiv>select, #countryDiv>input, #cityDiv>input, #streetDiv>input, #houseNumberDiv>input,
+#flatNumberDiv>input, #postcodeDiv>input {
+    width: 100%;
+    margin-bottom: 3%;
+}
+.emailDiv, .websiteDiv{
+    width: 100%;
+}
+.edit {
+    cursor: hand;
+    padding-top: 2%;
+    float: right;
+    display: inline-block;
+}
+.phoneButtons, .attachmentButtons {
+    visibility: hidden;
+}
+.phoneTd, .attachmentTd {
+    padding: 1% 0 1% 0;
+}
+.phoneTd input, .attachmentTd input {
+    border: none;
+    width: 100%;
+}
+.phoneCheckboxTd, .attachmentCheckboxTd {
+    padding: 1% 0 1% 0;
+    visibility: hidden;
 }

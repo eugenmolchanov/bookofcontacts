@@ -131,8 +131,18 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void delete(long id, Connection connection) throws SQLException {
         final String DELETE_CONTACT = "delete from contact where id = ?;";
+        final String DELETE_CONTACT_ATTACHMENTS = "delete from attachment where contact_id=?;";
+        final String DELETE_CONTACT_PHONES = "delete from phone where contact_id=?;";
         final String DELETE_CONTACT_MESSAGE = "delete from contact_message where contact_id = ?;";
         PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT_MESSAGE);
+        statement.setLong(1, id);
+        statement.executeUpdate();
+
+        statement = connection.prepareStatement(DELETE_CONTACT_ATTACHMENTS);
+        statement.setLong(1, id);
+        statement.executeUpdate();
+
+        statement = connection.prepareStatement(DELETE_CONTACT_PHONES);
         statement.setLong(1, id);
         statement.executeUpdate();
 
@@ -182,7 +192,7 @@ public class ContactDaoImpl implements ContactDao {
         statement.setLong(1, startContactNumber);
         statement.setLong(2, quantityOfContacts);
         ResultSet resultSet = statement.executeQuery();
-        TreeSet<Contact> contacts = new TreeSet<>(Comparator.comparing(Contact::getLastName));
+        TreeSet<Contact> contacts = new TreeSet<>(Comparator.comparing(Contact::getLastName).thenComparing(Contact::getFirstName).thenComparing(Contact::getId));
         while (resultSet.next()) {
             Contact contact = new Contact();
             contact.setId(resultSet.getLong("id"));

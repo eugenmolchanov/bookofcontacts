@@ -9,6 +9,7 @@ import resources.MessageManager;
 import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -17,16 +18,16 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 16.09.2017.
  */
-public class SearchCommand implements ActionCommand {
+public class Search implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(CreateNewContactCommand.class);
+    private static Logger logger = Logger.getLogger(CreateNewContact.class);
     private ContactService service = ContactServiceImpl.getInstance();
     private Set<Contact> contacts;
     private long numberOfContacts;
     private Contact contact = new Contact();
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         if (Validation.searchDataIsValid(req, logger)) {
             long startContact = Long.valueOf(String.valueOf(req.getSession().getAttribute("startContactNumber")));
             if (req.getParameter("startContactNumber") != null && !req.getParameter("startContactNumber").equals("")) {

@@ -141,7 +141,7 @@ public class Validation {
         boolean result = false;
         String param = req.getParameter("form");
         if (param != null) {
-            if (param.equals("createContact") || param.equals("contact") || param.equals("search") || param.equals("sendEmail")) {
+            if (param.equals("createContact") || param.equals("contact") || param.equals("search") || param.equals("sendEmail") || param.equals("message")) {
                 result = true;
             }
         }

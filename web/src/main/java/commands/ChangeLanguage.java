@@ -5,6 +5,7 @@ import resources.MessageManager;
 import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -12,12 +13,12 @@ import java.util.ResourceBundle;
 /**
  * Created by Yauhen Malchanau on 18.09.2017.
  */
-public class LanguageCommand implements ActionCommand {
+public class ChangeLanguage implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
+    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         if (Validation.languageDataIsValid(req, logger)) {
             Locale russian = new Locale("ru", "RU");
             Locale belorussian = new Locale("be", "BY");
@@ -36,8 +37,8 @@ public class LanguageCommand implements ActionCommand {
             MessageManager.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
             HttpSession session = req.getSession(true);
             session.setAttribute("language", language);
-            return new EmptyCommand().execute(req);
+            return new EmptyCommand().execute(req, resp);
         }
-        return new EmptyCommand().execute(req);
+        return new EmptyCommand().execute(req, resp);
     }
 }

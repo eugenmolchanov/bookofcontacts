@@ -22,11 +22,17 @@
 <div class="main">
     <form action="/controller?command=deleteContacts" method="post" name="deleteForm"
           onsubmit="return deleteContacts()">
-        <input type="checkbox" onclick="toggle(this)" id="chooseAll"/>
-        <input type="submit" value="<fmt:message key="delete"/>" class="button" onclick="deleteContacts()"/>
+        <div class="mainCheckbox">
+            <input type="checkbox" onclick="toggle(this)" id="chooseAll"/>
+        </div>
+        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="deleteContacts()"/>
         <input type="submit" value="<fmt:message key="send_email"/> "
-               formaction="/controller?command=redirect&form=sendEmail" onclick="return chooseEmail()">
-        <table class="table table-bordered">
+               formaction="/controller?command=redirect&form=sendEmail" onclick="return chooseEmail()"
+               class="emailButton"/>
+        <div class="bookImage">
+            <img src="${pageContext.request.contextPath}/assests/images/002-agenda-1.png">
+        </div>
+        <table class="table table-bordered" style="background-color: #ffffff">
             <thead>
             <tr>
                 <th></th>
@@ -49,7 +55,7 @@
                         <input type="hidden" name="email" id="useEmail_${contact.email}" value=""/>
                     </td>
                     <td>
-                        <a href="controller?command=redirect&form=contact">${contact.lastName} ${" "} ${contact.firstName}</a>
+                        <a href="controller?command=displayContact&id=${contact.id}">${contact.lastName} ${" "} ${contact.firstName}</a>
                     </td>
                     <td>${contact.birthday}</td>
                     <td>${contact.country}</td>

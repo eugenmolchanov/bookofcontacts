@@ -8,7 +8,7 @@ import commands.*;
 public enum CommandEnum {
     LISTOFCONTACTS {
         {
-            this.command = new ListOfContactsCommand();
+            this.command = new ShowListOfContacts();
         }
     },
     DELETECONTACTS {
@@ -18,27 +18,37 @@ public enum CommandEnum {
     },
     REDIRECT {
         {
-            this.command = new RedirectCommand();
+            this.command = new Redirect();
         }
     },
     CREATENEWCONTACT {
         {
-            this.command = new CreateNewContactCommand();
+            this.command = new CreateNewContact();
         }
     },
     SEARCH {
         {
-            this.command = new SearchCommand();
+            this.command = new Search();
         }
     },
     SENDEMAIL {
         {
-            this.command = new SendEmailCommand();
+            this.command = new SendEmail();
         }
     },
     LANGUAGE {
         {
-            this.command = new LanguageCommand();
+            this.command = new ChangeLanguage();
+        }
+    },
+    DISPLAYCONTACT {
+        {
+            this.command = new DisplayContact();
+        }
+    },
+    DISPLAYCONTACTPHOTO {
+        {
+            this.command = new DisplayContactPhoto();
         }
     }
     ;

@@ -9,6 +9,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -17,9 +18,9 @@ import org.antlr.stringtemplate.*;
 /**
  * Created by Yauhen Malchanau on 17.09.2017.
  */
-public class SendEmailCommand implements ActionCommand {
+public class SendEmail implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(ListOfContactsCommand.class);
+    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
     private String from = "johnnymolchanov@gmail.com";
     private String password = "1234567abc";
     private String host = "smtp.gmail.com";
@@ -27,7 +28,7 @@ public class SendEmailCommand implements ActionCommand {
     private String page;
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         if (Validation.sendEmailDataIsValid(req, logger)) {
             Properties properties = System.getProperties();
             properties.put("mail.smtp.host", host);

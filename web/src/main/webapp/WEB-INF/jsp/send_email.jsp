@@ -15,7 +15,7 @@
 <head>
     <title><fmt:message key="send_email"/></title>
 </head>
-<body>
+<body class="sendEmailBody">
 <jsp:include page="header.jsp"/>
 <div class="message">${requestScope.message}</div>
 <div class="sendEmail">
@@ -24,19 +24,19 @@
         <input type="hidden" name="command" value="sendEmail"/>
         <label for="addressees"><fmt:message key="to_whom"/> </label><br>
         <input type="text" id="addressees" name="addressees"
-               value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>"/><br>
+               value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>" class="form-control"/><br>
         <label for="topic"><fmt:message key="topic"/> </label><br>
-        <input type="text" id="topic" name="topic" placeholder="<fmt:message key="topic"/> "/><br>
-        <select id="template" name="template" onchange="chooseTemplate()">
-            <option selected disabled><fmt:message key="choose_template"/> </option>
+        <input type="text" id="topic" name="topic" placeholder="<fmt:message key="topic"/> " class="form-control"/><br>
+        <select id="template" name="template" onchange="chooseTemplate()" class="form-control">
+            <option selected disabled hidden><fmt:message key="choose_template"/> </option>
             <option value="birthday"><fmt:message key="birthday_congratulations"/></option>
             <option value="newYear"><fmt:message key="new_year_congratulations"/> </option>
         </select>
     </form>
     <br>
     <label for="message"><fmt:message key="message"/> </label><br>
-    <textarea name="message" id="message" form="emailForm" rows="10" cols="100"></textarea><br>
-    <input type="submit" onclick="sendEmail() " value="<fmt:message key="send"/> " form="emailForm"/>
+    <textarea name="message" id="message" form="emailForm" rows="10" cols="100" class="form-control"></textarea><br>
+    <input type="submit" onclick="sendEmail() " value="<fmt:message key="send"/> " form="emailForm" class="emailSubmit"/>
 </div>
 </body>
 </html>

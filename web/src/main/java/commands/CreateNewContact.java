@@ -12,6 +12,7 @@ import util.Data;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -21,17 +22,18 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 15.09.2017.
  */
-public class CreateNewContactCommand implements ActionCommand {
+public class CreateNewContact implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(CreateNewContactCommand.class);
+    private static Logger logger = Logger.getLogger(CreateNewContact.class);
     private ContactService service = ContactServiceImpl.getInstance();
     private String page = ConfigurationManager.getProperty("create_contact");
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.setLevel(Level.DEBUG);
         if (true) {
             try {
+                System.out.println(req.getParameter("firstName"));
                 Map<String, Object> parameters = Data.upload(req);
                 String firstName = (String) parameters.get("firstName");
                 String lastName = (String) parameters.get("lastName");

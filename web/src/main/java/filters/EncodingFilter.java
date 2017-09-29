@@ -27,10 +27,10 @@ public class EncodingFilter implements Filter {
         if (servletRequest.getCharacterEncoding() == null) {
             servletRequest.setCharacterEncoding(encoding);
         }
-        servletResponse.setContentType(contentType);
-        servletResponse.setCharacterEncoding(encoding);
 
         filterChain.doFilter(servletRequest, servletResponse);
+        servletResponse.setContentType(contentType);
+        servletResponse.setCharacterEncoding(encoding);
     }
 
     @Override

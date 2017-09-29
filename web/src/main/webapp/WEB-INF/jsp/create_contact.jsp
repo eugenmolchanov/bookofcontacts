@@ -32,9 +32,9 @@
             <div class="nameMessage" id="firstNameMessage"></div>
             <div class="nameMessage" id="secondNameMessage"></div>
             <div class="nameMessage" id="middleNameMessage"></div>
-            <input type="text" name="firstName" id="firstName" placeholder="<fmt:message key="first_name"/> " required
+            <input type="text" name="firstName" id="firstName" placeholder="<fmt:message key="first_name"/>${'*'} " required
                    class="form-control"/>
-            <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>" required
+            <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}" required
                    class="form-control"/>
             <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
                    class="form-control"/>
@@ -43,10 +43,13 @@
             <div class="nameMessage" id="birthdayMessage"></div>
             <div class="nameMessage" id="genderMessage"></div>
             <div class="nameMessage" id="nationalityMessage"></div>
-            <input type="date" name="birthday" id="birthday" placeholder="<fmt:message key="birthday"/> "
-                   class="form-control"/>
-            <input type="text" name="gender" id="gender" placeholder="<fmt:message key="gender"/> "
-                   class="form-control"/>
+            <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'" onblur="if(this.value==''){this.type='text'}"
+                   placeholder="<fmt:message key="birthday"/> " class="form-control"/>
+            <select name="gender" id="gender" class="form-control">
+                <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
+                <option value="Мужчина"><fmt:message key="male"/> </option>
+                <option value="Женщина"><fmt:message key="female"/> </option>
+            </select>
             <input type="text" name="nationality" id="nationality" placeholder="<fmt:message key="nationality"/>"
                    class="form-control"/>
         </div>
@@ -54,8 +57,16 @@
             <div class="nameMessage" id="maritalStatusMessage"></div>
             <div class="nameMessage" id="websiteMessage"></div>
             <div class="nameMessage" id="emailMessage"></div>
-            <input type="text" name="maritalStatus" id="maritalStatus"
-                   placeholder="<fmt:message key="marital_status"/> " class="form-control"/>
+            <select name="maritalStatus" id="maritalStatus" class="form-control">
+                <option selected disabled hidden><fmt:message key="marital_status"/></option>
+                <option value="Не женат"><fmt:message key="not_married_male"/> </option>
+                <option value="Не замужем"><fmt:message key="not_married_female"/> </option>
+                <option value="Женат"><fmt:message key="married_male"/> </option>
+                <option value="Замужем"><fmt:message key="married_female"/> </option>
+                <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/> </option>
+                <option value="Вдовец"><fmt:message key="widower"/> </option>
+                <option value="Вдова"><fmt:message key="widow"/> </option>
+            </select>
             <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
                    class="form-control"/>
             <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> " class="form-control"/>
@@ -66,8 +77,13 @@
             <br>
             <input type="text" name="employmentPlace" id="employmentPlace"
                    placeholder="<fmt:message key="employment_place"/> " class="form-control"/>
-            <input type="text" name="contactGroup" id="contactGroup" placeholder="<fmt:message key="contact_group"/> "
-                   class="form-control"/>
+            <select name="contactGroup" id="contactGroup" class="form-control">
+                <option selected disabled hidden><fmt:message key="contact_group"/></option>
+                <option value="Семья"><fmt:message key="family"/> </option>
+                <option value="Друзья"><fmt:message key="friends"/> </option>
+                <option value="Коллеги"><fmt:message key="colleagues"/> </option>
+                <option value="Соседи"><fmt:message key="neighbours"/> </option>
+            </select>
         </div>
 
         <div class="addressInfo"><h3><fmt:message key="address"/></h3></div>
@@ -99,7 +115,7 @@
             <table class="phoneTable" id="phoneTable">
                 <caption class="phoneTitle">
                     <div class="phonePopup">
-                        <button type="button" name="phonePopup" onclick="addPhones()" class="btn btn-primary">
+                        <button type="button" name="phonePopup" onclick="addPhone()" class="btn btn-primary">
                             <fmt:message key="create"/></button>
                         <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
                                 class="btn btn-primary"><fmt:message key="delete"/></button>
@@ -157,17 +173,17 @@
     <div class="phoneForm" id="phoneForm">
         <form>
             <div class="phoneMessage" id="countryCodeMessage"></div>
-            <input type="number" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
-                   class="form-control"/>
+            <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
+                   class="form-control" required/>
             <div class="phoneMessage" id="operatorCodeMessage"></div>
             <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
-                   class="form-control"/>
+                   class="form-control" required/>
             <div class="phoneMessage" id="numberMessage"></div>
             <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
-                   class="form-control"/>
+                   class="form-control" required/>
             <div class="phoneMessage" id="typeMessage"></div>
-            <select id="type" name="type" placeholder="<fmt:message key="type"/> " class="form-control">
-                <option selected disabled><fmt:message key="type"/></option>
+            <select id="type" name="type" class="form-control" required>
+                <option selected disabled hidden><fmt:message key="type"/></option>
                 <option value="Рабочий"><fmt:message key="work_phone"/></option>
                 <option value="Домашний"><fmt:message key="home_phone"/></option>
                 <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
@@ -178,7 +194,7 @@
             <div id="phone_buttons" class="phone_buttons">
                 <button type="button" id="savePhone" onclick="addPhoneTable()" class="btn btn-primary"><fmt:message
                         key="save"/></button>
-                <button type="button" id="cancelPhone" onclick="addPhones()" class="btn btn-success"><fmt:message
+                <button type="button" id="cancelPhone" onclick="addPhone()" class="btn btn-success"><fmt:message
                         key="exit"/></button>
             </div>
         </form>

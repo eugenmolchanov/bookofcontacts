@@ -41,7 +41,7 @@ public class ContactDaoImplTest {
 
     @After
     public void afterTesting() throws SQLException {
-        dao.deleteAll(connection);
+//        dao.deleteAll(connection);
     }
 
     @Test
@@ -83,11 +83,11 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldGetContacts() throws SQLException {
-        dao.save(contact, connection);
+//        dao.save(contact, connection);
         long startContactNumber = 0;
-        long quantityOfContacts = 4;
+        long quantityOfContacts = 10;
         Set<Contact> contacts = dao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
-        Assert.assertEquals(1, contacts.size());
+        Assert.assertEquals(2, contacts.size());
     }
 
     @Test
