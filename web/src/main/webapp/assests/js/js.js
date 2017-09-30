@@ -28,7 +28,15 @@ function edit() {
     document.getElementById("postalIndex").removeAttribute("readonly");
     document.getElementById("phoneButtons").style.visibility = "visible";
     document.getElementById("attachmentButtons").style.visibility = "visible";
-    document.getElementById("phoneCheckboxTd").style.visibility = "visible";
+    document.getElementById("bigEditButton").style.visibility = "visible";
+    var phoneCheckBoxes = document.getElementsByName("phoneId");
+    for (var j = 0; j < phoneCheckBoxes.length; j++) {
+        phoneCheckBoxes[j].style.visibility = "visible";
+    }
+    var attachmentCheckboxes = document.getElementsByName("attachmentId");
+    for (var i = 0; i < attachmentCheckboxes.length; i++) {
+        attachmentCheckboxes[i].style.visibility = "visible";
+    }
 }
 
 function deleteContacts() {
@@ -52,7 +60,13 @@ function sendEmail() {
 function chooseTemplate() {
     var template = document.getElementById("template").value;
     if (template == 'birthday') {
-        document.getElementById("message").value = "";
+        document.getElementById("message").value = "Уважаемый, $contact.firstName$! Поздравляю Вас с Днем Рождения и хочу пожелать Вам здоровья, успехов, процветания и " +
+            "достижения всех намеченных целей, чтобы на Вашем жизненном пути никогда не возникали непроходимые преграды,чтобы всегда и везде сопутствовала Вам удача и " +
+            "светило над головой ясное небо!";
+    } if (template == 'newYear') {
+        document.getElementById("message").value = "$contact.firstName$! Искренне поздравляю Вас с Новым годом! Желаю Вам в грядущем году быть в окружении исключительно " +
+            "положительных и доброжелательных людей, переживать только приятные эмоции, радоваться каждому прожитому дню, дарить радость и улыбки окружающим. И пусть этот " +
+            "Новый год станет для Вас особенным.";
     }
 }
 
@@ -226,12 +240,24 @@ function closePhonePopup() {
     cleanPhonePopup();
 }
 
+function closeAttachmentPopup() {
+    var body = document.getElementById('contact_form');
+    body.classList.toggle("roll");
+    var popup = document.getElementById("attachmentPopup");
+    popup.classList.toggle("show");
+    cleanAttachmentPopup();
+}
+
 function cleanPhonePopup() {
     document.getElementById('countryCode').value = "";
     document.getElementById('operatorCode').value = "";
     document.getElementById('number').value = "";
     document.getElementById('type').value = "";
     document.getElementById('comment').value = "";
+}
+
+function cleanAttachmentPopup() {
+    document.getElementById('attachComment').value = "";
 }
 
 function addPhoneTable() {
@@ -337,8 +363,25 @@ function addAttachmentTable() {
     var attachmentName = "attachment";
 
     var comment = document.getElementById(commentName).value;
-    var attachment = document.getElementById(attachmentName).value;
+    var attachment = document.getElementById(attachmentName);
+    var file;
+    var size;
+    var att;
+    if ('files' in attachment) {
+        if (attachment.files.length == 0) {
 
+        } else {
+            for (var i = 0; i < attachment.files.length; i++) {
+                att = attachment.files[i];
+                if ('size' in att) {
+                    size = att.size;
+                }
+                if ('file' in att) {
+                    file = att.value;
+                }
+            }
+        }
+    }
 
     var body = document.getElementById("attachmentRows");
 
@@ -356,7 +399,7 @@ function addAttachmentTable() {
     attachmentInput.setAttribute("type", "file");
     attachmentInput.setAttribute("name", attachmentName);
     attachmentInput.setAttribute("style", "border: none; width: 100%");
-    attachmentInput.setAttribute("value", attachment);
+    attachmentInput.setAttribute("value", att);
     attachmentTd.appendChild(attachmentInput);
     tr.appendChild(attachmentTd);
 
@@ -373,6 +416,8 @@ function addAttachmentTable() {
 
 
     body.appendChild(tr);
+    addAttachments();
+    cleanAttachmentPopup();
     addAttachments();
 }
 
@@ -407,6 +452,23 @@ function editPhone() {
     }
 }
 
+function editAttachment() {
+    var counter = 0;
+    var id;
+    var attachmentIds = document.getElementsByName('attachmentId');
+    for (var i = 0; i < attachmentIds.length; i++) {
+        if (attachmentIds[i].checked) {
+            counter++;
+            id = attachmentIds[i].value;
+        }
+    }
+    if (counter == 1) {
+        // document.getElementById('countryCode').value = document.getElementById('attachmentFileId_'.concat(id)).value;
+        document.getElementById('attachComment').value = document.getElementById('attachCommentId_'.concat(id)).value;
+        addAttachments();
+    }
+}
+
 function editPhoneFields() {
     var counter = 0;
     var id;
@@ -425,6 +487,21 @@ function editPhoneFields() {
         document.getElementById('commentId_'.concat(id)).value = document.getElementById('comment').value;
     }
     closePhonePopup();
+}
+function editAttachmentFields() {
+    var counter = 0;
+    var id;
+    var attachmentIds = document.getElementsByName('attachmentId');
+    for (var i = 0; i < attachmentIds.length; i++) {
+        if (attachmentIds[i].checked) {
+            counter++;
+            id = attachmentIds[i].value;
+        }
+    }
+    if (counter == 1) {
+        document.getElementById('attachCommentId_'.concat(id)).value = document.getElementById('attachComment').value;
+    }
+    closeAttachmentPopup();
 }
 
 

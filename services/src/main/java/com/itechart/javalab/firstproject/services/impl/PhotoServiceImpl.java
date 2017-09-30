@@ -41,4 +41,12 @@ public class PhotoServiceImpl implements PhotoService {
     protected void update(Photo entity, Connection connection) throws SQLException {
         photoDao.update(entity, connection);
     }
+
+    @Override
+    public Photo findById(long id) throws SQLException {
+        Connection connection = Database.getConnection();
+        Photo photo = photoDao.findById(id, connection);
+        connection.close();
+        return photo;
+    }
 }

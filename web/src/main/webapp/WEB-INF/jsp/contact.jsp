@@ -14,7 +14,7 @@
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
-    <title>Title</title>
+    <title><fmt:message key="contact"/></title>
 </head>
 <body class="create_contact_body">
 <jsp:include page="header.jsp"/>
@@ -30,7 +30,15 @@
         </div>
         <br>
         <div class="photo">
-            <img src="/controller?command=displayContactPhoto&id=${requestScope.contact.id}" class="photoImage"/>
+            <c:choose>
+                <c:when test="${requestScope.contact.photo.id != 0}">
+                    <img src="/controller?command=displayContactPhoto&id=${requestScope.contact.photo.id}"
+                         class="photoImage"/>
+                </c:when>
+                <c:otherwise>
+                    <img src="${pageContext.request.contextPath}/assests/images/profile_photo.png" class="defaultImage"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="fullName" id="fullName">
             <label for="firstName"><fmt:message key="first_name"/> </label><br>
@@ -237,14 +245,14 @@
                 </thead>
                 <tbody id="attachmentRows">
                 <c:forEach var="attachment" items="${requestScope.contact.attachments}">
-                    ${attachment.date}
                     <tr>
                         <td class="attachmentCheckboxTd" id="attachmentCheckboxTd">
                             <input type="checkbox" name="attachmentId" value="${attachment.id}"/>
-                            <input type="hidden" name="phone" id="id_${attachment.id}" value=""/>
+                            <input type="hidden" name="attachment" id="id_${attachment.id}" value=""/>
                         </td>
                         <td class="attachmentTd">
-                            <input id="attachmentFileId_${phone.id}" value=""
+                            <a href="/controller?command=downloadAttachment&id=${attachment.id}">${attachment.fileName}</a>
+                            <input type="hidden" id="attachmentFileId_${attachment.id}" value="${attachment.fileName}"
                                    class="attachmentFile"/>
                         </td>
                         <td class="attachmentTd">
@@ -252,7 +260,8 @@
                                    class="attachmentDate">
                         </td>
                         <td class="attachmentTd">
-                            <input id="numberId_${attachment.id}" value="${attachment.commentary}" class="attachmentCommentary">
+                            <input id="attachCommentId_${attachment.id}" value="${attachment.commentary}"
+                                   class="attachmentCommentary">
                         </td>
                     </tr>
                 </c:forEach>
@@ -260,8 +269,8 @@
             </table>
         </div>
         <br>
-        <input type="submit" onclick="createContact()" value="<fmt:message key="create"/> "
-               class="btn btn-primary btn-lg btn-block"/>
+        <input type="submit" onclick="createContact()" value="<fmt:message key="edit"/> "
+               class="bigEditButton" id="bigEditButton"/>
     </form>
 </div>
 <div class="phonePopupText" id="phonePopup">
@@ -310,9 +319,9 @@
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
             <div class="attachments_buttons">
-                <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
+                <button type="button" id="saveAttachment" onclick="editAttachmentFields()" class="btn btn-primary">
                     <fmt:message key="save"/></button>
-                <button type="button" id="cancelAttachment" onclick="addAttachments()" class="btn btn-success">
+                <button type="button" id="cancelAttachment" onclick="closeAttachmentPopup()" class="btn btn-success">
                     <fmt:message
                             key="exit"/></button>
             </div>

@@ -46,4 +46,12 @@ public class AttachmentServiceImpl implements AttachmentService {
     protected void update(Attachment entity, Connection connection) throws SQLException {
         attachmentDao.update(entity, connection);
     }
+
+    @Override
+    public Attachment findById(long id) throws SQLException {
+        Connection connection = Database.getConnection();
+        Attachment attachment = attachmentDao.findById(id, connection);
+        connection.close();
+        return attachment;
+    }
 }

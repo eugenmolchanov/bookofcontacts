@@ -128,8 +128,9 @@ input {
 }
 #full-name>input, #secondLine>input, #thirdLine>input, #fourthLine>input, #full-name>.nameMessage, #secondLine>.nameMessage, #thirdLine>.nameMessage, #fourthLine>.nameMessage,
 #fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage, #secondLine>select, #thirdLine>select, #fourthLine>select {
-    width: 30%;
-    margin-right: 2%;
+    width: 31%;
+    margin-right: 1%;
+    margin-left: 1%;
 }
 #secondLine, #thirdLine, #fourthLine, #sixthLine {
     padding-top: 1.5%;
@@ -170,12 +171,19 @@ input {
     padding-bottom: 1%;
 }
 .attachmentFile {
-    width: 49%;
+    width: 30%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 }
 .attachmentComment {
-    width: 48%;
+    width: 42%;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
+}
+.attachmentDate {
+    width: 25%;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
 }
 #phoneRows>td {
     border-bottom: 1px solid #ddd;
@@ -223,13 +231,17 @@ input {
 .gender, .maritalStatus {
     color: #999;
 }
-.emailSubmit, .deleteButton, .emailButton, .createButton, .editButton {
+.emailSubmit, .deleteButton, .emailButton, .createButton, .editButton, .bigEditButton {
     opacity: 1;
     background-color: #ce9842;
     color: #ffffff;
     border: none;
     border-radius: 4%;
     padding: 1%;
+}
+.bigEditButton {
+    width: 100%;
+    visibility: hidden;
 }
 .emailButton {
     margin-left: 0.6%;
@@ -249,7 +261,6 @@ input {
     left: 90.7%;
 }
 .photo {
-    /*margin-top: 4%;*/
     display: inline-block;
     width: 31%;
     height: 40%;
@@ -260,6 +271,10 @@ input {
     width: auto;
     max-height: 100%;
     max-width: 100%;
+}
+.defaultImage {
+    height: 70%;
+    width: 70%;
 }
 .fullName, .secondCol {
     width: 31%;

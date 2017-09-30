@@ -6,11 +6,9 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
-import util.DisplayProfilePhoto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -18,7 +16,7 @@ import java.sql.SQLException;
  */
 public class DisplayContact implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(CreateNewContact.class);
+    private static Logger logger = Logger.getLogger(DisplayContact.class);
     private ContactService service = ContactServiceImpl.getInstance();
     private String page;
 

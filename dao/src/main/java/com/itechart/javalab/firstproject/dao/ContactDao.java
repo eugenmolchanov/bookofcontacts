@@ -67,4 +67,14 @@ public interface ContactDao extends GenericDao<Contact> {
      * @throws SQLException
      */
     long getNumberOfContacts(Connection connection) throws SQLException;
+
+    /**
+     * Method finds entity by email.
+     *
+     * @param email      email of entity
+     * @param connection connection to database
+     * @return entity object
+     * @throws SQLException
+     */
+    Contact findByEmail(String email, Connection connection) throws SQLException;
 }

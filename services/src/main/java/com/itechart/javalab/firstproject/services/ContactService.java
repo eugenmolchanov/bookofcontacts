@@ -84,4 +84,13 @@ public interface ContactService extends GenericService<Contact> {
      * @throws SQLException
      */
     long getNumberOfContacts() throws SQLException;
+
+    /**
+     * Method finds entity by email.
+     *
+     * @param email      email of entity
+     * @return entity object
+     * @throws SQLException
+     */
+    Contact findByEmail(String email) throws SQLException;
 }

@@ -62,8 +62,8 @@
                     <td>${contact.city}</td>
                     <td>${contact.street}</td>
                     <td>${contact.houseNumber}</td>
-                    <td>${contact.flatNumber}</td>
-                    <td>${contact.postcode}</td>
+                    <td><c:if test="${contact.flatNumber > 0}">${contact.flatNumber}</c:if></td>
+                    <td><c:if test="${contact.postcode > 0}">${contact.postcode}</c:if></td>
                     <td>${contact.employmentPlace}</td>
                     <td>${contact.contactGroup}</td>
                 </tr>

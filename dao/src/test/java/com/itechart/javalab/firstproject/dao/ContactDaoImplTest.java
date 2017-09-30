@@ -52,6 +52,12 @@ public class ContactDaoImplTest {
     }
 
     @Test
+    public void shouldFindContactByEmail() throws SQLException {
+        Contact actualContact = dao.findByEmail("yauhenmalchanau@gmail.com", connection);
+        Assert.assertEquals("Евгений", actualContact.getFirstName());
+    }
+
+    @Test
     public void shouldCountContacts() throws SQLException {
         dao.save(contact, connection);
         Assert.assertEquals(2, dao.getNumberOfContacts(connection));

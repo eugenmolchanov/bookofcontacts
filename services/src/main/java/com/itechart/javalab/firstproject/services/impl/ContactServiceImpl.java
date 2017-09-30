@@ -202,4 +202,12 @@ public class ContactServiceImpl implements ContactService {
         connection.close();
         return number;
     }
+
+    @Override
+    public Contact findByEmail(String email) throws SQLException {
+        Connection connection = Database.getConnection();
+        Contact contact = contactDao.findByEmail(email, connection);
+        connection.close();
+        return contact;
+    }
 }

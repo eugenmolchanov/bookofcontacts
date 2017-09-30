@@ -44,7 +44,7 @@ public class PhoneDaoImplTest {
 
     @After
     public void afterTesting() throws SQLException {
-        contactDao.deleteAll(connection);
+//        contactDao.deleteAll(connection);
     }
 
 
@@ -82,9 +82,9 @@ public class PhoneDaoImplTest {
     }
 
     @Test
-    public void shouldGetAllAttachmentsOfContact() throws SQLException {
+    public void shouldGetAllPhonesOfContact() throws SQLException {
 //        phoneDao.save(phone, connection);
-        Set<Phone> phones = phoneDao.getAllPhonesOfContact(5, connection);
+        Set<Phone> phones = phoneDao.getAllPhonesOfContact(4, connection);
         Assert.assertEquals(0, phones.size());
     }
 }

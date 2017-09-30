@@ -17,8 +17,8 @@
 </head>
 <body class="sendEmailBody">
 <jsp:include page="header.jsp"/>
-<div class="message">${requestScope.message}</div>
 <div class="sendEmail">
+    <div class="message">${requestScope.message}</div>
     <form class="emailForm" id="emailForm" name="emailForm" action="/controller" method="post"
           onsubmit="return sendEmail()">
         <input type="hidden" name="command" value="sendEmail"/>
