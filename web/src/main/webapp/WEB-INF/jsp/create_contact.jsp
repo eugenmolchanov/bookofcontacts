@@ -26,7 +26,9 @@
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
         <div class="contactTitle"><h2><fmt:message key="personal_data"/></h2></div>
         <div class="photoInfo"><h3><fmt:message key="contact_photo"/></h3></div>
-        <input type="file" name="image" id="image" class="form-control"/><br>
+        <input type="button" value="<fmt:message key="choose_photo"/> " class="chooseButton" onclick="addPhoto()"/>
+        <div id="image" class="image">
+        </div>
         <div class="generalInfo"><h3><fmt:message key="general_info"/></h3></div>
         <div id="full-name">
             <div class="nameMessage" id="firstNameMessage"></div>
@@ -115,10 +117,10 @@
             <table class="phoneTable" id="phoneTable">
                 <caption class="phoneTitle">
                     <div class="phonePopup">
-                        <button type="button" name="phonePopup" onclick="addPhone()" class="btn btn-primary">
+                        <button type="button" name="phonePopup" onclick="addPhone()" class="createButton">
                             <fmt:message key="create"/></button>
                         <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
-                                class="btn btn-primary"><fmt:message key="delete"/></button>
+                                class="deleteButton"><fmt:message key="delete"/></button>
                     </div>
                 </caption>
                 <thead>
@@ -143,16 +145,16 @@
             <table class="attachmentTable">
                 <caption class="attachmentTitle">
                     <div class="attachmentPopup">
-                        <button type="button" name="attachmentPopup" onclick="addAttachments()" class="btn btn-primary">
+                        <button type="button" name="attachmentPopup" onclick="addAttachments()" class="createButton">
                             <fmt:message key="create"/></button>
                         <button type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()"
-                                class="btn btn-primary"><fmt:message key="delete"/></button>
+                                class="deleteButton"><fmt:message key="delete"/></button>
                     </div>
                 </caption>
                 <thead>
                 <tr>
                     <th class="attachmentCheckbox"></th>
-                    <th class="attachmentFile"><fmt:message key="attachment"/></th>
+                    <th class="attachmentName"><fmt:message key="title"/></th>
                     <th class="attachmentComment"><fmt:message key="comment"/></th>
                 </tr>
                 </thead>
@@ -163,7 +165,7 @@
         </div>
         <br>
         <input type="submit" onclick="createContact()" value="<fmt:message key="create"/> "
-               class="btn btn-primary btn-lg btn-block"/>
+               class="bigCreateButton"/>
     </form>
 </div>
 <div class="phonePopupText" id="phonePopup">
@@ -200,6 +202,7 @@
         </form>
     </div>
 </div>
+<input type="file" id="file" style="visibility: hidden">
 <div class="attachmentPopupText" id="attachmentPopup">
     <div class="fileImage">
         <img src="${pageContext.request.contextPath}/assests/images/file.jpg">
@@ -207,7 +210,10 @@
     <div class="attachmentForm" id="attachmentForm">
         <form>
             <div class="attachmentMessage" id="attachmentMessage"></div>
-            <input type="file" name="attachment" id="attachment" class="form-control"/>
+            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="uploadAttachment()" value="<fmt:message key="choose_file"/>"/>
+            <div class="attachTitleMessage" id="attachTitleMessage"></div>
+            <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
+                   class="form-control"/>
             <div class="attachmentMessage" id="attachCommentMessage"></div>
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
@@ -215,6 +221,22 @@
                 <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
                     <fmt:message key="save"/></button>
                 <button type="button" id="cancelAttachment" onclick="addAttachments()" class="btn btn-success">
+                    <fmt:message
+                            key="exit"/></button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="photoPopupText" id="photoPopup">
+    <div class="photoForm" id="photoForm">
+        <form>
+            <div class="photoPathMessage" id="photoPathMessage"></div>
+            <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="choosePhoto()" value="<fmt:message key="choose_photo"/>"/>
+            <div class="photoPath" id="photoPath">dwd</div>
+            <div class="attachments_buttons">
+                <button type="button" id="savePhoto" onclick="addAttachmentTable()" class="btn btn-primary">
+                    <fmt:message key="save"/></button>
+                <button type="button" id="cancelPhoto" onclick="addAttachments()" class="btn btn-success">
                     <fmt:message
                             key="exit"/></button>
             </div>

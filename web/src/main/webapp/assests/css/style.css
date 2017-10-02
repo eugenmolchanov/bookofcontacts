@@ -25,7 +25,7 @@ input {
     padding-top: 5%;
     position: relative;
 }
-.mainBody, .create_contact_body, .sendEmailBody {
+.mainBody, .create_contact_body, .sendEmailBody, .searchBody {
     background-color: #f0f0f0;
 }
 .mainPagePagination {
@@ -88,7 +88,7 @@ input {
 .attachmentInfo {
     width: 75%;
 }
-.attachmentPopupText {
+.attachmentPopupText, .photoPopupText {
     background-color: #ffffff;
     visibility: hidden;
     position: fixed;
@@ -100,7 +100,7 @@ input {
     border: outset 3px;
     z-index: 1;
 }
-.attachmentPopupText.show {
+.attachmentPopupText.show, .photoPopupText.show {
     visibility: visible;
 }
 .attachmentTitle {
@@ -115,7 +115,7 @@ input {
 }
 .generalInfo {
 }
-.contact_form {
+.contact_form, .searchForm {
     background-color: #ffffff;
     padding-left: 3%;
     padding-right: 3%;
@@ -128,6 +128,7 @@ input {
 }
 #full-name>input, #secondLine>input, #thirdLine>input, #fourthLine>input, #full-name>.nameMessage, #secondLine>.nameMessage, #thirdLine>.nameMessage, #fourthLine>.nameMessage,
 #fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage, #secondLine>select, #thirdLine>select, #fourthLine>select {
+    display: inline-block;
     width: 31%;
     margin-right: 1%;
     margin-left: 1%;
@@ -170,7 +171,7 @@ input {
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
-.attachmentFile {
+.attachmentName {
     width: 30%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
@@ -208,7 +209,12 @@ input {
 .attachmentForm {
     position: fixed;
     left: 43%;
-    top: 35%;
+    top: 31%;
+}
+.photoForm {
+    position: fixed;
+    left: 38%;
+    top: 31%;
 }
 #phonePopup input, #phonePopup select {
     width: 180%;
@@ -219,11 +225,12 @@ input {
 #phone_buttons input {
     width: 50%;
 }
-#attachmentMessage, #attachCommentMessage {
+#attachmentMessage, #attachCommentMessage, #attachTitleMessage {
     padding-top: 10%;
 }
 .attachments_buttons {
-    padding-top: 35%;
+    padding-top: 20%;
+    padding-left: 5%;
 }
 #attachmentPopup input {
     width: 120%;
@@ -231,7 +238,7 @@ input {
 .gender, .maritalStatus {
     color: #999;
 }
-.emailSubmit, .deleteButton, .emailButton, .createButton, .editButton, .bigEditButton {
+.emailSubmit, .deleteButton, .emailButton, .createButton, .editButton, .bigEditButton, .searchButton, .bigCreateButton, .chooseButton {
     opacity: 1;
     background-color: #ce9842;
     color: #ffffff;
@@ -239,15 +246,26 @@ input {
     border-radius: 4%;
     padding: 1%;
 }
+.searchButton {
+    margin-top: 3%;
+    width: 100%;
+}
 .bigEditButton {
     width: 100%;
     visibility: hidden;
+}
+.bigCreateButton {
+    width: 100%;
 }
 .emailButton {
     margin-left: 0.6%;
 }
 .deleteButton {
     margin-left: 0.6%;
+    width: auto;
+}
+.chooseButton {
+    height: 15%;
     width: auto;
 }
 .mainCheckbox {
@@ -326,4 +344,13 @@ input {
 .phoneCheckboxTd, .attachmentCheckboxTd {
     padding: 1% 0 1% 0;
     visibility: hidden;
+}
+.photoPath {
+    border: none;
+}
+#photoForm>input {
+    display: inline-block;
+}
+.photoPath {
+    display: inline-block;
 }

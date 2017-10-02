@@ -100,22 +100,22 @@ public class ContactDaoImplTest {
     public void shouldGetSearchedContacts() throws SQLException {
         long startContactNumber = 0;
         long quantityOfContacts = 10;
-        dao.save(contact, connection);
+//        dao.save(contact, connection);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
-        conditionContact.setFirstName("name");
+        conditionContact.setLastName("Молчанов");
         Set<Contact> contacts = dao.searchContacts(conditionContact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
-        Assert.assertEquals(1, contacts.size());
+        Assert.assertEquals(2, contacts.size());
     }
 
     @Test
     public void shouldGetTotalQuantityOfSearchedContacts() throws SQLException {
-        dao.save(contact, connection);
+//        dao.save(contact, connection);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
         long count = dao.getNumberOfSearchContacts(conditionContact, lowerLimit, upperLimit, connection);
-        Assert.assertEquals(1, count);
+        Assert.assertEquals(2, count);
     }
 }

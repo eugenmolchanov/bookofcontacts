@@ -28,6 +28,8 @@ public class Database {
         poolProperties.setUsername(USERNAME);
         poolProperties.setPassword(PASSWORD);
         poolProperties.setDriverClassName(DRIVER);
+        poolProperties.setMaxActive(20);
+        poolProperties.setMaxIdle(20);
         dataSource.setPoolProperties(poolProperties);
         return dataSource.getConnection();
     }

@@ -63,7 +63,8 @@ function chooseTemplate() {
         document.getElementById("message").value = "Уважаемый, $contact.firstName$! Поздравляю Вас с Днем Рождения и хочу пожелать Вам здоровья, успехов, процветания и " +
             "достижения всех намеченных целей, чтобы на Вашем жизненном пути никогда не возникали непроходимые преграды,чтобы всегда и везде сопутствовала Вам удача и " +
             "светило над головой ясное небо!";
-    } if (template == 'newYear') {
+    }
+    if (template == 'newYear') {
         document.getElementById("message").value = "$contact.firstName$! Искренне поздравляю Вас с Новым годом! Желаю Вам в грядущем году быть в окружении исключительно " +
             "положительных и доброжелательных людей, переживать только приятные эмоции, радоваться каждому прожитому дню, дарить радость и улыбки окружающим. И пусть этот " +
             "Новый год станет для Вас особенным.";
@@ -357,36 +358,58 @@ function addAttachments() {
     var popup = document.getElementById("attachmentPopup");
     popup.classList.toggle("show");
 }
+function addPhoto() {
+    var body = document.getElementById('contact_form');
+    body.classList.toggle("roll");
+    var popup = document.getElementById("photoPopup");
+    popup.classList.toggle("show");
+}
+
+var counter = 0;
+function createInputTypeFileForAttachment() {
+    var body = document.getElementById("attachmentRows");
+    var fileInput = document.createElement("input");
+    fileInput.setAttribute("type", "file");
+    fileInput.setAttribute("style", "visibility: hidden; position: fixed;");
+    fileInput.setAttribute("name", "attachmentFile");
+    fileInput.setAttribute("id", "attachmentFile");
+    fileInput.setAttribute("number", counter.toString());
+    body.appendChild(fileInput)
+}
+function createInputTypeFileForPhoto() {
+    var photoDiv = document.getElementById("image");
+    var fileInput = document.createElement("input");
+    fileInput.setAttribute("type", "file");
+    fileInput.setAttribute("style", "visibility: hidden; position: fixed;");
+    fileInput.setAttribute("name", "photoFile");
+    fileInput.setAttribute("id", "photoFile");
+    photoDiv.appendChild(fileInput)
+}
+
+function choosePhoto() {
+    createInputTypeFileForPhoto();
+    document.getElementById('photoFile').click();
+}
+
+function uploadAttachment() {
+    createInputTypeFileForAttachment();
+    document.getElementById('attachmentFile').click();
+}
 
 function addAttachmentTable() {
     var commentName = "attachComment";
-    var attachmentName = "attachment";
-
+    var attachmentName = "attachTitle";
     var comment = document.getElementById(commentName).value;
-    var attachment = document.getElementById(attachmentName);
-    var file;
-    var size;
-    var att;
-    if ('files' in attachment) {
-        if (attachment.files.length == 0) {
+    var title = document.getElementById(attachmentName).value;
 
-        } else {
-            for (var i = 0; i < attachment.files.length; i++) {
-                att = attachment.files[i];
-                if ('size' in att) {
-                    size = att.size;
-                }
-                if ('file' in att) {
-                    file = att.value;
-                }
-            }
-        }
-    }
 
     var body = document.getElementById("attachmentRows");
 
     var tr = document.createElement("tr");
+    tr.setAttribute("number", counter.toString());
+    counter++;
     var checkTd = document.createElement("td");
+    checkTd.setAttribute("style", "width: 3%; border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
     var checkInput = document.createElement("input");
     checkInput.setAttribute("type", "checkbox");
     checkInput.setAttribute("name", "attachmentId");
@@ -394,16 +417,18 @@ function addAttachmentTable() {
     tr.appendChild(checkTd);
 
     var attachmentTd = document.createElement("td");
+    attachmentTd.setAttribute("style", "width: 30%; border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
     var attachmentInput = document.createElement("input");
     attachmentInput.setAttribute("readonly", "readonly");
-    attachmentInput.setAttribute("type", "file");
+    attachmentInput.setAttribute("type", "text");
     attachmentInput.setAttribute("name", attachmentName);
     attachmentInput.setAttribute("style", "border: none; width: 100%");
-    attachmentInput.setAttribute("value", att);
+    attachmentInput.setAttribute("value", title);
     attachmentTd.appendChild(attachmentInput);
     tr.appendChild(attachmentTd);
 
     var titleTd = document.createElement("td");
+    titleTd.setAttribute("style", "width: 42%; border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
     var titleInput = document.createElement("input");
     titleInput.setAttribute("readonly", "readonly");
     titleInput.setAttribute("type", "text");
@@ -427,11 +452,17 @@ function deleteAttachmentFromTable() {
         if (elms[i].checked) {
             var td = elms[i].parentNode;
             var tr = td.parentNode;
+            var number = tr.getAttribute('number');
             var body = tr.parentNode;
+            var files = document.getElementsByName('attachmentFile');
+            for (var i = 0; i < files.length; i++) {
+                if (files[i].getAttribute('number') == number) {
+                    files[i].parentNode.removeChild(files[i]);
+                }
+            }
             body.removeChild(tr);
         }
 }
-
 function editPhone() {
     var counter = 0;
     var id;

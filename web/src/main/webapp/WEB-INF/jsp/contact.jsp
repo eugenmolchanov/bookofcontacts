@@ -238,7 +238,7 @@
                 <thead>
                 <tr>
                     <th class="attachmentCheckbox"></th>
-                    <th class="attachmentFile"><fmt:message key="attachment"/></th>
+                    <th class="attachmentTitle"><fmt:message key="attachment"/></th>
                     <th class="attachmentDate"><fmt:message key="attachment"/></th>
                     <th class="attachmentComment"><fmt:message key="comment"/></th>
                 </tr>
@@ -253,7 +253,7 @@
                         <td class="attachmentTd">
                             <a href="/controller?command=downloadAttachment&id=${attachment.id}">${attachment.fileName}</a>
                             <input type="hidden" id="attachmentFileId_${attachment.id}" value="${attachment.fileName}"
-                                   class="attachmentFile"/>
+                                   class="attachmentTitle"/>
                         </td>
                         <td class="attachmentTd">
                             <input id="attachmentDateId_${attachment.id}" value="${attachment.date}"

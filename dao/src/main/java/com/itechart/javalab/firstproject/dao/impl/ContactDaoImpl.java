@@ -1,12 +1,14 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.ContactDao;
+import com.itechart.javalab.firstproject.dao.util.Builder;
 import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by Yauhen Malchanau on 06.09.2017.
@@ -220,46 +222,70 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts, Connection connection) throws SQLException {
-        final String GET_CONTACTS = "select id, first_name, last_name, birth_date, email, employment_place, contact_group, country, city, street, house_number, " +
-                "flat_number, postcode from contact where (first_name = ? or ? is null) and (last_name = ? or ? is null) and (middle_name = ? or ? is null) and (gender = ? or ? is null) " +
-                "and (marital_status = ? or ? is null) and (nationality = ? or ? is null) and (contact_group = ? or ? is null) and (country = ? or ? is null)" +
-                " and (city = ? or ? is null) and (street = ? or ? is null) and (house_number = ? or ? is null) and (flat_number = ? or ? = 0) and (postcode = ? or ? = 0)" +
-                " and birth_date between ? and ? order by last_name limit ?, ?;";
+        StringBuilder getContacts = new StringBuilder("select id, first_name, last_name, birth_date, email, employment_place, contact_group, country, city, street, house_number, " +
+                "flat_number, postcode from contact ");
 
-        PreparedStatement statement = connection.prepareStatement(GET_CONTACTS);
-        statement.setString(1, entity.getFirstName());
-        statement.setString(2, entity.getFirstName());
-        statement.setString(3, entity.getLastName());
-        statement.setString(4, entity.getLastName());
-        statement.setString(5, entity.getMiddleName());
-        statement.setString(6, entity.getMiddleName());
-        statement.setString(7, entity.getGender());
-        statement.setString(8, entity.getGender());
-        statement.setString(9, entity.getMaritalStatus());
-        statement.setString(10, entity.getMaritalStatus());
-        statement.setString(11, entity.getNationality());
-        statement.setString(12, entity.getNationality());
-        statement.setString(13, entity.getContactGroup());
-        statement.setString(14, entity.getContactGroup());
-        statement.setString(15, entity.getCountry());
-        statement.setString(16, entity.getCountry());
-        statement.setString(17, entity.getCity());
-        statement.setString(18, entity.getCity());
-        statement.setString(19, entity.getStreet());
-        statement.setString(20, entity.getStreet());
-        statement.setString(21, entity.getHouseNumber());
-        statement.setString(22, entity.getHouseNumber());
-        statement.setInt(23, entity.getFlatNumber());
-        statement.setInt(24, entity.getFlatNumber());
-        statement.setInt(25, entity.getPostcode());
-        statement.setInt(26, entity.getPostcode());
-        statement.setDate(27, lowerLimit);
-        statement.setDate(28, upperLimit);
-        statement.setLong(29, startContactNumber);
-        statement.setLong(30, quantityOfContacts);
+        Builder query = new Builder();
+        query.where(getContacts).addConditionIfExist("first_name", entity.getFirstName(), getContacts).addConditionIfExist("last_name", entity.getLastName(),
+                getContacts).addConditionIfExist("middle_name", entity.getMiddleName(), getContacts).addConditionIfExist("gender", entity.getGender(),
+                getContacts).addConditionIfExist("marital_status", entity.getMaritalStatus(), getContacts).addConditionIfExist("nationality", entity.getNationality(),
+                getContacts).addConditionIfExist("contact_group", entity.getContactGroup(), getContacts).addConditionIfExist("country", entity.getCountry(),
+                getContacts).addConditionIfExist("city", entity.getCity(), getContacts).addConditionIfExist("street", entity.getStreet(),
+                getContacts).addConditionIfExist("house_number", entity.getHouseNumber(), getContacts).addConditionIfExist("flat_number", entity.getFlatNumber(),
+                getContacts).addConditionIfExist("postcode", entity.getPostcode(), getContacts).addBirthdayCondition(getContacts).orderBy(getContacts).limit(getContacts).build(getContacts);
+        PreparedStatement statement = connection.prepareStatement(getContacts.toString());
+        int counter = 0;
+        if (entity.getFirstName() != null) {
+            statement.setString(++counter, entity.getFirstName());
+        }
+        if (entity.getLastName() != null) {
+            statement.setString(++counter, entity.getLastName());
+        }
+        if (entity.getMiddleName() != null) {
+            statement.setString(++counter, entity.getMiddleName());
+        }
+        if (entity.getGender() != null) {
+            statement.setString(++counter, entity.getGender());
+        }
+        if (entity.getMaritalStatus() != null) {
+            statement.setString(++counter, entity.getMaritalStatus());
+        }
+        if (entity.getNationality() != null) {
+            statement.setString(++counter, entity.getNationality());
+        }
+        if (entity.getContactGroup() != null) {
+            statement.setString(++counter, entity.getContactGroup());
+        }
+        if (entity.getCountry() != null) {
+            statement.setString(++counter, entity.getCountry());
+        }
+        if (entity.getCity() != null) {
+            statement.setString(++counter, entity.getCity());
 
+        }
+        if (entity.getStreet() != null) {
+            statement.setString(++counter, entity.getStreet());
+
+        }
+        if (entity.getHouseNumber() != null) {
+            statement.setString(++counter, entity.getHouseNumber());
+
+        }
+        if (entity.getFlatNumber() != 0) {
+            statement.setInt(++counter, entity.getFlatNumber());
+
+        }
+        if (entity.getPostcode() != 0) {
+            statement.setInt(++counter, entity.getPostcode());
+
+        }
+        statement.setDate(++counter, lowerLimit);
+        statement.setDate(++counter, upperLimit);
+        statement.setString(++counter, "first_name");
+        statement.setLong(++counter, startContactNumber);
+        statement.setLong(++counter, quantityOfContacts);
         ResultSet resultSet = statement.executeQuery();
-        TreeSet<Contact> contacts = new TreeSet<>(Comparator.comparing(Contact::getLastName));
+        TreeSet<Contact> contacts = new TreeSet<>(Comparator.comparing(Contact::getLastName).thenComparing(Contact::getFirstName));
         while (resultSet.next()) {
             Contact contact = new Contact();
             contact.setId(resultSet.getLong("id"));
@@ -282,41 +308,65 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public long getNumberOfSearchContacts(Contact contact, Date lowerLimit, Date upperLimit, Connection connection) throws SQLException {
-        final String GET_CONTACTS = "select count(id) from contact where (first_name = ? or ? is null) and (last_name = ? or ? is null) and (middle_name = ? or ? is null) " +
-                "and (gender = ? or ? is null) and (marital_status = ? or ? is null) and (nationality = ? or ? is null) and (contact_group = ? or ? is null) " +
-                "and (country = ? or ? is null)and (city = ? or ? is null) and (street = ? or ? is null) and (house_number = ? or ? is null) and (flat_number = ? or ? = 0) " +
-                "and (postcode = ? or ? = 0) and birth_date between ? and ?;";
+    public long getNumberOfSearchContacts(Contact entity, Date lowerLimit, Date upperLimit, Connection connection) throws SQLException {
+        StringBuilder getContacts = new StringBuilder("select count(id) from contact ");
 
-        PreparedStatement statement = connection.prepareStatement(GET_CONTACTS);
-        statement.setString(1, contact.getFirstName());
-        statement.setString(2, contact.getFirstName());
-        statement.setString(3, contact.getLastName());
-        statement.setString(4, contact.getLastName());
-        statement.setString(5, contact.getMiddleName());
-        statement.setString(6, contact.getMiddleName());
-        statement.setString(7, contact.getGender());
-        statement.setString(8, contact.getGender());
-        statement.setString(9, contact.getMaritalStatus());
-        statement.setString(10, contact.getMaritalStatus());
-        statement.setString(11, contact.getNationality());
-        statement.setString(12, contact.getNationality());
-        statement.setString(13, contact.getContactGroup());
-        statement.setString(14, contact.getContactGroup());
-        statement.setString(15, contact.getCountry());
-        statement.setString(16, contact.getCountry());
-        statement.setString(17, contact.getCity());
-        statement.setString(18, contact.getCity());
-        statement.setString(19, contact.getStreet());
-        statement.setString(20, contact.getStreet());
-        statement.setString(21, contact.getHouseNumber());
-        statement.setString(22, contact.getHouseNumber());
-        statement.setInt(23, contact.getFlatNumber());
-        statement.setInt(24, contact.getFlatNumber());
-        statement.setInt(25, contact.getPostcode());
-        statement.setInt(26, contact.getPostcode());
-        statement.setDate(27, lowerLimit);
-        statement.setDate(28, upperLimit);
+        Builder query = new Builder();
+        query.where(getContacts).addConditionIfExist("first_name", entity.getFirstName(), getContacts).addConditionIfExist("last_name", entity.getLastName(),
+                getContacts).addConditionIfExist("middle_name", entity.getMiddleName(), getContacts).addConditionIfExist("gender", entity.getGender(),
+                getContacts).addConditionIfExist("marital_status", entity.getMaritalStatus(), getContacts).addConditionIfExist("nationality", entity.getNationality(),
+                getContacts).addConditionIfExist("contact_group", entity.getContactGroup(), getContacts).addConditionIfExist("country", entity.getCountry(),
+                getContacts).addConditionIfExist("city", entity.getCity(), getContacts).addConditionIfExist("street", entity.getStreet(),
+                getContacts).addConditionIfExist("house_number", entity.getHouseNumber(), getContacts).addConditionIfExist("flat_number", entity.getFlatNumber(),
+                getContacts).addConditionIfExist("postcode", entity.getPostcode(), getContacts).addBirthdayCondition(getContacts).build(getContacts);
+        PreparedStatement statement = connection.prepareStatement(getContacts.toString());
+        int counter = 0;
+        if (entity.getFirstName() != null) {
+            statement.setString(++counter, entity.getFirstName());
+        }
+        if (entity.getLastName() != null) {
+            statement.setString(++counter, entity.getLastName());
+        }
+        if (entity.getMiddleName() != null) {
+            statement.setString(++counter, entity.getMiddleName());
+        }
+        if (entity.getGender() != null) {
+            statement.setString(++counter, entity.getGender());
+        }
+        if (entity.getMaritalStatus() != null) {
+            statement.setString(++counter, entity.getMaritalStatus());
+        }
+        if (entity.getNationality() != null) {
+            statement.setString(++counter, entity.getNationality());
+        }
+        if (entity.getContactGroup() != null) {
+            statement.setString(++counter, entity.getContactGroup());
+        }
+        if (entity.getCountry() != null) {
+            statement.setString(++counter, entity.getCountry());
+        }
+        if (entity.getCity() != null) {
+            statement.setString(++counter, entity.getCity());
+
+        }
+        if (entity.getStreet() != null) {
+            statement.setString(++counter, entity.getStreet());
+
+        }
+        if (entity.getHouseNumber() != null) {
+            statement.setString(++counter, entity.getHouseNumber());
+
+        }
+        if (entity.getFlatNumber() != 0) {
+            statement.setInt(++counter, entity.getFlatNumber());
+
+        }
+        if (entity.getPostcode() != 0) {
+            statement.setInt(++counter, entity.getPostcode());
+
+        }
+        statement.setDate(++counter, lowerLimit);
+        statement.setDate(++counter, upperLimit);
 
         ResultSet resultSet = statement.executeQuery();
         long totalQuantity = 0;
