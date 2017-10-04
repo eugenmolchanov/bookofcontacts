@@ -28,89 +28,257 @@
         <div class="photoInfo"><h3><fmt:message key="contact_photo"/></h3></div>
         <input type="button" value="<fmt:message key="choose_photo"/> " class="chooseButton" onclick="addPhoto()"/>
         <div id="image" class="image">
+
         </div>
         <div class="generalInfo"><h3><fmt:message key="general_info"/></h3></div>
         <div id="full-name">
-            <div class="nameMessage" id="firstNameMessage"></div>
-            <div class="nameMessage" id="secondNameMessage"></div>
-            <div class="nameMessage" id="middleNameMessage"></div>
-            <input type="text" name="firstName" id="firstName" placeholder="<fmt:message key="first_name"/>${'*'} " required
-                   class="form-control"/>
-            <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}" required
-                   class="form-control"/>
-            <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
-                   class="form-control"/>
+            <div class="nameMessage" id="firstNameMessage">${requestScope.validation.firstNameMessage}</div>
+            <div class="nameMessage" id="secondNameMessage">${requestScope.validation.secondNameMessage}</div>
+            <div class="nameMessage" id="middleNameMessage">${requestScope.validation.middleNameMessage}</div>
+            <c:choose>
+                <c:when test="${requestScope.validation.firstNameMessage == null}">
+                    <input type="text" name="firstName" id="firstName"
+                           placeholder="<fmt:message key="first_name"/>${'*'} " required
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="firstName" id="firstName"
+                           placeholder="<fmt:message key="first_name"/>${'*'} " required
+                           class="form-group has-warning form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.secondNameMessage == null}">
+                    <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}"
+                           required
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}"
+                           required
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.middleNameMessage == null}">
+                    <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div id="secondLine">
-            <div class="nameMessage" id="birthdayMessage"></div>
-            <div class="nameMessage" id="genderMessage"></div>
-            <div class="nameMessage" id="nationalityMessage"></div>
-            <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'" onblur="if(this.value==''){this.type='text'}"
-                   placeholder="<fmt:message key="birthday"/> " class="form-control"/>
-            <select name="gender" id="gender" class="form-control">
-                <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
-                <option value="Мужчина"><fmt:message key="male"/> </option>
-                <option value="Женщина"><fmt:message key="female"/> </option>
-            </select>
-            <input type="text" name="nationality" id="nationality" placeholder="<fmt:message key="nationality"/>"
-                   class="form-control"/>
+            <div class="nameMessage" id="birthdayMessage">${requestScope.validation.birthdayMessage}</div>
+            <div class="nameMessage" id="genderMessage">${requestScope.validation.genderMessage}</div>
+            <div class="nameMessage" id="nationalityMessage">${requestScope.validation.nationalityMessage}</div>
+            <c:choose>
+                <c:when test="${requestScope.validation.birthdayMessage == null}">
+                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'"
+                           onblur="if(this.value==''){this.type='text'}"
+                           placeholder="<fmt:message key="birthday"/> " class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'"
+                           onblur="if(this.value==''){this.type='text'}"
+                           placeholder="<fmt:message key="birthday"/> " class="form-control"
+                           style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.genderMessage == null}">
+                    <select name="gender" id="gender" class="form-control">
+                        <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
+                        <option value="Мужчина"><fmt:message key="male"/></option>
+                        <option value="Женщина"><fmt:message key="female"/></option>
+                    </select>
+                </c:when>
+                <c:otherwise>
+                    <select name="gender" id="gender" class="form-control" style="border-color: #A94442;">
+                        <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
+                        <option value="Мужчина"><fmt:message key="male"/></option>
+                        <option value="Женщина"><fmt:message key="female"/></option>
+                    </select>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.nationalityMessage == null}">
+                    <input type="text" name="nationality" id="nationality"
+                           placeholder="<fmt:message key="nationality"/>"
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="nationality" id="nationality"
+                           placeholder="<fmt:message key="nationality"/>"
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div id="thirdLine">
-            <div class="nameMessage" id="maritalStatusMessage"></div>
-            <div class="nameMessage" id="websiteMessage"></div>
-            <div class="nameMessage" id="emailMessage"></div>
-            <select name="maritalStatus" id="maritalStatus" class="form-control">
-                <option selected disabled hidden><fmt:message key="marital_status"/></option>
-                <option value="Не женат"><fmt:message key="not_married_male"/> </option>
-                <option value="Не замужем"><fmt:message key="not_married_female"/> </option>
-                <option value="Женат"><fmt:message key="married_male"/> </option>
-                <option value="Замужем"><fmt:message key="married_female"/> </option>
-                <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/> </option>
-                <option value="Вдовец"><fmt:message key="widower"/> </option>
-                <option value="Вдова"><fmt:message key="widow"/> </option>
-            </select>
-            <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
-                   class="form-control"/>
-            <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> " class="form-control"/>
+            <div class="nameMessage" id="maritalStatusMessage">${requestScope.validation.maritalStatusMessage}</div>
+            <div class="nameMessage" id="websiteMessage">${requestScope.validation.websiteMessage}</div>
+            <div class="nameMessage" id="emailMessage">${requestScope.validation.emailMessage}</div>
+            <c:choose>
+                <c:when test="${requestScope.validation.maritalStatusMessage == null}">
+                    <select name="maritalStatus" id="maritalStatus" class="form-control">
+                        <option selected disabled hidden><fmt:message key="marital_status"/></option>
+                        <option value="Не женат"><fmt:message key="not_married_male"/></option>
+                        <option value="Не замужем"><fmt:message key="not_married_female"/></option>
+                        <option value="Женат"><fmt:message key="married_male"/></option>
+                        <option value="Замужем"><fmt:message key="married_female"/></option>
+                        <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/></option>
+                        <option value="Вдовец"><fmt:message key="widower"/></option>
+                        <option value="Вдова"><fmt:message key="widow"/></option>
+                    </select>
+                </c:when>
+                <c:otherwise>
+                    <select name="maritalStatus" id="maritalStatus" class="form-control" style="border-color: #A94442;">
+                        <option selected disabled hidden><fmt:message key="marital_status"/></option>
+                        <option value="Не женат"><fmt:message key="not_married_male"/></option>
+                        <option value="Не замужем"><fmt:message key="not_married_female"/></option>
+                        <option value="Женат"><fmt:message key="married_male"/></option>
+                        <option value="Замужем"><fmt:message key="married_female"/></option>
+                        <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/></option>
+                        <option value="Вдовец"><fmt:message key="widower"/></option>
+                        <option value="Вдова"><fmt:message key="widow"/></option>
+                    </select>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.websiteMessage == null}">
+                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.emailMessage == null}">
+                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div id="fourthLine">
-            <div class="nameMessage" id="employmentPlaceMessage"></div>
-            <div class="nameMessage" id="contactGroupMessage"></div>
+            <div class="nameMessage" id="employmentPlaceMessage">${requestScope.validation.employmentPlaceMessage}</div>
+            <div class="nameMessage" id="contactGroupMessage">${requestScope.validation.contactGroupMessage}</div>
             <br>
-            <input type="text" name="employmentPlace" id="employmentPlace"
-                   placeholder="<fmt:message key="employment_place"/> " class="form-control"/>
-            <select name="contactGroup" id="contactGroup" class="form-control">
-                <option selected disabled hidden><fmt:message key="contact_group"/></option>
-                <option value="Семья"><fmt:message key="family"/> </option>
-                <option value="Друзья"><fmt:message key="friends"/> </option>
-                <option value="Коллеги"><fmt:message key="colleagues"/> </option>
-                <option value="Соседи"><fmt:message key="neighbours"/> </option>
-            </select>
+            <c:choose>
+                <c:when test="${requestScope.validation.employmentPlaceMessage == null}">
+                    <input type="text" name="employmentPlace" id="employmentPlace"
+                           placeholder="<fmt:message key="employment_place"/> " class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="employmentPlace" id="employmentPlace"
+                           placeholder="<fmt:message key="employment_place"/> " class="form-control"
+                           style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.contactGroupMessage == null}">
+                    <select name="contactGroup" id="contactGroup" class="form-control">
+                        <option selected disabled hidden><fmt:message key="contact_group"/></option>
+                        <option value="Семья"><fmt:message key="family"/></option>
+                        <option value="Друзья"><fmt:message key="friends"/></option>
+                        <option value="Коллеги"><fmt:message key="colleagues"/></option>
+                        <option value="Соседи"><fmt:message key="neighbours"/></option>
+                    </select>
+                </c:when>
+                <c:otherwise>
+                    <select name="contactGroup" id="contactGroup" class="form-control" style="border-color: #A94442;">
+                        <option selected disabled hidden><fmt:message key="contact_group"/></option>
+                        <option value="Семья"><fmt:message key="family"/></option>
+                        <option value="Друзья"><fmt:message key="friends"/></option>
+                        <option value="Коллеги"><fmt:message key="colleagues"/></option>
+                        <option value="Соседи"><fmt:message key="neighbours"/></option>
+                    </select>
+                </c:otherwise>
+            </c:choose>
         </div>
 
         <div class="addressInfo"><h3><fmt:message key="address"/></h3></div>
         <div id="fifthLine">
-            <div class="nameMessage" id="countryMessage"></div>
-            <div class="nameMessage" id="cityMessage"></div>
-            <div class="nameMessage" id="streetMessage"></div>
-            <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "
-                   class="form-control"/>
-            <input type="text" name="city" id="city" placeholder="<fmt:message key="city"/> " class="form-control"/>
-            <input type="text" name="street" id="street" placeholder="<fmt:message key="street"/> "
-                   class="form-control"/>
+            <div class="nameMessage" id="countryMessage">${requestScope.validation.countryMessage}</div>
+            <div class="nameMessage" id="cityMessage">${requestScope.validation.cityMessage}</div>
+            <div class="nameMessage" id="streetMessage">${requestScope.validation.streetMessage}</div>
+            <c:choose>
+                <c:when test="${requestScope.validation.countryMessage == null}">
+                    <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.cityMessage == null}">
+                    <input type="text" name="city" id="city" placeholder="<fmt:message key="city"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="city" id="city" placeholder="<fmt:message key="city"/> "
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.streetMessage == null}">
+                    <input type="text" name="street" id="street" placeholder="<fmt:message key="street"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="street" id="street" placeholder="<fmt:message key="street"/> "
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div id="sixthLine">
-            <div class="nameMessage" id="houseNumberMessage"></div>
-            <div class="nameMessage" id="flatNumberMessage"></div>
-            <div class="nameMessage" id="postalIndexMessage"></div>
-            <input type="text" name="houseNumber" id="houseNumber"
-                   placeholder="<fmt:message key="house_number"/> " class="form-control"/>
-            <input type="number" min="1" name="flatNumber" id="flatNumber"
-                   placeholder="<fmt:message key="flat_number"/> "
-                   pattern="[0-9]" title="Only digits" class="form-control"/>
-            <input type="number" min="1" name="postalIndex" id="postalIndex"
-                   placeholder="<fmt:message key="postcode"/> "
-                   pattern="[0-9]" title="Only digits" class="form-control"/>
+            <div class="nameMessage" id="houseNumberMessage">${requestScope.validation.houseNumberMessage}</div>
+            <div class="nameMessage" id="flatNumberMessage">${requestScope.validation.flatNumberMessage}</div>
+            <div class="nameMessage" id="postalIndexMessage">${requestScope.validation.postalIndexMessage}</div>
+            <c:choose>
+                <c:when test="${requestScope.validation.houseNumberMessage == null}">
+                    <input type="text" name="houseNumber" id="houseNumber"
+                           placeholder="<fmt:message key="house_number"/> " class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="houseNumber" id="houseNumber"
+                           placeholder="<fmt:message key="house_number"/> " class="form-control"
+                           style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.flatNumberMessage == null}">
+                    <input type="number" min="1" name="flatNumber" id="flatNumber"
+                           placeholder="<fmt:message key="flat_number"/> "
+                           pattern="[0-9]" title="Only digits" class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="number" min="1" name="flatNumber" id="flatNumber"
+                           placeholder="<fmt:message key="flat_number"/> "
+                           pattern="[0-9]" title="Only digits" class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${requestScope.validation.postalIndexMessage == null}">
+                    <input type="number" min="1" name="postalIndex" id="postalIndex"
+                           placeholder="<fmt:message key="postcode"/> "
+                           pattern="[0-9]" title="Only digits" class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="number" min="1" name="postalIndex" id="postalIndex"
+                           placeholder="<fmt:message key="postcode"/> "
+                           pattern="[0-9]" title="Only digits" class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="phonesInfo"><h3><fmt:message key="phones"/></h3></div>
         <div class="phoneInfo" id="phoneInfo">
@@ -122,6 +290,7 @@
                         <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
                                 class="deleteButton"><fmt:message key="delete"/></button>
                     </div>
+                    <div class="phoneMessage">${requestScope.validation.phoneMessage}</div>
                 </caption>
                 <thead>
                 <tr>
@@ -150,6 +319,7 @@
                         <button type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()"
                                 class="deleteButton"><fmt:message key="delete"/></button>
                     </div>
+                    <div class="attachmentMessage">${requestScope.validation.attachmentMessage}</div>
                 </caption>
                 <thead>
                 <tr>
@@ -173,7 +343,6 @@
         <img src="${pageContext.request.contextPath}/assests/images/phone.jpg">
     </div>
     <div class="phoneForm" id="phoneForm">
-        <form>
             <div class="phoneMessage" id="countryCodeMessage"></div>
             <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
                    class="form-control" required/>
@@ -199,7 +368,7 @@
                 <button type="button" id="cancelPhone" onclick="addPhone()" class="btn btn-success"><fmt:message
                         key="exit"/></button>
             </div>
-        </form>
+
     </div>
 </div>
 <input type="file" id="file" style="visibility: hidden">
@@ -210,7 +379,8 @@
     <div class="attachmentForm" id="attachmentForm">
         <form>
             <div class="attachmentMessage" id="attachmentMessage"></div>
-            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="uploadAttachment()" value="<fmt:message key="choose_file"/>"/>
+            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="uploadAttachment()"
+                   value="<fmt:message key="choose_file"/>"/>
             <div class="attachTitleMessage" id="attachTitleMessage"></div>
             <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
                    class="form-control"/>
@@ -229,18 +399,17 @@
 </div>
 <div class="photoPopupText" id="photoPopup">
     <div class="photoForm" id="photoForm">
-        <form>
-            <div class="photoPathMessage" id="photoPathMessage"></div>
-            <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="choosePhoto()" value="<fmt:message key="choose_photo"/>"/>
-            <div class="photoPath" id="photoPath">dwd</div>
-            <div class="attachments_buttons">
-                <button type="button" id="savePhoto" onclick="addAttachmentTable()" class="btn btn-primary">
-                    <fmt:message key="save"/></button>
-                <button type="button" id="cancelPhoto" onclick="addAttachments()" class="btn btn-success">
-                    <fmt:message
-                            key="exit"/></button>
-            </div>
-        </form>
+        <div class="photoPathMessage" id="photoPathMessage"></div>
+        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="findPhoto()"
+               value="<fmt:message key="choose_photo"/>"/>
+        <div class="photoPath" id="photoPath"></div>
+        <div class="photo_buttons">
+            <button type="button" id="savePhoto" onclick="savePhotoFile()" class="btn btn-primary"><fmt:message
+                    key="save"/></button>
+            <button type="button" id="cancelPhoto" onclick="deletePhoto()" class="btn btn-success">
+                <fmt:message
+                        key="cancel"/></button>
+        </div>
     </div>
 </div>
 </body>

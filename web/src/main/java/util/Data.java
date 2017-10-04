@@ -3,6 +3,7 @@ package util;
 import com.itechart.javalab.firstproject.entities.Attachment;
 import com.itechart.javalab.firstproject.entities.Phone;
 import com.itechart.javalab.firstproject.entities.Photo;
+import dto.PhoneDataDto;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -27,32 +28,34 @@ import java.util.*;
 public class Data {
 
     public static Map<String, Object> upload(HttpServletRequest req) throws IOException, ServletException, FileUploadException {
+        if (!ServletFileUpload.isMultipartContent(req)) {
+            return null;
+        }
         Map<String, Object> parameters = new HashMap<>();
         List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(req);
-        Set<Phone> phones = new HashSet<>();
+        Set<PhoneDataDto> phones = new HashSet<>();
         Set<Attachment> attachments = new HashSet<>();
         Attachment attachment = new Attachment();
-        Phone phone = new Phone();
+        PhoneDataDto phone = new PhoneDataDto();
         String pathToFolder = "D:\\IndividualProject\\contacts\\";
         String folder = pathToFolder.concat(LocalDate.now().toString()).concat(UUID.randomUUID().toString()).concat("\\");
         for (FileItem item : items) {
             if (item.isFormField()) {
                 String fieldName = item.getFieldName();
                 String fieldValue = item.getString("UTF-8");
-                if (!fieldValue.equals("")) {
-                    if (!fieldName.equals("attachComment") && !fieldName.equals("countryCode") && !fieldName.equals("operatorCode") &&
+                    if (!fieldName.equals("attachComment") && !fieldName.equals("attachTitle") && !fieldName.equals("countryCode") && !fieldName.equals("operatorCode") &&
                             !fieldName.equals("number") && !fieldName.equals("type") && !fieldName.equals("comment")) {
                         parameters.put(fieldName, fieldValue);
-                    } else if (!fieldName.equals("attachComment")) {
+                    } else if (!fieldName.equals("attachComment") && !fieldName.equals("attachTitle")) {
                         switch (fieldName) {
                             case "countryCode":
                                 phone.setCountryCode(fieldValue);
                                 break;
                             case "operatorCode":
-                                phone.setOperatorCode(Integer.parseInt(fieldValue));
+                                phone.setOperatorCode(fieldValue);
                                 break;
                             case "number":
-                                phone.setNumber(Integer.parseInt(fieldValue));
+                                phone.setNumber(fieldValue);
                                 break;
                             case "type":
                                 phone.setType(fieldValue);
@@ -60,15 +63,16 @@ public class Data {
                             case "comment":
                                 phone.setComment(fieldValue);
                                 phones.add(phone);
-                                phone = new Phone();
+                                phone = new PhoneDataDto();
                                 break;
                         }
+                    } else if (fieldName.equals("attachTitle")) {
+                        attachment.setFileName(fieldValue);
                     } else if (fieldName.equals("attachComment")) {
                         attachment.setCommentary(fieldValue);
                         attachments.add(attachment);
                         attachment = new Attachment();
                     }
-                }
             } else {
                 String fieldName = item.getFieldName();
                 String fileName = FilenameUtils.getName(item.getName());
@@ -76,19 +80,18 @@ public class Data {
                     InputStream fileContent = item.getInputStream();
                     String[] array = fileName.split("\\.");
                     String format = array[1];
-                    if (fieldName.equals("image")) {
+                    if (fieldName.equals("photoFile")) {
                         String uuid = UUID.randomUUID().toString();
                         String fileTitle = uuid.concat(".").concat(format);
                         File file = new File(folder.concat(fileTitle));
                         FileUtils.copyInputStreamToFile(fileContent, file);
                         Photo photo = new Photo(0, folder, fileTitle);
                         parameters.put(fieldName, photo);
-                    } else if (fieldName.equals("attachment")) {
+                    } else if (fieldName.equals("attachmentFile")) {
                         String uuid = UUID.randomUUID().toString();
                         String fileTitle = uuid.concat(".").concat(format);
                         File file = new File(folder.concat(fileTitle));
                         FileUtils.copyInputStreamToFile(fileContent, file);
-                        attachment.setFileName(fileName);
                         attachment.setPathToFile(folder);
                         attachment.setUuid(fileTitle);
                         attachment.setDate(Timestamp.valueOf(LocalDateTime.now()));
