@@ -87,7 +87,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public void update(Contact contact) throws SQLException {
+    public void update(Contact contact, Set<Long> phonesForDelete, Set<Long> attachmentsForDelete) throws SQLException {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);
         try {
@@ -116,6 +116,9 @@ public class ContactServiceImpl implements ContactService {
                     attachmentService.create(attachment, connection);
                 }
             }
+            for (long id : attachmentsForDelete) {
+                attachmentService.delete(id);
+            }
             Set<Phone> phones = phoneService.getAllPhonesOfContact(contact.getId(), connection);
             if (phones.size() != 0) {
                 Iterator<Phone> entityIterator = contact.getPhones().iterator();
@@ -140,10 +143,11 @@ public class ContactServiceImpl implements ContactService {
                     phoneService.create(phone, connection);
                 }
             }
-            if (contact.getPhoto().getId() != 0) {
+            for (long id : phonesForDelete) {
+                phoneService.delete(id);
+            }
+            if (contact.getPhoto() != null) {
                 photoService.update(contact.getPhoto(), connection);
-            } else {
-                photoService.create(contact.getPhoto(), connection);
             }
             connection.commit();
         } catch (SQLException e) {

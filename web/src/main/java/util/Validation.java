@@ -4,6 +4,7 @@ import com.itechart.javalab.firstproject.entities.Attachment;
 import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Phone;
 import com.itechart.javalab.firstproject.entities.Photo;
+import dto.AttachmentDataDto;
 import dto.PhoneDataDto;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
@@ -38,7 +39,7 @@ public class Validation {
                 logger.debug("quantityOfContacts param is not valid.", e);
             }
         }
-        if (req.getAttribute("startContactNumber") != null && req.getAttribute("quantityOfContacts")!= null) {
+        if (req.getAttribute("startContactNumber") != null && req.getAttribute("quantityOfContacts") != null) {
             result = true;
         }
         return result;
@@ -252,13 +253,37 @@ public class Validation {
         }
         if (parameters.get("attachments") != null) {
             try {
-                Set<Attachment> attachments = (Set<Attachment>) parameters.get("attachments");
-                for (Attachment attachment : attachments) {
-                    if (attachment.getUuid() == null || attachment.getFileName().isEmpty()) {
-                        validationMessages.put("attachmentNameMessage", invalid);
+                Set<AttachmentDataDto> attachments = (Set<AttachmentDataDto>) parameters.get("attachments");
+                if (attachments.size() != 0) {
+                    Set<Attachment> contactAttachments = new HashSet<>();
+                    for (AttachmentDataDto attachment : attachments) {
+                        Attachment contactAttachment = new Attachment();
+                        if (attachment.getId() != null) {
+                            if (attachment.getId().isEmpty()) {
+                                validationMessages.put("attachmentMessage", invalid);
+                            } else {
+                                try {
+                                    long attachmentId = Long.parseLong(attachment.getId());
+                                    contactAttachment.setId(attachmentId);
+                                } catch (Exception e) {
+                                    logger.debug(e.getMessage(), e);
+                                    validationMessages.put("attachmentMessage", invalid);
+                                }
+                            }
+                        }
+                        if (attachment.getFileName().isEmpty()) {
+                            validationMessages.put("attachTitleMessage", invalid);
+                        } else {
+                            contactAttachment.setFileName(attachment.getFileName());
+                        }
+                        if (attachment.getCommentary().length() > 255) {
+                            validationMessages.put("attachCommentMessage", invalid);
+                        } else if (!attachment.getCommentary().isEmpty()) {
+                            contactAttachment.setCommentary(attachment.getCommentary());
+                        }
+                        contactAttachments.add(contactAttachment);
                     }
                 }
-                contact.setAttachments(attachments);
             } catch (Exception e) {
                 logger.debug(e.getMessage(), e);
                 validationMessages.put("attachmentMessage", invalid);
@@ -272,6 +297,19 @@ public class Validation {
                     Set<Phone> contactPhones = new HashSet<>();
                     for (PhoneDataDto phone : phones) {
                         Phone contactPhone = new Phone();
+                        if (phone.getId() != null) {
+                            if (phone.getId().isEmpty()) {
+                                validationMessages.put("phoneMessage", invalid);
+                            } else {
+                                try {
+                                    long phoneId = Long.parseLong(phone.getId());
+                                    contactPhone.setId(phoneId);
+                                } catch (Exception e) {
+                                    logger.debug(e.getMessage(), e);
+                                    validationMessages.put("phoneMessage", invalid);
+                                }
+                            }
+                        }
                         if (phone.getCountryCode().isEmpty()) {
                             validationMessages.put("countryCodeMessage", invalid);
                         } else {
@@ -292,9 +330,9 @@ public class Validation {
                         } else {
                             contactPhone.setType(phone.getType());
                         }
-                        if (phone.getComment().isEmpty()) {
+                        if (phone.getComment().length() > 255) {
                             validationMessages.put("phoneCommentMessage", invalid);
-                        } else {
+                        } else if (!phone.getComment().isEmpty()) {
                             contactPhone.setComment(phone.getComment());
                         }
                         contactPhones.add(contactPhone);
@@ -318,6 +356,64 @@ public class Validation {
         }
         result.put("contact", contact);
         result.put("validation", validationMessages);
+        return result;
+    }
+
+    public static Map<String, Object> editContactData(Map<String, Object> parameters, Logger logger) {
+        Map<String, Object> result = createContactData(parameters, logger);
+        String invalid = "Not valid";
+        Set<Long> attachmentsForDelete = new HashSet<>();
+        Set<Long> phonesForDelete = new HashSet<>();
+        Map<String, String> validationMessages = (Map<String, String>) result.get("validation");
+        if (parameters.get("attachmentsForDelete") != null) {
+            try {
+                Set<String> attachmentIds = (Set<String>) parameters.get("attachmentsForDelete");
+                if (attachmentIds.size() != 0) {
+                    for (String attachmentId : attachmentIds) {
+                        if (attachmentId.isEmpty()) {
+                            validationMessages.put("attachmentMessage", invalid);
+                        } else {
+                            try {
+                                long id = Long.parseLong(attachmentId);
+                                attachmentsForDelete.add(id);
+                            } catch (Exception e) {
+                                logger.debug(e.getMessage(), e);
+                                validationMessages.put("attachmentMessage", invalid);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                logger.debug(e.getMessage(), e);
+                validationMessages.put("attachmentMessage", invalid);
+            }
+            result.put("attachmentsForDelete", attachmentsForDelete);
+        }
+        if (parameters.get("phonesForDelete") != null) {
+            try {
+                Set<String> phonesIds = (Set<String>) parameters.get("phonesForDelete");
+                if (phonesIds.size() != 0) {
+                    for (String phoneId : phonesIds) {
+                        if (phoneId.isEmpty()) {
+                            validationMessages.put("phoneMessage", invalid);
+                        } else {
+                            try {
+                                long id = Long.parseLong(phoneId);
+                                phonesForDelete.add(id);
+                            } catch (Exception e) {
+                                logger.debug(e.getMessage(), e);
+                                validationMessages.put("phoneMessage", invalid);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                logger.debug(e.getMessage(), e);
+                validationMessages.put("phoneMessage", invalid);
+            }
+            result.put("phonesForDelete", phonesForDelete);
+        }
+        result.replace("validation", validationMessages);
         return result;
     }
 

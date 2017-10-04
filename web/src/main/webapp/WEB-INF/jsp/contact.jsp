@@ -21,7 +21,7 @@
 <%--<div><p>${requestScope.message}</p></div>--%>
 <div class="contact_form" id="contact_form">
     <div class="messageInfo">${requestScope.message}</div>
-    <form action="/controller?command=createNewContact" method="post" name="createForm"
+    <form action="/controller?command=editContact" method="post" name="createForm"
           onsubmit="return createContact()"
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
         <div class="contactTitle"><h2><fmt:message key="personal_data"/></h2></div>
@@ -29,14 +29,14 @@
             <img src="${pageContext.request.contextPath}/assests/images/edit.png"/>
         </div>
         <br>
-        <div class="photo">
+        <div class="photo" id="image">
             <c:choose>
-                <c:when test="${requestScope.contact.photo.id != 0}">
+                <c:when test="${requestScope.contact.photo.pathToFile != null}">
                     <img src="/controller?command=displayContactPhoto&id=${requestScope.contact.photo.id}"
-                         class="photoImage"/>
+                         class="photoImage" onclick="addPhoto()"/>
                 </c:when>
                 <c:otherwise>
-                    <img src="${pageContext.request.contextPath}/assests/images/profile_photo.png" class="defaultImage"/>
+                    <img src="${pageContext.request.contextPath}/assests/images/profile_photo.png" class="defaultImage" onclick="addPhoto()"/>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -196,30 +196,28 @@
                     <tr>
                         <td class="phoneCheckboxTd" id="phoneCheckboxTd">
                             <input type="checkbox" name="phoneId" value="${phone.id}"/>
-                            <input type="hidden" name="phone" id="id_${phone.id}" value=""/>
+                            <input type="hidden" name="phoneId" value="${phone.id}"/>
                         </td>
                         <td class="phoneTd">
-                            <input id="countryCodeId_${phone.id}" value="${phone.countryCode}"
-                                   class="phoneCountryCode"/>
+                            <input type="text" name="countryCode" id="countryCodeId_${phone.id}" value="${phone.countryCode}" class="phoneCountryCode" readonly/>
                         </td>
                         <td class="phoneTd">
-                            <input id="operatorCodeId_${phone.id}" value="${phone.operatorCode}"
-                                   class="phoneOperatorCode">
+                            <input type="text" name="operatorCode" id="operatorCodeId_${phone.id}" value="${phone.operatorCode}" class="phoneOperatorCode" readonly/>
                         </td>
                         <td class="phoneTd">
-                            <input id="numberId_${phone.id}" value="${phone.number}" class="phoneNumber">
+                            <input type="text" name="number" id="numberId_${phone.id}" value="${phone.number}" class="phoneNumber" readonly/>
                         </td>
                         <td class="phoneTd">
-                            <input id="typeId_${phone.id}" value="${phone.type}" class="phoneType">
+                            <input type="text" name="type" id="typeId_${phone.id}" value="${phone.type}" class="phoneType" readonly/>
                         </td>
                         <td class="phoneTd">
-                            <input id="commentId_${phone.id}" value="${phone.comment}" class="phoneComment">
+                            <input type="text" name="comment" id="commentId_${phone.id}" value="${phone.comment}" class="phoneComment" readonly/>
                         </td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
-
+            <input type="hidden" id="clickEdit" value="false"/>
         </div>
         <br>
         <div class="attachmentsInfo"><h3><fmt:message key="attachments"/></h3></div>
@@ -238,8 +236,8 @@
                 <thead>
                 <tr>
                     <th class="attachmentCheckbox"></th>
-                    <th class="attachmentTitle"><fmt:message key="attachment"/></th>
-                    <th class="attachmentDate"><fmt:message key="attachment"/></th>
+                    <th class="attachmentName"><fmt:message key="title"/></th>
+                    <th class="attachmentDate"><fmt:message key="date"/></th>
                     <th class="attachmentComment"><fmt:message key="comment"/></th>
                 </tr>
                 </thead>
@@ -248,20 +246,17 @@
                     <tr>
                         <td class="attachmentCheckboxTd" id="attachmentCheckboxTd">
                             <input type="checkbox" name="attachmentId" value="${attachment.id}"/>
-                            <input type="hidden" name="attachment" id="id_${attachment.id}" value=""/>
+                            <input type="hidden" name="attachmentId" value="${attachment.id}"/>
                         </td>
                         <td class="attachmentTd">
-                            <a href="/controller?command=downloadAttachment&id=${attachment.id}">${attachment.fileName}</a>
-                            <input type="hidden" id="attachmentFileId_${attachment.id}" value="${attachment.fileName}"
-                                   class="attachmentTitle"/>
+                            <a href="/controller?command=downloadAttachment&id=${attachment.id}" id="hrefId_${attachment.id}">${attachment.fileName}</a>
+                            <input type="hidden" name="attachTitle" id="attachmentFileId_${attachment.id}" value="${attachment.fileName}" class="attachmentTitle" readonly/>
+                        </td>
+                        <td class="attachmentTd" name="date">
+                            <input id="attachmentDateId_${attachment.id}" value="${attachment.date}" class="attachmentDate" readonly>
                         </td>
                         <td class="attachmentTd">
-                            <input id="attachmentDateId_${attachment.id}" value="${attachment.date}"
-                                   class="attachmentDate">
-                        </td>
-                        <td class="attachmentTd">
-                            <input id="attachCommentId_${attachment.id}" value="${attachment.commentary}"
-                                   class="attachmentCommentary">
+                            <input type="text" name="attachComment" id="attachCommentId_${attachment.id}" value="${attachment.commentary}" class="attachmentCommentary" readonly/>
                         </td>
                     </tr>
                 </c:forEach>
@@ -278,33 +273,32 @@
         <img src="${pageContext.request.contextPath}/assests/images/phone.jpg">
     </div>
     <div class="phoneForm" id="phoneForm">
-        <form>
-            <div class="phoneMessage" id="countryCodeMessage"></div>
-            <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
-                   class="form-control" required/>
-            <div class="phoneMessage" id="operatorCodeMessage"></div>
-            <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
-                   class="form-control" required/>
-            <div class="phoneMessage" id="numberMessage"></div>
-            <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
-                   class="form-control" required/>
-            <div class="phoneMessage" id="typeMessage"></div>
-            <select id="type" name="type" class="form-control" required>
-                <option selected disabled hidden><fmt:message key="type"/></option>
-                <option value="Рабочий"><fmt:message key="work_phone"/></option>
-                <option value="Домашний"><fmt:message key="home_phone"/></option>
-                <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
-            </select>
-            <div class="phoneMessage" id="commentMessage"></div>
-            <input type="text" id="comment" name="comment"
-                   placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
-            <div id="phone_buttons" class="phone_buttons">
-                <button type="button" id="savePhone" onclick="editPhoneFields()" class="btn btn-primary"><fmt:message
-                        key="save"/></button>
-                <button type="button" id="cancelPhone" onclick="closePhonePopup()" class="btn btn-success"><fmt:message
-                        key="exit"/></button>
-            </div>
-        </form>
+        <div class="phoneMessage" id="countryCodeMessage"></div>
+        <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
+               class="form-control" required/>
+        <div class="phoneMessage" id="operatorCodeMessage"></div>
+        <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
+               class="form-control" required/>
+        <div class="phoneMessage" id="numberMessage"></div>
+        <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
+               class="form-control" required/>
+        <div class="phoneMessage" id="typeMessage"></div>
+        <select id="type" name="type" class="form-control" required>
+            <option selected disabled hidden><fmt:message key="type"/></option>
+            <option value="Рабочий"><fmt:message key="work_phone"/></option>
+            <option value="Домашний"><fmt:message key="home_phone"/></option>
+            <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
+        </select>
+        <div class="phoneMessage" id="commentMessage"></div>
+        <input type="text" id="comment" name="comment"
+               placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
+        <div id="phone_buttons" class="phone_buttons">
+            <button type="button" id="savePhone" onclick="addPhoneTable()" class="btn btn-primary"><fmt:message
+                    key="save"/></button>
+            <button type="button" id="cancelPhone" onclick="closePhonePopup()" class="btn btn-success"><fmt:message
+                    key="exit"/></button>
+        </div>
+
     </div>
 </div>
 <div class="attachmentPopupText" id="attachmentPopup">
@@ -314,12 +308,16 @@
     <div class="attachmentForm" id="attachmentForm">
         <form>
             <div class="attachmentMessage" id="attachmentMessage"></div>
-            <input type="file" name="attachment" id="attachment" class="form-control"/>
+            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="uploadAttachment()"
+                   value="<fmt:message key="choose_file"/>"/>
+            <div class="attachmentMessage" id="attachTitleMessage"></div>
+            <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
+                   class="form-control"/>
             <div class="attachmentMessage" id="attachCommentMessage"></div>
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
             <div class="attachments_buttons">
-                <button type="button" id="saveAttachment" onclick="editAttachmentFields()" class="btn btn-primary">
+                <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
                     <fmt:message key="save"/></button>
                 <button type="button" id="cancelAttachment" onclick="closeAttachmentPopup()" class="btn btn-success">
                     <fmt:message
@@ -328,5 +326,21 @@
         </form>
     </div>
 </div>
+<div class="photoPopupText" id="photoPopup">
+    <div class="photoForm" id="photoForm">
+        <div class="photoPathMessage" id="photoPathMessage"></div>
+        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="findPhoto()"
+               value="<fmt:message key="choose_photo"/>"/>
+        <div class="photoPath" id="photoPath"></div>
+        <div class="photo_buttons">
+            <button type="button" id="savePhoto" onclick="savePhotoFile()" class="btn btn-primary"><fmt:message
+                    key="save"/></button>
+            <button type="button" id="cancelPhoto" onclick="deletePhoto()" class="btn btn-success">
+                <fmt:message
+                        key="cancel"/></button>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="page" value="edit"/>
 </body>
 </html>

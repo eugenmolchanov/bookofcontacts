@@ -246,6 +246,7 @@ function closeAttachmentPopup() {
     body.classList.toggle("roll");
     var popup = document.getElementById("attachmentPopup");
     popup.classList.toggle("show");
+    document.getElementById('attachment').setAttribute('type', 'button');
     cleanAttachmentPopup();
 }
 
@@ -255,24 +256,64 @@ function cleanPhonePopup() {
     document.getElementById('number').value = "";
     document.getElementById('type').value = "";
     document.getElementById('comment').value = "";
+    cleanPhoneValidation();
 }
-
+function cleanPhoneValidation() {
+    document.getElementById('countryCodeMessage').innerHTML = "";
+    document.getElementById('countryCode').style.borderColor = "";
+    document.getElementById('operatorCodeMessage').innerHTML = "";
+    document.getElementById('operatorCode').style.borderColor = "";
+    document.getElementById('numberMessage').innerHTML = "";
+    document.getElementById('number').style.borderColor = "";
+    document.getElementById('typeMessage').innerHTML = "";
+    document.getElementById('type').style.borderColor = "";
+}
+function cleanAttachmentValidation() {
+    document.getElementById('attachmentMessage').innerHTML = "";
+    document.getElementById('attachTitleMessage').innerHTML = "";
+    document.getElementById('attachTitle').style.borderColor = "";
+    document.getElementById('attachCommentMessage').innerHTML = "";
+    document.getElementById('attachComment').style.borderColor = "";
+}
 function cleanAttachmentPopup() {
+    document.getElementById('attachTitle').value = "";
     document.getElementById('attachComment').value = "";
 }
-function validatePhone(countryCode, operatorCode) {
+function validatePhone(countryCode, operatorCode, number, type, comment) {
     var dataIsValid = true;
-    if (countryCode == null || countryCode == "") {
+    if (countryCode == null || countryCode == "" || countryCode.length > 255) {
         document.getElementById('countryCodeMessage').innerHTML = "Not valid";
+        document.getElementById('countryCode').style.borderColor = "#A94442";
         dataIsValid = false;
     }
     if (operatorCode == null || operatorCode == "") {
         document.getElementById('operatorCodeMessage').innerHTML = "Not valid";
+        document.getElementById('operatorCode').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (number == null || number == "") {
+        document.getElementById('numberMessage').innerHTML = "Not valid";
+        document.getElementById('number').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (type == null || type == "" || (type != "Рабочий" && type != "Домашний" && type != "Сотовый")) {
+        document.getElementById('typeMessage').innerHTML = "Not valid";
+        document.getElementById('type').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (comment.length > 255) {
+        document.getElementById('commentMessage').innerHTML = "Not valid";
+        document.getElementById('comment').style.borderColor = "#A94442";
         dataIsValid = false;
     }
     return dataIsValid;
 }
 function addPhoneTable() {
+    cleanPhoneValidation();
+    if (document.getElementById('clickEdit').value == 'true') {
+        editPhoneFields();
+        return;
+    }
     var countryCodeName = "countryCode";
     var operatorCodeName = "operatorCode";
     var numberName = "number";
@@ -284,7 +325,7 @@ function addPhoneTable() {
     var type = document.getElementById(typeName).value;
     var comment = document.getElementById(commentName).value;
     var body = document.getElementById("phoneRows");
-    if (validatePhone(countryCode, operatorCode) == false) {
+    if (validatePhone(countryCode, operatorCode, number, type, comment) == false) {
         return;
     }
     var tr = document.createElement("tr");
@@ -342,29 +383,18 @@ function addPhoneTable() {
 
     var commentTd = document.createElement("td");
     commentTd.setAttribute("style", "width: 36%; border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
-    var comentInput = document.createElement("input");
-    comentInput.setAttribute("readonly", "readonly");
-    comentInput.setAttribute("type", "text");
-    comentInput.setAttribute("name", commentName);
-    comentInput.setAttribute("style", "border: none; width: 100%");
-    comentInput.setAttribute("value", comment);
-    commentTd.appendChild(comentInput);
+    var commentInput = document.createElement("input");
+    commentInput.setAttribute("readonly", "readonly");
+    commentInput.setAttribute("type", "text");
+    commentInput.setAttribute("name", commentName);
+    commentInput.setAttribute("style", "border: none; width: 100%");
+    commentInput.setAttribute("value", comment);
+    commentTd.appendChild(commentInput);
     tr.appendChild(commentTd);
     body.appendChild(tr);
     cleanPhonePopup();
     addPhone();
 }
-function deletePhoneFromTable() {
-    var elms = document.querySelectorAll("[name='phoneId']");
-    for (var i = 0; i < elms.length; i++)
-        if (elms[i].checked) {
-            var td = elms[i].parentNode;
-            var tr = td.parentNode;
-            var body = tr.parentNode;
-            body.removeChild(tr);
-        }
-}
-
 function addAttachments() {
     var body = document.getElementById('contact_form');
     body.classList.toggle("roll");
@@ -437,23 +467,60 @@ function findPhoto() {
 
 function uploadAttachment() {
     createInputTypeFileForAttachment();
-    document.getElementById('attachmentFile').click();
+    var attachments = document.getElementsByName('attachmentFile');
+    for (var i = 0; i < attachments.length; i++) {
+        if (attachments[i].getAttribute('number') == counter.toString()) {
+            attachments[i].click();
+        }
+    }
 }
-
+function validateAttachment(title, comment) {
+    var dataIsValid = true;
+    if (document.getElementById('attachment').getAttribute('type') == 'button') {
+        var attachments = document.getElementsByName('attachmentFile');
+        var counterInput = 0;
+        for (var i = 0; i < attachments.length; i++) {
+            if (attachments[i].getAttribute('number') == counter.toString()) {
+                counterInput++;
+            }
+        }
+        if (counterInput != 1) {
+            document.getElementById('attachmentMessage').innerHTML = "Add attachment";
+            dataIsValid = false;
+        }
+    }
+    if (title == null || title == "" || title.length > 255) {
+        document.getElementById('attachTitleMessage').innerHTML = "Not valid";
+        document.getElementById('attachTitle').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (comment.length > 255) {
+        document.getElementById('attachCommentMessage').innerHTML = "Not valid";
+        document.getElementById('attachComment').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    return dataIsValid;
+}
 function addAttachmentTable() {
+    cleanAttachmentValidation();
     var commentName = "attachComment";
     var attachmentName = "attachTitle";
     var comment = document.getElementById(commentName).value;
     var title = document.getElementById(attachmentName).value;
 
-
+    if (!validateAttachment(title, comment)) {
+        return;
+    }
     var body = document.getElementById("attachmentRows");
-
+    if (document.getElementById('attachment').getAttribute('type') == 'hidden') {
+        editAttachmentFields();
+        return;
+    }
     var tr = document.createElement("tr");
     tr.setAttribute("number", counter.toString());
     counter++;
     var checkTd = document.createElement("td");
-    checkTd.setAttribute("style", "width: 3%; border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
+    checkTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
     var checkInput = document.createElement("input");
     checkInput.setAttribute("type", "checkbox");
     checkInput.setAttribute("name", "attachmentId");
@@ -461,7 +528,7 @@ function addAttachmentTable() {
     tr.appendChild(checkTd);
 
     var attachmentTd = document.createElement("td");
-    attachmentTd.setAttribute("style", "width: 30%; border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
+    attachmentTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
     var attachmentInput = document.createElement("input");
     attachmentInput.setAttribute("readonly", "readonly");
     attachmentInput.setAttribute("type", "text");
@@ -470,9 +537,13 @@ function addAttachmentTable() {
     attachmentInput.setAttribute("value", title);
     attachmentTd.appendChild(attachmentInput);
     tr.appendChild(attachmentTd);
-
+    if (document.getElementById('page') != null && document.getElementById('page').value == 'edit') {
+        var dataTd = document.createElement("td");
+        dataTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
+        tr.appendChild(dataTd);
+    }
     var titleTd = document.createElement("td");
-    titleTd.setAttribute("style", "width: 42%; border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
+    titleTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding: 1% 0 1% 0");
     var titleInput = document.createElement("input");
     titleInput.setAttribute("readonly", "readonly");
     titleInput.setAttribute("type", "text");
@@ -485,19 +556,44 @@ function addAttachmentTable() {
 
 
     body.appendChild(tr);
-    addAttachments();
     cleanAttachmentPopup();
+    document.getElementById('attachment').setAttribute('type', 'button');
     addAttachments();
 }
-
+function deletePhoneFromTable() {
+    var elms = document.querySelectorAll("[name='phoneId']");
+    for (var i = 0; i < elms.length; i++)
+        if (elms[i].checked) {
+            var id = elms[i].value;
+            var td = elms[i].parentNode;
+            var tr = td.parentNode;
+            var body = tr.parentNode;
+            if (id != null && id > 0) {
+                var input = document.createElement('input');
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "phoneForDelete");
+                input.setAttribute('value', id);
+                body.appendChild(input);
+            }
+            body.removeChild(tr);
+        }
+}
 function deleteAttachmentFromTable() {
     var elms = document.querySelectorAll("[name='attachmentId']");
     for (var i = 0; i < elms.length; i++)
         if (elms[i].checked) {
+            var id = elms[i].value;
             var td = elms[i].parentNode;
             var tr = td.parentNode;
             var number = tr.getAttribute('number');
             var body = tr.parentNode;
+            if (id != null && id > 0) {
+                var input = document.createElement('input');
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "attachmentForDelete");
+                input.setAttribute('value', id);
+                body.appendChild(input);
+            }
             var files = document.getElementsByName('attachmentFile');
             for (var i = 0; i < files.length; i++) {
                 if (files[i].getAttribute('number') == number) {
@@ -523,6 +619,7 @@ function editPhone() {
         document.getElementById('number').value = document.getElementById('numberId_'.concat(id)).value;
         document.getElementById('type').value = document.getElementById('typeId_'.concat(id)).value;
         document.getElementById('comment').value = document.getElementById('commentId_'.concat(id)).value;
+        document.getElementById('clickEdit').setAttribute('value', 'true');
         addPhone();
     }
 }
@@ -538,8 +635,9 @@ function editAttachment() {
         }
     }
     if (counter == 1) {
-        // document.getElementById('countryCode').value = document.getElementById('attachmentFileId_'.concat(id)).value;
+        document.getElementById('attachTitle').value = document.getElementById('attachmentFileId_'.concat(id)).value;
         document.getElementById('attachComment').value = document.getElementById('attachCommentId_'.concat(id)).value;
+        document.getElementById('attachment').setAttribute('type', 'hidden');
         addAttachments();
     }
 }
@@ -560,6 +658,7 @@ function editPhoneFields() {
         document.getElementById('numberId_'.concat(id)).value = document.getElementById('number').value;
         document.getElementById('typeId_'.concat(id)).value = document.getElementById('type').value;
         document.getElementById('commentId_'.concat(id)).value = document.getElementById('comment').value;
+        document.getElementById('clickEdit').setAttribute('value', 'false');
     }
     closePhonePopup();
 }
@@ -575,6 +674,8 @@ function editAttachmentFields() {
     }
     if (counter == 1) {
         document.getElementById('attachCommentId_'.concat(id)).value = document.getElementById('attachComment').value;
+        document.getElementById('attachmentFileId_'.concat(id)).value = document.getElementById('attachTitle').value;
+        document.getElementById('hrefId_'.concat(id)).innerHTML = document.getElementById('attachTitle').value;
     }
     closeAttachmentPopup();
 }

@@ -222,9 +222,15 @@ input {
 }
 #phonePopup input, #phonePopup select {
     width: 180%;
+    /*margin-bottom: 7%;*/
+}
+.phoneTitle {
+    text-align: right;
 }
 #countryCodeMessage, #operatorCodeMessage, #numberMessage, #typeMessage, #commentMessage {
-    padding-top: 14%;
+    margin-top: 10%;
+    margin-bottom: 3%;
+    line-height: 8%;
 }
 #phone_buttons input {
     width: 50%;
@@ -292,7 +298,7 @@ input {
     display: inline-block;
     width: 31%;
     height: 40%;
-
+    cursor: hand;
 }
 .photoImage {
     height: auto;
@@ -301,8 +307,8 @@ input {
     max-width: 100%;
 }
 .defaultImage {
-    height: 70%;
-    width: 70%;
+    height: 100%;
+    width: 100%;
 }
 .fullName, .secondCol {
     width: 31%;

@@ -98,6 +98,8 @@
             ${" - "}${start + size}${" "}
             <fmt:message key="from"/>
             ${" "}${count}</div>
+        ${"  "}
+        <fmt:message key="page"/>${" "}
         <c:if test="${start != 0}">
             <div id="previous"><a
                     href="/controller?command=${requestScope.command}&startContactNumber=${start - step}&quantityOfContacts=${step}">

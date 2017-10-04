@@ -29,11 +29,12 @@ public interface ContactService extends GenericService<Contact> {
 
     /**
      * Method updates contact and all phones, attachments and photo which belong to it.
-     *
      * @param contact
+     * @param phonesForDelete
+     * @param attachmentsForDelete
      * @throws SQLException
      */
-    void update(Contact contact) throws SQLException;
+    void update(Contact contact, Set<Long> phonesForDelete, Set<Long> attachmentsForDelete) throws SQLException;
 
     /**
      * Method is used for pagination and returns certain set of contacts.

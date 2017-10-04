@@ -55,6 +55,11 @@ public enum CommandEnum {
         {
             this.command = new DownloadAttachment();
         }
+    },
+    EDITCONTACT {
+        {
+            this.command = new EditContact();
+        }
     }
     ;
     ActionCommand command;

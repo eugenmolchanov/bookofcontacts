@@ -365,13 +365,12 @@
             <div id="phone_buttons" class="phone_buttons">
                 <button type="button" id="savePhone" onclick="addPhoneTable()" class="btn btn-primary"><fmt:message
                         key="save"/></button>
-                <button type="button" id="cancelPhone" onclick="addPhone()" class="btn btn-success"><fmt:message
+                <button type="button" id="cancelPhone" onclick="closePhonePopup()" class="btn btn-success"><fmt:message
                         key="exit"/></button>
             </div>
 
     </div>
 </div>
-<input type="file" id="file" style="visibility: hidden">
 <div class="attachmentPopupText" id="attachmentPopup">
     <div class="fileImage">
         <img src="${pageContext.request.contextPath}/assests/images/file.jpg">
@@ -381,7 +380,7 @@
             <div class="attachmentMessage" id="attachmentMessage"></div>
             <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="uploadAttachment()"
                    value="<fmt:message key="choose_file"/>"/>
-            <div class="attachTitleMessage" id="attachTitleMessage"></div>
+            <div class="attachmentMessage" id="attachTitleMessage"></div>
             <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
                    class="form-control"/>
             <div class="attachmentMessage" id="attachCommentMessage"></div>
@@ -390,7 +389,7 @@
             <div class="attachments_buttons">
                 <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
                     <fmt:message key="save"/></button>
-                <button type="button" id="cancelAttachment" onclick="addAttachments()" class="btn btn-success">
+                <button type="button" id="cancelAttachment" onclick="closeAttachmentPopup()" class="btn btn-success">
                     <fmt:message
                             key="exit"/></button>
             </div>

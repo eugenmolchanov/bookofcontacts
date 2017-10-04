@@ -13,9 +13,9 @@
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=71">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=74">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=36"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=40"></script>
 </head>
 <body>
 <div class="header">

@@ -1,8 +1,7 @@
 package util;
 
-import com.itechart.javalab.firstproject.entities.Attachment;
-import com.itechart.javalab.firstproject.entities.Phone;
 import com.itechart.javalab.firstproject.entities.Photo;
+import dto.AttachmentDataDto;
 import dto.PhoneDataDto;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -13,7 +12,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +32,10 @@ public class Data {
         Map<String, Object> parameters = new HashMap<>();
         List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(req);
         Set<PhoneDataDto> phones = new HashSet<>();
-        Set<Attachment> attachments = new HashSet<>();
-        Attachment attachment = new Attachment();
+        Set<String> phonesForDelete = new HashSet<>();
+        Set<String> attachmentsForDelete = new HashSet<>();
+        Set<AttachmentDataDto> attachments = new HashSet<>();
+        AttachmentDataDto attachment = new AttachmentDataDto();
         PhoneDataDto phone = new PhoneDataDto();
         String pathToFolder = "D:\\IndividualProject\\contacts\\";
         String folder = pathToFolder.concat(LocalDate.now().toString()).concat(UUID.randomUUID().toString()).concat("\\");
@@ -44,10 +44,14 @@ public class Data {
                 String fieldName = item.getFieldName();
                 String fieldValue = item.getString("UTF-8");
                     if (!fieldName.equals("attachComment") && !fieldName.equals("attachTitle") && !fieldName.equals("countryCode") && !fieldName.equals("operatorCode") &&
-                            !fieldName.equals("number") && !fieldName.equals("type") && !fieldName.equals("comment")) {
+                            !fieldName.equals("number") && !fieldName.equals("type") && !fieldName.equals("comment") && !fieldName.equals("phoneId")
+                            && !fieldName.equals("attachmentId") && !fieldName.equals("attachmentForDelete") && !fieldName.equals("phoneForDelete")) {
                         parameters.put(fieldName, fieldValue);
-                    } else if (!fieldName.equals("attachComment") && !fieldName.equals("attachTitle")) {
+                    } else {
                         switch (fieldName) {
+                            case "phoneId":
+                                phone.setId(fieldValue);
+                                break;
                             case "countryCode":
                                 phone.setCountryCode(fieldValue);
                                 break;
@@ -65,13 +69,24 @@ public class Data {
                                 phones.add(phone);
                                 phone = new PhoneDataDto();
                                 break;
+                            case "attachmentId":
+                                attachment.setId(fieldValue);
+                                break;
+                            case "attachTitle":
+                                attachment.setFileName(fieldValue);
+                                break;
+                            case "attachComment":
+                                attachment.setCommentary(fieldValue);
+                                attachments.add(attachment);
+                                attachment = new AttachmentDataDto();
+                                break;
+                            case "phoneForDelete":
+                                phonesForDelete.add(fieldValue);
+                                break;
+                            case "attachmentForDelete":
+                                attachmentsForDelete.add(fieldValue);
+                                break;
                         }
-                    } else if (fieldName.equals("attachTitle")) {
-                        attachment.setFileName(fieldValue);
-                    } else if (fieldName.equals("attachComment")) {
-                        attachment.setCommentary(fieldValue);
-                        attachments.add(attachment);
-                        attachment = new Attachment();
                     }
             } else {
                 String fieldName = item.getFieldName();
@@ -104,6 +119,12 @@ public class Data {
         }
         if (phones.size() != 0) {
             parameters.put("phones", phones);
+        }
+        if (phonesForDelete.size() != 0) {
+            parameters.put("phonesForDelete", phonesForDelete);
+        }
+        if (attachmentsForDelete.size() != 0) {
+            parameters.put("attachmentsForDelete", attachmentsForDelete);
         }
         return parameters;
     }
