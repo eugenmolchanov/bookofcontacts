@@ -116,8 +116,10 @@ public class ContactServiceImpl implements ContactService {
                     attachmentService.create(attachment, connection);
                 }
             }
-            for (long id : attachmentsForDelete) {
-                attachmentService.delete(id);
+            if (attachmentsForDelete != null && attachmentsForDelete.size() > 0) {
+                for (long id : attachmentsForDelete) {
+                    attachmentService.delete(id);
+                }
             }
             Set<Phone> phones = phoneService.getAllPhonesOfContact(contact.getId(), connection);
             if (phones.size() != 0) {
@@ -143,10 +145,12 @@ public class ContactServiceImpl implements ContactService {
                     phoneService.create(phone, connection);
                 }
             }
-            for (long id : phonesForDelete) {
-                phoneService.delete(id);
+            if (phonesForDelete != null && phonesForDelete.size() > 0) {
+                for (long id : phonesForDelete) {
+                    phoneService.delete(id);
+                }
             }
-            if (contact.getPhoto() != null) {
+            if (contact.getPhoto().getId() != 0 && contact.getPhoto().getPathToFile() != null) {
                 photoService.update(contact.getPhoto(), connection);
             }
             connection.commit();

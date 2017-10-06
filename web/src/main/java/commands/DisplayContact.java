@@ -23,7 +23,17 @@ public class DisplayContact implements ActionCommand {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.setLevel(Level.DEBUG);
-        long id = Long.parseLong(req.getParameter("id"));
+        long id = 0;
+        try {
+            id = Long.parseLong(req.getParameter("id"));
+        } catch (Exception e) {
+            logger.debug(e);
+        }
+        try {
+            id = (long) req.getAttribute("id");
+        } catch (Exception e) {
+            logger.debug(e);
+        }
         Contact contact = null;
         try {
             contact = service.findById(id);

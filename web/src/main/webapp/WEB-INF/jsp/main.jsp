@@ -79,7 +79,7 @@
         <c:set var="maxPage"/>
         <c:choose>
             <c:when test="${count / step > 1}">
-                <fmt:parseNumber var="maxPage" type="number" value="${count / step}"/>
+                <fmt:parseNumber var="maxPage" type="number" value="${count / step + 1}"/>
             </c:when>
             <c:otherwise>
                 <c:set var="maxPage" value="${1}"/>

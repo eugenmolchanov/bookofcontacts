@@ -226,13 +226,15 @@ public class ContactDaoImpl implements ContactDao {
                 "flat_number, postcode from contact ");
 
         Builder query = new Builder();
-        query.where(getContacts).addConditionIfExist("first_name", entity.getFirstName(), getContacts).addConditionIfExist("last_name", entity.getLastName(),
-                getContacts).addConditionIfExist("middle_name", entity.getMiddleName(), getContacts).addConditionIfExist("gender", entity.getGender(),
-                getContacts).addConditionIfExist("marital_status", entity.getMaritalStatus(), getContacts).addConditionIfExist("nationality", entity.getNationality(),
-                getContacts).addConditionIfExist("contact_group", entity.getContactGroup(), getContacts).addConditionIfExist("country", entity.getCountry(),
-                getContacts).addConditionIfExist("city", entity.getCity(), getContacts).addConditionIfExist("street", entity.getStreet(),
-                getContacts).addConditionIfExist("house_number", entity.getHouseNumber(), getContacts).addConditionIfExist("flat_number", entity.getFlatNumber(),
-                getContacts).addConditionIfExist("postcode", entity.getPostcode(), getContacts).addBirthdayCondition(getContacts).orderBy(getContacts).limit(getContacts).build(getContacts);
+        StringBuilder where = new StringBuilder("");
+        where.append(query.getWhereClause(entity, lowerLimit, upperLimit));
+        String whereClause = where.toString();
+        if (!whereClause.equals("")) {
+            query.where(getContacts);
+            whereClause = whereClause.substring(0, whereClause.length() - 4);
+            getContacts.append(whereClause);
+        }
+        query.orderBy(getContacts).limit(getContacts).build(getContacts);
         PreparedStatement statement = connection.prepareStatement(getContacts.toString());
         int counter = 0;
         if (entity.getFirstName() != null) {
@@ -261,26 +263,25 @@ public class ContactDaoImpl implements ContactDao {
         }
         if (entity.getCity() != null) {
             statement.setString(++counter, entity.getCity());
-
         }
         if (entity.getStreet() != null) {
             statement.setString(++counter, entity.getStreet());
-
         }
         if (entity.getHouseNumber() != null) {
             statement.setString(++counter, entity.getHouseNumber());
-
         }
         if (entity.getFlatNumber() != 0) {
             statement.setInt(++counter, entity.getFlatNumber());
-
         }
         if (entity.getPostcode() != 0) {
             statement.setInt(++counter, entity.getPostcode());
-
         }
-        statement.setDate(++counter, lowerLimit);
-        statement.setDate(++counter, upperLimit);
+        if (lowerLimit != null) {
+            statement.setDate(++counter, lowerLimit);
+        }
+        if (upperLimit != null) {
+            statement.setDate(++counter, upperLimit);
+        }
         statement.setString(++counter, "first_name");
         statement.setLong(++counter, startContactNumber);
         statement.setLong(++counter, quantityOfContacts);
@@ -312,13 +313,15 @@ public class ContactDaoImpl implements ContactDao {
         StringBuilder getContacts = new StringBuilder("select count(id) from contact ");
 
         Builder query = new Builder();
-        query.where(getContacts).addConditionIfExist("first_name", entity.getFirstName(), getContacts).addConditionIfExist("last_name", entity.getLastName(),
-                getContacts).addConditionIfExist("middle_name", entity.getMiddleName(), getContacts).addConditionIfExist("gender", entity.getGender(),
-                getContacts).addConditionIfExist("marital_status", entity.getMaritalStatus(), getContacts).addConditionIfExist("nationality", entity.getNationality(),
-                getContacts).addConditionIfExist("contact_group", entity.getContactGroup(), getContacts).addConditionIfExist("country", entity.getCountry(),
-                getContacts).addConditionIfExist("city", entity.getCity(), getContacts).addConditionIfExist("street", entity.getStreet(),
-                getContacts).addConditionIfExist("house_number", entity.getHouseNumber(), getContacts).addConditionIfExist("flat_number", entity.getFlatNumber(),
-                getContacts).addConditionIfExist("postcode", entity.getPostcode(), getContacts).addBirthdayCondition(getContacts).build(getContacts);
+        StringBuilder where = new StringBuilder("");
+        where.append(query.getWhereClause(entity, lowerLimit, upperLimit));
+        String whereClause = where.toString();
+        if (!whereClause.equals("")) {
+            query.where(getContacts);
+            whereClause = whereClause.substring(0, whereClause.length() - 4);
+            getContacts.append(whereClause);
+        }
+        query.build(getContacts);
         PreparedStatement statement = connection.prepareStatement(getContacts.toString());
         int counter = 0;
         if (entity.getFirstName() != null) {
@@ -347,26 +350,25 @@ public class ContactDaoImpl implements ContactDao {
         }
         if (entity.getCity() != null) {
             statement.setString(++counter, entity.getCity());
-
         }
         if (entity.getStreet() != null) {
             statement.setString(++counter, entity.getStreet());
-
         }
         if (entity.getHouseNumber() != null) {
             statement.setString(++counter, entity.getHouseNumber());
-
         }
         if (entity.getFlatNumber() != 0) {
             statement.setInt(++counter, entity.getFlatNumber());
-
         }
         if (entity.getPostcode() != 0) {
             statement.setInt(++counter, entity.getPostcode());
-
         }
-        statement.setDate(++counter, lowerLimit);
-        statement.setDate(++counter, upperLimit);
+        if (lowerLimit != null) {
+            statement.setDate(++counter, lowerLimit);
+        }
+        if (upperLimit != null) {
+            statement.setDate(++counter, upperLimit);
+        }
 
         ResultSet resultSet = statement.executeQuery();
         long totalQuantity = 0;

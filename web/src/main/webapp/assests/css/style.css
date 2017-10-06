@@ -3,7 +3,6 @@
     z-index: 10;
     position: fixed;
     width: 100%;
-    opacity: 1;
 }
 .sendEmail {
     padding-left: 5%;
@@ -25,7 +24,7 @@ input {
     padding-top: 5%;
     position: relative;
 }
-.mainBody, .create_contact_body, .sendEmailBody, .searchBody {
+.mainBody, .create_contact_body, .sendEmailBody, .searchBody, .errorBody {
     background-color: #f0f0f0;
 }
 .mainPagePagination {
@@ -60,18 +59,6 @@ input {
     position: fixed;
     left: 94.5%;
 }
-.phonePopupText {
-    background-color: #ffffff;
-    visibility: hidden;
-    position: fixed;
-    top: 20%;
-    height: 60%;
-    bottom: 25%;
-    left: 25%;
-    width: 50%;
-    border: outset 3px;
-    z-index: 1;
-}
 .phonePopupText.show {
     visibility: visible;
 }
@@ -88,7 +75,8 @@ input {
 .attachmentInfo {
     width: 75%;
 }
-.attachmentPopupText, .photoPopupText {
+.attachmentPopupText, .photoPopupText, .phonePopupText {
+    box-shadow: 2px 2px 10px 4px grey;
     background-color: #ffffff;
     visibility: hidden;
     position: fixed;
@@ -114,6 +102,12 @@ input {
     padding-bottom: 3%;
 }
 .generalInfo {
+}
+.edit {
+    cursor: hand;
+    padding-top: 2%;
+    float: right;
+    display: inline-block;
 }
 .contact_form, .searchForm {
     background-color: #ffffff;
@@ -260,7 +254,7 @@ input {
     background-color: #ce9842;
     color: #ffffff;
     border: none;
-    border-radius: 4%;
+    border-radius: 5px;
     padding: 1%;
 }
 .searchButton {
@@ -295,10 +289,10 @@ input {
     left: 90.7%;
 }
 .photo {
+    pointer-events: none;
     display: inline-block;
     width: 31%;
     height: 40%;
-    cursor: hand;
 }
 .photoImage {
     height: auto;
@@ -341,17 +335,12 @@ input {
 .emailDiv, .websiteDiv{
     width: 100%;
 }
-.edit {
-    cursor: hand;
-    padding-top: 2%;
-    float: right;
-    display: inline-block;
-}
 .phoneButtons, .attachmentButtons {
     visibility: hidden;
 }
 .phoneTd, .attachmentTd {
     padding: 1% 0 1% 0;
+    border-bottom: 1px solid #ddd;
 }
 .phoneTd input, .attachmentTd input {
     border: none;
@@ -359,6 +348,7 @@ input {
 }
 .phoneCheckboxTd, .attachmentCheckboxTd {
     padding: 1% 0 1% 0;
+    border-bottom: 1px solid #ddd;
     visibility: hidden;
 }
 .photoPath {
@@ -373,4 +363,8 @@ input {
 .phoneMessage, .attachmentMessage {
     text-align: left;
     color: #A94442;
+}
+.error {
+    padding-top: 20%;
+    text-align: center;
 }

@@ -36,6 +36,7 @@ public class Data {
         Set<String> attachmentsForDelete = new HashSet<>();
         Set<AttachmentDataDto> attachments = new HashSet<>();
         AttachmentDataDto attachment = new AttachmentDataDto();
+        Photo photo = new Photo();
         PhoneDataDto phone = new PhoneDataDto();
         String pathToFolder = "D:\\IndividualProject\\contacts\\";
         String folder = pathToFolder.concat(LocalDate.now().toString()).concat(UUID.randomUUID().toString()).concat("\\");
@@ -45,10 +46,14 @@ public class Data {
                 String fieldValue = item.getString("UTF-8");
                     if (!fieldName.equals("attachComment") && !fieldName.equals("attachTitle") && !fieldName.equals("countryCode") && !fieldName.equals("operatorCode") &&
                             !fieldName.equals("number") && !fieldName.equals("type") && !fieldName.equals("comment") && !fieldName.equals("phoneId")
-                            && !fieldName.equals("attachmentId") && !fieldName.equals("attachmentForDelete") && !fieldName.equals("phoneForDelete")) {
+                            && !fieldName.equals("attachId") && !fieldName.equals("attachmentForDelete") && !fieldName.equals("phoneForDelete")
+                            && !fieldName.equals("photoId")) {
                         parameters.put(fieldName, fieldValue);
                     } else {
                         switch (fieldName) {
+                            case "photoId":
+                                photo.setId(Long.parseLong(fieldValue));
+                                break;
                             case "phoneId":
                                 phone.setId(fieldValue);
                                 break;
@@ -69,7 +74,7 @@ public class Data {
                                 phones.add(phone);
                                 phone = new PhoneDataDto();
                                 break;
-                            case "attachmentId":
+                            case "attachId":
                                 attachment.setId(fieldValue);
                                 break;
                             case "attachTitle":
@@ -100,7 +105,8 @@ public class Data {
                         String fileTitle = uuid.concat(".").concat(format);
                         File file = new File(folder.concat(fileTitle));
                         FileUtils.copyInputStreamToFile(fileContent, file);
-                        Photo photo = new Photo(0, folder, fileTitle);
+                        photo.setPathToFile(folder);
+                        photo.setUuid(fileTitle);
                         parameters.put(fieldName, photo);
                     } else if (fieldName.equals("attachmentFile")) {
                         String uuid = UUID.randomUUID().toString();

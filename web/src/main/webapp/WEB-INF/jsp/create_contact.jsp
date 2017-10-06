@@ -27,6 +27,7 @@
         <div class="contactTitle"><h2><fmt:message key="personal_data"/></h2></div>
         <div class="photoInfo"><h3><fmt:message key="contact_photo"/></h3></div>
         <input type="button" value="<fmt:message key="choose_photo"/> " class="chooseButton" onclick="addPhoto()"/>
+        <div class="nameMessage" id="fotoMessage"></div>
         <div id="image" class="image">
 
         </div>
@@ -44,7 +45,7 @@
                 <c:otherwise>
                     <input type="text" name="firstName" id="firstName"
                            placeholder="<fmt:message key="first_name"/>${'*'} " required
-                           class="form-group has-warning form-control" style="border-color: #A94442;"/>
+                           class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
             <c:choose>
@@ -354,7 +355,7 @@
                    class="form-control" required/>
             <div class="phoneMessage" id="typeMessage"></div>
             <select id="type" name="type" class="form-control" required>
-                <option selected disabled hidden><fmt:message key="type"/></option>
+                <option selected disabled><fmt:message key="type"/></option>
                 <option value="Рабочий"><fmt:message key="work_phone"/></option>
                 <option value="Домашний"><fmt:message key="home_phone"/></option>
                 <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
@@ -400,7 +401,7 @@
     <div class="photoForm" id="photoForm">
         <div class="photoPathMessage" id="photoPathMessage"></div>
         <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="findPhoto()"
-               value="<fmt:message key="choose_photo"/>"/>
+               value="<fmt:message key="find"/>"/>
         <div class="photoPath" id="photoPath"></div>
         <div class="photo_buttons">
             <button type="button" id="savePhoto" onclick="savePhotoFile()" class="btn btn-primary"><fmt:message

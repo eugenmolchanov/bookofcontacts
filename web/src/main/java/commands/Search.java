@@ -51,20 +51,18 @@ public class Search implements ActionCommand {
             if (!Objects.equals(middleName, "")) {
                 contact.setMiddleName(middleName);
             }
-            Date birthdayFrom;
+            Date birthdayFrom = null;
             try {
                 birthdayFrom = Date.valueOf(req.getParameter("birthdayFrom"));
 
             } catch (Exception e) {
                 logger.debug(e);
-                birthdayFrom = Date.valueOf(LocalDate.of(1900, 1, 1));
             }
-            Date birthdayTo;
+            Date birthdayTo = null;
             try {
                 birthdayTo = Date.valueOf(req.getParameter("birthdayTo"));
             } catch (Exception e) {
                 logger.debug(e);
-                birthdayTo = Date.valueOf(LocalDate.now());
             }
             String gender = req.getParameter("gender");
             String nationality = req.getParameter("nationality");

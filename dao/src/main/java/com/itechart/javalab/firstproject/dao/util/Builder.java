@@ -1,75 +1,67 @@
 package com.itechart.javalab.firstproject.dao.util;
 
+import com.itechart.javalab.firstproject.entities.Contact;
+
+import java.util.Date;
+
 /**
  * Created by Yauhen Malchanau on 11.09.2017.
  */
 public class Builder {
 
-    public Builder addConditionIfExist(final String name, Object condition, StringBuilder builder) {
-        if (condition != null && !condition.equals(0)) {
-            switch (name) {
-                case "first_name":
-                    String firstNameCondition = "first_name = ? and ";
-                    builder.append(firstNameCondition);
-                    break;
-                case "last_name":
-                    String lastNameCondition = "last_name = ? and ";
-                    builder.append(lastNameCondition);
-                    break;
-                case "middle_name":
-                    String middleNameCondition = "middle_name = ? and ";
-                    builder.append(middleNameCondition);
-                    break;
-                case "gender":
-                    String genderCondition = "gender = ? and ";
-                    builder.append(genderCondition);
-                    break;
-                case "marital_status":
-                    String maritalCondition = "marital_status = ? and ";
-                    builder.append(maritalCondition);
-                    break;
-                case "nationality":
-                    String nationalityCondition = "nationality = ? and ";
-                    builder.append(nationalityCondition);
-                    break;
-                case "contact_group":
-                    String contactGroupCondition = "contact_group = ? and ";
-                    builder.append(contactGroupCondition);
-                    break;
-                case "country":
-                    String countryCondition = "country = ? and ";
-                    builder.append(countryCondition);
-                    break;
-                case "city":
-                    String cityCondition = "city = ? and ";
-                    builder.append(cityCondition);
-                    break;
-                case "street":
-                    String streetCondition = "street = ? and ";
-                    builder.append(streetCondition);
-                    break;
-                case "house_number":
-                    String houseNumberCondition = "house_number = ? and ";
-                    builder.append(houseNumberCondition);
-                    break;
-                case "flat_number":
-                    String flatNumberCondition = "flat_number = ? and ";
-                    builder.append(flatNumberCondition);
-                    break;
-                case "postcode":
-                    String postalIndexCondition = "postcode = ? and ";
-                    builder.append(postalIndexCondition);
-                    break;
-            }
+    public StringBuilder getWhereClause(Contact contact, Date lowerLimit, Date upperLimit) {
+        StringBuilder query = new StringBuilder("");
+        if (contact.getFirstName() != null) {
+            query.append("first_name = ? and ");
         }
-        return this;
+        if (contact.getLastName() != null) {
+            query.append("last_name = ? and ");
+        }
+        if (contact.getMiddleName() != null) {
+            query.append("middle_name = ? and ");
+        }
+        if (contact.getGender() != null) {
+            query.append("gender = ? and ");
+        }
+        if (contact.getMaritalStatus() != null) {
+            query.append("marital_status = ? and ");
+        }
+        if (contact.getNationality() != null) {
+            query.append("nationality = ? and ");
+        }
+        if (contact.getContactGroup() != null) {
+            query.append("contact_group = ? and ");
+        }
+        if (contact.getCountry() != null) {
+            query.append("country = ? and ");
+        }
+        if (contact.getCity() != null) {
+            query.append("city = ? and ");
+        }
+        if (contact.getStreet() != null) {
+            query.append("street = ? and ");
+        }
+        if (contact.getHouseNumber() != null) {
+            query.append("house_number = ? and ");
+        }
+        if (contact.getFlatNumber() != 0) {
+            query.append("flat_number = ? and ");
+        }
+        if (contact.getPostcode() != 0) {
+            query.append("postcode = ? and ");
+        }
+        if (lowerLimit == null && upperLimit == null) {
+            return query;
+        } else if (lowerLimit != null && upperLimit == null) {
+            query.append("birth_date >= ? and ");
+        } else if (lowerLimit == null){
+            query.append("birth_date <= ? and ");
+        } else {
+            query.append(" and birth_date between ? and ? and ");
+        }
+        return query;
     }
 
-    public Builder addBirthdayCondition(StringBuilder builder) {
-        String birthdayCondition = "birth_date between ? and ? ";
-        builder.append(birthdayCondition);
-        return this;
-    }
 
     public Builder where(StringBuilder builder) {
         builder.append("where ");
@@ -86,7 +78,7 @@ public class Builder {
         return this;
     }
     public Builder orderBy(StringBuilder builder) {
-        builder.append("order by ? ");
+        builder.append(" order by ? ");
         return this;
     }
 }

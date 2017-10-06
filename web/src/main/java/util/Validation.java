@@ -116,10 +116,12 @@ public class Validation {
         }
         if (parameters.get("gender") != null) {
             String gender = String.valueOf(parameters.get("gender"));
-            if (!gender.equals("Мужчина") && !gender.equals("Женщина")) {
-                validationMessages.put("genderMessage", invalid);
-            } else {
-                contact.setGender(gender);
+            if (!gender.isEmpty()) {
+                if (!gender.equals("Мужчина") && !gender.equals("Женщина")) {
+                    validationMessages.put("genderMessage", invalid);
+                } else {
+                    contact.setGender(gender);
+                }
             }
         }
         if (parameters.get("nationality") != null) {
@@ -134,11 +136,13 @@ public class Validation {
         }
         if (parameters.get("maritalStatus") != null) {
             String maritalStatus = String.valueOf(parameters.get("maritalStatus"));
-            if (!maritalStatus.equals("Не женат") && !maritalStatus.equals("Не замужем") && !maritalStatus.equals("Женат") && !maritalStatus.equals("Замужем") &&
-                    !maritalStatus.equals("Состою в гражданском браке") && !maritalStatus.equals("Вдовец") && !maritalStatus.equals("Вдова")) {
-                validationMessages.put("maritalStatusMessage", invalid);
-            } else {
-                contact.setMaritalStatus(maritalStatus);
+            if (!maritalStatus.isEmpty()) {
+                if (!maritalStatus.equals("Не женат") && !maritalStatus.equals("Не замужем") && !maritalStatus.equals("Женат") && !maritalStatus.equals("Замужем") &&
+                        !maritalStatus.equals("Состою в гражданском браке") && !maritalStatus.equals("Вдовец") && !maritalStatus.equals("Вдова")) {
+                    validationMessages.put("maritalStatusMessage", invalid);
+                } else {
+                    contact.setMaritalStatus(maritalStatus);
+                }
             }
         }
         if (parameters.get("webSite") != null) {
@@ -173,10 +177,12 @@ public class Validation {
         }
         if (parameters.get("contactGroup") != null) {
             String contactGroup = String.valueOf(parameters.get("contactGroup"));
-            if (!contactGroup.equals("Семья") && !contactGroup.equals("Друзья") && !contactGroup.equals("Коллеги") && !contactGroup.equals("Соседи")) {
-                validationMessages.put("contactGroupMessage", invalid);
-            } else {
-                contact.setContactGroup(contactGroup);
+            if (!contactGroup.isEmpty()) {
+                if (!contactGroup.equals("Семья") && !contactGroup.equals("Друзья") && !contactGroup.equals("Коллеги") && !contactGroup.equals("Соседи")) {
+                    validationMessages.put("contactGroupMessage", invalid);
+                } else {
+                    contact.setContactGroup(contactGroup);
+                }
             }
         }
         if (parameters.get("country") != null) {
@@ -215,7 +221,7 @@ public class Validation {
                 if (houseNumber.length() > 255) {
                     validationMessages.put("houseNumberMessage", invalid);
                 } else {
-                    contact.setStreet(houseNumber);
+                    contact.setHouseNumber(houseNumber);
                 }
             }
         }
@@ -281,8 +287,14 @@ public class Validation {
                         } else if (!attachment.getCommentary().isEmpty()) {
                             contactAttachment.setCommentary(attachment.getCommentary());
                         }
+                        if (contactAttachment.getId() == 0) {
+                            contactAttachment.setDate(attachment.getDate());
+                            contactAttachment.setPathToFile(attachment.getPathToFile());
+                            contactAttachment.setUuid(attachment.getUuid());
+                        }
                         contactAttachments.add(contactAttachment);
                     }
+                    contact.setAttachments(contactAttachments);
                 }
             } catch (Exception e) {
                 logger.debug(e.getMessage(), e);
@@ -365,6 +377,23 @@ public class Validation {
         Set<Long> attachmentsForDelete = new HashSet<>();
         Set<Long> phonesForDelete = new HashSet<>();
         Map<String, String> validationMessages = (Map<String, String>) result.get("validation");
+        Contact contact = (Contact) result.get("contact");
+        if (parameters.get("contactId") != null) {
+            String contactId = String.valueOf(parameters.get("contactId"));
+            if (!contactId.isEmpty()) {
+                try {
+                    long id = Long.valueOf(String.valueOf(parameters.get("contactId")));
+                    if (id < 1) {
+                        validationMessages.put("contactMessage", invalid);
+                    } else {
+                        contact.setId(id);
+                    }
+                } catch (Exception e) {
+                    logger.debug(e.getMessage(), e);
+                    validationMessages.put("contactMessage", invalid);
+                }
+            }
+        }
         if (parameters.get("attachmentsForDelete") != null) {
             try {
                 Set<String> attachmentIds = (Set<String>) parameters.get("attachmentsForDelete");
@@ -414,6 +443,9 @@ public class Validation {
             result.put("phonesForDelete", phonesForDelete);
         }
         result.replace("validation", validationMessages);
+        if (contact.getId() != 0) {
+            result.replace("contact", contact);
+        }
         return result;
     }
 

@@ -7,6 +7,7 @@ import util.Validation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,7 +16,7 @@ import java.util.ResourceBundle;
  */
 public class ChangeLanguage implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
+    private static Logger logger = Logger.getLogger(ChangeLanguage.class);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -37,6 +38,12 @@ public class ChangeLanguage implements ActionCommand {
             MessageManager.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
             HttpSession session = req.getSession(true);
             session.setAttribute("language", language);
+            String referrer = req.getHeader("referer");
+            try {
+                resp.sendRedirect(resp.encodeRedirectURL(referrer));
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+            }
             return new EmptyCommand().execute(req, resp);
         }
         return new EmptyCommand().execute(req, resp);

@@ -31,7 +31,6 @@ public class DownloadAttachment implements ActionCommand {
             String path = attachment.getPathToFile().concat(attachment.getUuid());
             byte[] attachmentBytes = Files.readAllBytes(new File(path).toPath());
             resp.setContentType("text/plain");
-            resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", "Movie info.txt"));
             resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", attachment.getFileName()));
             OutputStream outputStream = resp.getOutputStream();
             outputStream.write(attachmentBytes);

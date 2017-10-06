@@ -37,21 +37,23 @@ public class EditContact implements ActionCommand {
             Map<String, String> validationMessages = (Map<String, String>) result.get("validation");
             Set<Long> phonesForDelete = (Set<Long>) result.get("phonesForDelete");
             Set<Long> attachmentsForDelete = (Set<Long>) result.get("attachmentsForDelete");
+            Contact contact = (Contact) result.get("contact");
             if (validationMessages.size() == 0) {
                 try {
-                    Contact contact = (Contact) result.get("contact");
                     service.update(contact, phonesForDelete, attachmentsForDelete);
                 } catch (SQLException e) {
                     logger.error(e);
-                    req.setAttribute("message", MessageManager.getProperty("unsuccessful_create"));
-                    return page;
+                    req.setAttribute("message", MessageManager.getProperty("unsuccessful_update"));
+                    return new DisplayContact().execute(req, resp);
                 }
-                req.setAttribute("message", MessageManager.getProperty("successful_create"));
-                return page;
+                req.setAttribute("id", contact.getId());
+                req.setAttribute("message", MessageManager.getProperty("successful_update"));
+                return new DisplayContact().execute(req, resp);
             } else {
                 logger.debug("Data isn't valid.");
+                req.setAttribute("id", contact.getId());
                 req.setAttribute("validation", validationMessages);
-                return page;
+                return new DisplayContact().execute(req, resp);
             }
         } catch (IOException | ServletException | FileUploadException e) {
             logger.error(e);

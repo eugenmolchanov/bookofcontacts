@@ -42,13 +42,15 @@ public class Controller extends HttpServlet {
             dispatcher.forward(req, resp);
         }
         page = command != null ? command.execute(req, resp) : null;
-        if (page != null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-            dispatcher.forward(req, resp);
-        } else {
-            req.setAttribute("message", MessageManager.getProperty("error"));
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
-            dispatcher.forward(req, resp);
+        if (!resp.isCommitted()) {
+            if (page != null) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+                dispatcher.forward(req, resp);
+            } else {
+                req.setAttribute("message", MessageManager.getProperty("error"));
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
+                dispatcher.forward(req, resp);
+            }
         }
     }
 }

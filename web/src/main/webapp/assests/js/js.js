@@ -26,9 +26,18 @@ function edit() {
     document.getElementById("houseNumber").removeAttribute("readonly");
     document.getElementById("flatNumber").removeAttribute("readonly");
     document.getElementById("postalIndex").removeAttribute("readonly");
+    document.getElementById("image").style.pointerEvents = "auto";
     document.getElementById("phoneButtons").style.visibility = "visible";
     document.getElementById("attachmentButtons").style.visibility = "visible";
     document.getElementById("bigEditButton").style.visibility = "visible";
+    var photoImage = document.getElementById("photoImage");
+    if (photoImage != null) {
+        photoImage.style.cursor = "pointer";
+    }
+    var defaultImage = document.getElementById("defaultImage");
+    if (defaultImage != null) {
+        defaultImage.style.cursor = "pointer";
+    }
     var phoneCheckBoxes = document.getElementsByName("phoneId");
     for (var j = 0; j < phoneCheckBoxes.length; j++) {
         phoneCheckBoxes[j].style.visibility = "visible";
@@ -115,18 +124,18 @@ function createContact() {
     var number = document.getElementById('number').value;
     var comment = document.getElementById('comment').value;
     var attachComment = document.getElementById('attachComment').value;
-    if (firstName == "" || firstName == null || firstName.length > 255 || /[0-9~@#$%^&*()_+|?><":}!№;,\s]/.test(firstName.toString())) {
-        dataIsValid = false;
-        document.getElementById("firstNameMessage").innerHTML = "Only letters";
-    }
-    if (lastName == "" || lastName == null || lastName.length > 255 || /[0-9~@#$%^&*()_+|?><":}!№;,\s]/.test(lastName.toString())) {
-        document.getElementById("secondNameMessage").innerHTML = "Only letters";
-        dataIsValid = false;
-    }
-    if (middleName.length > 255 || /[\d~@#$%^&*()_+|?><":}!№;,\s]/.test(middleName.toString())) {
-        dataIsValid = false;
-        document.getElementById("middleNameMessage").innerHTML = "Only letters";
-    }
+    // if (firstName == "" || firstName == null || firstName.length > 255 || /[0-9~@#$%^&*()_+|?><":}!№;,\s]/.test(firstName.toString())) {
+    //     dataIsValid = false;
+    //     document.getElementById("firstNameMessage").innerHTML = "Only letters";
+    // }
+    // if (lastName == "" || lastName == null || lastName.length > 255 || /[0-9~@#$%^&*()_+|?><":}!№;,\s]/.test(lastName.toString())) {
+    //     document.getElementById("secondNameMessage").innerHTML = "Only letters";
+    //     dataIsValid = false;
+    // }
+    // if (middleName.length > 255 || /[\d~@#$%^&*()_+|?><":}!№;,\s]/.test(middleName.toString())) {
+    //     dataIsValid = false;
+    //     document.getElementById("middleNameMessage").innerHTML = "Only letters";
+    // }
     // if (/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/.test(birthday.toString())) {
     //     dataIsValid = false;
     //     document.getElementById("birthdayMessage").innerHTML = "Date format DD/MM/YYYY";
@@ -278,6 +287,7 @@ function cleanAttachmentValidation() {
 function cleanAttachmentPopup() {
     document.getElementById('attachTitle').value = "";
     document.getElementById('attachComment').value = "";
+    cleanAttachmentValidation()
 }
 function validatePhone(countryCode, operatorCode, number, type, comment) {
     var dataIsValid = true;
@@ -310,10 +320,6 @@ function validatePhone(countryCode, operatorCode, number, type, comment) {
 }
 function addPhoneTable() {
     cleanPhoneValidation();
-    if (document.getElementById('clickEdit').value == 'true') {
-        editPhoneFields();
-        return;
-    }
     var countryCodeName = "countryCode";
     var operatorCodeName = "operatorCode";
     var numberName = "number";
@@ -326,6 +332,10 @@ function addPhoneTable() {
     var comment = document.getElementById(commentName).value;
     var body = document.getElementById("phoneRows");
     if (validatePhone(countryCode, operatorCode, number, type, comment) == false) {
+        return;
+    }
+    if (document.getElementById('clickEdit') && document.getElementById('clickEdit').value == 'true') {
+        editPhoneFields();
         return;
     }
     var tr = document.createElement("tr");
@@ -413,6 +423,7 @@ function savePhotoFile() {
         body.classList.toggle("roll");
         var popup = document.getElementById("photoPopup");
         popup.classList.toggle("show");
+        document.getElementById('fotoMessage').innerHTML = 'Фото сохранено'
     }
 }
 function deletePhoto() {
@@ -421,6 +432,7 @@ function deletePhoto() {
         body.classList.toggle("roll");
         var popup = document.getElementById("photoPopup");
         popup.classList.toggle("show");
+        document.getElementById('fotoMessage').innerHTML = ''
     } else if (document.getElementById('photoPath').textContent != "") {
         var photo = document.getElementById('photoFile');
         photo.parentNode.removeChild(photo);
@@ -429,6 +441,7 @@ function deletePhoto() {
         body.classList.toggle("roll");
         var popup = document.getElementById("photoPopup");
         popup.classList.toggle("show");
+        document.getElementById('fotoMessage').innerHTML = 'Фото удалено'
     }
 }
 
@@ -561,7 +574,7 @@ function addAttachmentTable() {
     addAttachments();
 }
 function deletePhoneFromTable() {
-    var elms = document.querySelectorAll("[name='phoneId']");
+    var elms = document.getElementsByName('phoneId');
     for (var i = 0; i < elms.length; i++)
         if (elms[i].checked) {
             var id = elms[i].value;
@@ -576,10 +589,11 @@ function deletePhoneFromTable() {
                 body.appendChild(input);
             }
             body.removeChild(tr);
+            i--;
         }
 }
 function deleteAttachmentFromTable() {
-    var elms = document.querySelectorAll("[name='attachmentId']");
+    var elms = document.getElementsByName('attachmentId');
     for (var i = 0; i < elms.length; i++)
         if (elms[i].checked) {
             var id = elms[i].value;
@@ -587,7 +601,7 @@ function deleteAttachmentFromTable() {
             var tr = td.parentNode;
             var number = tr.getAttribute('number');
             var body = tr.parentNode;
-            if (id != null && id > 0) {
+            if (id && id > 0) {
                 var input = document.createElement('input');
                 input.setAttribute("type", "hidden");
                 input.setAttribute("name", "attachmentForDelete");
@@ -595,12 +609,13 @@ function deleteAttachmentFromTable() {
                 body.appendChild(input);
             }
             var files = document.getElementsByName('attachmentFile');
-            for (var i = 0; i < files.length; i++) {
-                if (files[i].getAttribute('number') == number) {
-                    files[i].parentNode.removeChild(files[i]);
+            for (var j = 0; j < files.length; j++) {
+                if (files[j].getAttribute('number') == number) {
+                    files[j].parentNode.removeChild(files[j]);
                 }
             }
             body.removeChild(tr);
+            i--;
         }
 }
 function editPhone() {
