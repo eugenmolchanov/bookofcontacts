@@ -218,4 +218,12 @@ public class ContactServiceImpl implements ContactService {
         connection.close();
         return contact;
     }
+
+    @Override
+    public Set<Contact> findContactsByBirthday(Date date) throws SQLException {
+        Connection connection = Database.getConnection();
+        Set<Contact> contacts = contactDao.findContactsByBirthday(date, connection);
+        connection.close();
+        return contacts;
+    }
 }

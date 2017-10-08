@@ -102,7 +102,27 @@ function toBelorussian() {
     window.location = "http://localhost:8080/controller?command=language&language=be_BY";
 }
 
+function cleanContactValidation() {
+    document.getElementById("firstNameMessage").innerHTML = "";
+    document.getElementById('firstName').style.borderColor = "#ccc";
+    document.getElementById("secondNameMessage").innerHTML = "";
+    document.getElementById('lastName').style.borderColor = "#ccc";
+    document.getElementById("middleNameMessage").innerHTML = "";
+    document.getElementById('middleName').style.borderColor = "#ccc";
+    document.getElementById("birthdayMessage").innerHTML = "";
+    document.getElementById('birthday').style.borderColor = "#ccc";
+    document.getElementById("nationalityMessage").innerHTML = "";
+    document.getElementById('nationality').style.borderColor = "#ccc";
+    document.getElementById("websiteMessage").innerHTML = "";
+    document.getElementById('webSite').style.borderColor = "#ccc";
+    document.getElementById("emailMessage").innerHTML = "";
+    document.getElementById('email').style.borderColor = "#ccc";
+    document.getElementById("employmentPlaceMessage").innerHTML = "";
+    document.getElementById('employmentPlace').style.borderColor = "#ccc";
+}
+
 function createContact() {
+    cleanContactValidation();
     var dataIsValid = true;
     var firstName = document.getElementById('firstName').value;
     var lastName = document.getElementById('lastName').value;
@@ -124,38 +144,51 @@ function createContact() {
     var number = document.getElementById('number').value;
     var comment = document.getElementById('comment').value;
     var attachComment = document.getElementById('attachComment').value;
-    // if (firstName == "" || firstName == null || firstName.length > 255 || /[0-9~@#$%^&*()_+|?><":}!№;,\s]/.test(firstName.toString())) {
-    //     dataIsValid = false;
-    //     document.getElementById("firstNameMessage").innerHTML = "Only letters";
-    // }
-    // if (lastName == "" || lastName == null || lastName.length > 255 || /[0-9~@#$%^&*()_+|?><":}!№;,\s]/.test(lastName.toString())) {
-    //     document.getElementById("secondNameMessage").innerHTML = "Only letters";
-    //     dataIsValid = false;
-    // }
-    // if (middleName.length > 255 || /[\d~@#$%^&*()_+|?><":}!№;,\s]/.test(middleName.toString())) {
-    //     dataIsValid = false;
-    //     document.getElementById("middleNameMessage").innerHTML = "Only letters";
-    // }
-    // if (/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/.test(birthday.toString())) {
-    //     dataIsValid = false;
-    //     document.getElementById("birthdayMessage").innerHTML = "Date format DD/MM/YYYY";
-    // }
-    // if (nationality.length > 255 || /[\d~@#$%^&*()_+|?><":}!№;,\s]/.test(nationality.toString())) {
-    //     document.getElementById("nationalityMessage").innerHTML = "Only letters";
-    //     dataIsValid = false;
-    // }
-    // if (!/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/.test(webSite)) {
-    //     document.getElementById("websiteMessage").innerHTML = "Invalid website";
-    //     dataIsValid = false;
-    // }
-    // if (!/(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
-    //     document.getElementById("emailMessage").innerHTML = "Invalid email";
-    //     dataIsValid = false;
-    // }
-    // // if (employmentPlace.length > 255 || /[~@#$%^&*()_+|?><":}!№;,\s]/.test(employmentPlace.toString())) {
-    // //     dataIsValid = false;
-    // //     document.getElementById("firstNameMessage").innerHTML = "Only letters";
-    // // }
+    if (firstName == "" || firstName == null || firstName.length > 255 || (firstName.toString()).search(/[0-9~@#$%^&*.()_+|>?\/<":}!№;,\s]/) != -1) {
+        document.getElementById("firstNameMessage").innerHTML = "Only letters";
+        document.getElementById('firstName').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (lastName == "" || lastName == null || lastName.length > 255 || (lastName.toString()).search(/[0-9~@#$%^&*.()_+|>?\/<":}!№;,\s]/) != -1) {
+        document.getElementById("secondNameMessage").innerHTML = "Only letters";
+        document.getElementById('lastName').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (middleName.length > 255 || (middleName.toString()).search(/[0-9~@#$%^&*.()_+|>?\/<":}!№;,\s]/) != -1) {
+        document.getElementById("middleNameMessage").innerHTML = "Only letters";
+        document.getElementById('middleName').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    var today = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+    if (/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/.test(birthday.toString()) || new Date(birthday).getTime() > new Date(today).getTime()) {
+        document.getElementById("birthdayMessage").innerHTML = "Date format DD/MM/YYYY";
+        document.getElementById('birthday').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (nationality.length > 255 || (nationality.toString()).search(/[0-9~@#$%^&*.()_+|>?\/<":}!№;,\s]/) != -1) {
+        document.getElementById("nationalityMessage").innerHTML = "Only letters";
+        document.getElementById('nationality').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (employmentPlace.length > 255 || /[~@#$%^&*()_+|?><":}!№;,\s]/.test(employmentPlace.toString())) {
+        document.getElementById("employmentPlaceMessage").innerHTML = "Only letters";
+        document.getElementById('employmentPlace').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (webSite) {
+        if (webSite.length > 255 || !/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z‌​]{2,6}\b([-a-zA-Z0-9‌​@:%_\+.~#?&=]*)/.test(webSite)) {
+            document.getElementById("websiteMessage").innerHTML = "Invalid website";
+            document.getElementById('webSite').style.borderColor = "#A94442";
+            dataIsValid = false;
+        }
+    }
+    if (email) {
+        if (email.length > 255 || !/(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+            document.getElementById("emailMessage").innerHTML = "Invalid email";
+            document.getElementById('email').style.borderColor = "#A94442";
+            dataIsValid = false;
+        }
+    }
     // if (country.length > 255 || /[\d~@#$%^&*()_+|?><":}!№;,\s]/.test(country.toString())) {
     //     dataIsValid = false;
     //     document.getElementById("countryMessage").innerHTML = "Only letters";
@@ -417,6 +450,13 @@ function addPhoto() {
     var popup = document.getElementById("photoPopup");
     popup.classList.toggle("show");
 }
+function showAlertMessage() {
+    var popup = document.getElementById("alertMessagePopup");
+    popup.classList.toggle("show");
+    var arrow = document.getElementById("alertMessageArrow");
+    arrow.classList.toggle("show");
+}
+
 function savePhotoFile() {
     if (document.getElementById('photoPath').textContent != "") {
         var body = document.getElementById('contact_form');

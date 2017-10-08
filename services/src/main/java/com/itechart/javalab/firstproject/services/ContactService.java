@@ -94,4 +94,12 @@ public interface ContactService extends GenericService<Contact> {
      * @throws SQLException
      */
     Contact findByEmail(String email) throws SQLException;
+
+    /**
+     * Method get collection of contacts which have the required birth date.
+     * @param date birthday
+     * @return collection of contact objects
+     * @throws SQLException
+     */
+    Set<Contact> findContactsByBirthday(Date date) throws SQLException;
 }

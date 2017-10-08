@@ -13,9 +13,9 @@
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=80">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=87">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=43"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=47"></script>
 </head>
 <body>
 <div class="header">
@@ -31,6 +31,9 @@
     <div class="search" onclick="toSearchPage()">
         <fmt:message key="search"/>
     </div>
+    <div class="alertMessage" onclick="showAlertMessage()">
+        <img src="${pageContext.request.contextPath}/assests/images/envelope.png"/>
+    </div>
     <div class="en" onclick="toEnglish()">
         En
     </div>
@@ -41,5 +44,14 @@
         By
     </div>
 </div>
+<div class="alertMessageArrow" id="alertMessageArrow"></div>
+<c:if test="${applicationScope.alertMessage != null}">
+    <div class="alertMessageText" id="alertMessagePopup">
+        <fmt:message key="birthday"/>${"!"}<br>
+        <c:forEach var="contact" items="${applicationScope.alertMessage}">
+            <a href="controller?command=displayContact&id=${contact.id}">${contact.lastName} ${" "} ${contact.firstName}</a><br>
+        </c:forEach>
+    </div>
+</c:if>
 </body>
 </html>

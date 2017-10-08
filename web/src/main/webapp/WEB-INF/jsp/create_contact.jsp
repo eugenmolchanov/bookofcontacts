@@ -119,8 +119,8 @@
         </div>
         <div id="thirdLine">
             <div class="nameMessage" id="maritalStatusMessage">${requestScope.validation.maritalStatusMessage}</div>
-            <div class="nameMessage" id="websiteMessage">${requestScope.validation.websiteMessage}</div>
-            <div class="nameMessage" id="emailMessage">${requestScope.validation.emailMessage}</div>
+            <div class="nameMessage" id="employmentPlaceMessage">${requestScope.validation.employmentPlaceMessage}</div>
+            <div class="nameMessage" id="contactGroupMessage">${requestScope.validation.contactGroupMessage}</div>
             <c:choose>
                 <c:when test="${requestScope.validation.maritalStatusMessage == null}">
                     <select name="maritalStatus" id="maritalStatus" class="form-control">
@@ -147,31 +147,6 @@
                     </select>
                 </c:otherwise>
             </c:choose>
-            <c:choose>
-                <c:when test="${requestScope.validation.websiteMessage == null}">
-                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
-                           class="form-control"/>
-                </c:when>
-                <c:otherwise>
-                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
-                           class="form-control" style="border-color: #A94442;"/>
-                </c:otherwise>
-            </c:choose>
-            <c:choose>
-                <c:when test="${requestScope.validation.emailMessage == null}">
-                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
-                           class="form-control"/>
-                </c:when>
-                <c:otherwise>
-                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
-                           class="form-control" style="border-color: #A94442;"/>
-                </c:otherwise>
-            </c:choose>
-        </div>
-        <div id="fourthLine">
-            <div class="nameMessage" id="employmentPlaceMessage">${requestScope.validation.employmentPlaceMessage}</div>
-            <div class="nameMessage" id="contactGroupMessage">${requestScope.validation.contactGroupMessage}</div>
-            <br>
             <c:choose>
                 <c:when test="${requestScope.validation.employmentPlaceMessage == null}">
                     <input type="text" name="employmentPlace" id="employmentPlace"
@@ -201,6 +176,34 @@
                         <option value="Коллеги"><fmt:message key="colleagues"/></option>
                         <option value="Соседи"><fmt:message key="neighbours"/></option>
                     </select>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        <div id="fourthLine">
+            <div class="nameMessage" id="websiteMessage">${requestScope.validation.websiteMessage}</div>
+            <br>
+            <c:choose>
+                <c:when test="${requestScope.validation.websiteMessage == null}">
+                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
+                           class="form-control" style="border-color: #A94442;"/>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        <div id="emailLine">
+            <div class="nameMessage" id="emailMessage">${requestScope.validation.emailMessage}</div>
+            <br>
+            <c:choose>
+                <c:when test="${requestScope.validation.emailMessage == null}">
+                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
+                           class="form-control"/>
+                </c:when>
+                <c:otherwise>
+                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
+                           class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
         </div>

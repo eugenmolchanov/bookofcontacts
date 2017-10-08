@@ -118,4 +118,10 @@ public class ContactDaoImplTest {
         long count = dao.getNumberOfSearchContacts(conditionContact, lowerLimit, upperLimit, connection);
         Assert.assertEquals(2, count);
     }
+
+    @Test
+    public void shouldFindContactsByBirthday() throws SQLException {
+        Set<Contact> contacts = dao.findContactsByBirthday(Date.valueOf(LocalDate.now()), connection);
+        Assert.assertEquals(1, contacts.size());
+    }
 }

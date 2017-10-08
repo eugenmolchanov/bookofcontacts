@@ -50,7 +50,12 @@ public class SendEmail implements ActionCommand {
                     return new PasswordAuthentication(from, password);
                 }
             });
-            String parameter = req.getParameter("addressees");
+            String parameter = null;
+            try {
+                parameter = req.getParameter("addressees");
+            } catch (Exception e) {
+                logger.debug(e.getMessage(), e);
+            }
             try {
                 MimeMessage message = new MimeMessage(session);
                 String subject = req.getParameter("topic");

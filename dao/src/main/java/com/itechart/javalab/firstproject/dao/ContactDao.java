@@ -77,4 +77,13 @@ public interface ContactDao extends GenericDao<Contact> {
      * @throws SQLException
      */
     Contact findByEmail(String email, Connection connection) throws SQLException;
+
+    /**
+     *
+     * @param date birthday
+     * @param connection connection to database
+     * @return collection of contact objects
+     * @throws SQLException
+     */
+    Set<Contact> findContactsByBirthday(Date date, Connection connection) throws SQLException;
 }

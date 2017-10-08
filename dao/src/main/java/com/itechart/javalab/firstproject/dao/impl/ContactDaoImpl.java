@@ -422,4 +422,25 @@ public class ContactDaoImpl implements ContactDao {
         statement.close();
         return contact;
     }
+
+    @Override
+    public Set<Contact> findContactsByBirthday(Date date, Connection connection) throws SQLException {
+        final String GET_CONTACTS = "select id, first_name, last_name, email from contact where dayofmonth(birth_date) = dayofmonth(?) and month(birth_date) = month(?);";
+        PreparedStatement statement = connection.prepareStatement(GET_CONTACTS);
+        statement.setDate(1, date);
+        statement.setDate(2, date);
+        ResultSet resultSet = statement.executeQuery();
+        Set<Contact> contacts = new HashSet<>();
+        while (resultSet.next()) {
+            Contact contact = new Contact();
+            contact.setId(resultSet.getLong("id"));
+            contact.setFirstName(resultSet.getString("first_name"));
+            contact.setLastName(resultSet.getString("last_name"));
+            contact.setBirthday(date);
+            contact.setEmail(resultSet.getString("email"));
+            contacts.add(contact);
+        }
+        statement.close();
+        return contacts;
+    }
 }
