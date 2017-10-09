@@ -21,7 +21,7 @@
 <div class="contact_form" id="contact_form">
     <div class="messageInfo">${requestScope.message}</div>
     <form action="/controller?command=editContact" method="post" name="createForm"
-          onsubmit="return createContact()"
+          onsubmit="return contactValidation()"
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
         <input type="hidden" name="contactId" value="${requestScope.contact.id}">
         <input type="hidden" name="photoId" value="${requestScope.contact.photo.id}">
@@ -226,7 +226,7 @@
                            class="form-control"/><br>
                 </c:otherwise>
             </c:choose>
-            <div class="nameMessage" id="websiteMessage">${requestScope.validation.websiteMessage}</div>
+            <div class="nameMessage" id="websiteMessage">${" "}${requestScope.validation.websiteMessage}</div>
         </div>
         <div class="emailDiv" id="emailDiv">
             <label for="email"><fmt:message key="email"/> </label><br>
@@ -437,7 +437,7 @@
             </table>
         </div>
         <br>
-        <input type="submit" onclick="createContact()" value="<fmt:message key="edit"/> "
+        <input type="submit" onclick="contactValidation()" value="<fmt:message key="edit"/> "
                class="bigEditButton" id="bigEditButton"/>
     </form>
 </div>

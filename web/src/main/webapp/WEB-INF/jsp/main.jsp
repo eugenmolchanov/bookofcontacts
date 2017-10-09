@@ -32,7 +32,7 @@
         <div class="bookImage">
             <img src="${pageContext.request.contextPath}/assests/images/002-agenda-1.png">
         </div>
-        <table class="table table-bordered" style="background-color: #ffffff">
+        <table class="table table-bordered">
             <thead>
             <tr>
                 <th></th>

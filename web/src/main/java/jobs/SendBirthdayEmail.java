@@ -17,9 +17,6 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -30,17 +27,6 @@ import java.util.Set;
  * Created by Yauhen Malchanau on 07.10.2017.
  */
 public class SendBirthdayEmail implements Job {
-
-    private HttpServletRequest req;
-    private HttpServletResponse resp;
-
-    public SendBirthdayEmail(HttpServletRequest req, HttpServletResponse resp) {
-        this.req = req;
-        this.resp = resp;
-    }
-
-    public SendBirthdayEmail() {
-    }
 
     private Logger logger = Logger.getLogger(SendBirthdayEmail.class);
     private MessageService messageService = MessageServiceImpl.getInstance();
@@ -54,8 +40,9 @@ public class SendBirthdayEmail implements Job {
         ServletContext servletContext = null;
         try {
             servletContext = (ServletContext) jobExecutionContext.getScheduler().getContext().get("servletContext");
+            servletContext.removeAttribute("alertMessage");
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            logger.debug(e);
         }
         Set<Contact> contacts = null;
         try {
@@ -96,7 +83,6 @@ public class SendBirthdayEmail implements Job {
                 servletContext.setAttribute("alertMessage", contacts);
             } catch (MessagingException e) {
                 logger.error(e);
-                req.setAttribute("message", MessageManager.getProperty("error"));
             }
         }
     }

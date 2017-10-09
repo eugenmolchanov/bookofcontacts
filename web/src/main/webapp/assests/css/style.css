@@ -21,13 +21,15 @@ input {
 }
 .main, .messageDiv {
     padding-left: 3%;
+    padding-right: 3%;
     padding-top: 5%;
     position: relative;
+    /*float: left;*/
 }
 .mainBody, .create_contact_body, .sendEmailBody, .searchBody, .errorBody, .messagesBody {
     background-color: #f0f0f0;
 }
-.mainPagePagination {
+.mainPagePagination, .messagePagePagination {
     display: inline;
 }
 .main_page {
@@ -163,11 +165,12 @@ input {
     padding-left: 3%;
     padding-right: 3%;
     position: relative;
-    border: solid 1px;
-    border-radius: 8px;
-    top: 10%;
+    border: solid 1px #ffffff;
+    box-shadow: 2px 2px 12px 2px grey;
+    top: 15%;
     left: 18%;
     width: 64%;
+    margin-bottom: 2%;
 }
 #full-name>input, #secondLine>input, #thirdLine>input, #full-name>.nameMessage, #secondLine>.nameMessage, #thirdLine>.nameMessage, #fourthLine>.nameMessage,
 #fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage, #secondLine>select, #thirdLine>select, #fourthLine>select, .genderError input {
@@ -299,16 +302,22 @@ input {
     color: #999;
 }
 .emailSubmit, .deleteButton, .emailButton, .createButton, .editButton, .bigEditButton, .searchButton, .bigCreateButton, .chooseButton {
-    opacity: 1;
     background-color: #ce9842;
     color: #ffffff;
     border: none;
-    border-radius: 5px;
-    padding: 1%;
+    border-radius: 3px;
+    width: auto;
+    padding: 8px 16px;
 }
 .searchButton {
     margin-top: 3%;
-    width: 100%;
+    width: auto;
+}
+.searchButton:hover, .emailButton:hover, .deleteButton:hover {
+    box-shadow: 1px 1px 1px 1px grey;
+}
+.searchButtonDiv {
+    text-align: center;
 }
 .bigEditButton {
     width: 100%;
@@ -385,10 +394,11 @@ input {
 #marStatus>select, #websiteDiv>input, #emailDiv>input, #employDiv>input, #groupDiv>select, #countryDiv>input, #cityDiv>input, #streetDiv>input, #houseNumberDiv>input,
 #flatNumberDiv>input, #postcodeDiv>input {
     width: 100%;
-    margin-bottom: 3%;
 }
 .emailDiv, .websiteDiv{
     width: 100%;
+    display: inline-block;
+    margin-top: 2%;
 }
 .phoneButtons, .attachmentButtons {
     visibility: hidden;
@@ -422,4 +432,28 @@ input {
 .error {
     padding-top: 20%;
     text-align: center;
+}
+.main table {
+    background-color: #ffffff;
+    box-shadow: 2px 2px 12px 2px grey;
+}
+.messageDiv table {
+    margin-top: 2%;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 12px 2px grey;
+}
+.messageCheckTh {
+    width: 2%;
+}
+.recipientTh {
+    width: 20%;
+}
+.messageTh {
+    width: 63%;
+}
+.dateTh {
+    width: 15%;
+}
+.messageRow {
+    cursor: pointer;
 }

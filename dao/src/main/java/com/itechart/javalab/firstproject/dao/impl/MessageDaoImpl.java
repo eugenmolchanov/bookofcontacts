@@ -100,7 +100,7 @@ public class MessageDaoImpl implements MessageDao {
                     messages.add(message);
                 }
                 message = new Message();
-                contacts.clear();
+                contacts = new HashSet<>();
             }
             Contact contact = new Contact();
             contact.setId(resultSet.getLong("c.id"));

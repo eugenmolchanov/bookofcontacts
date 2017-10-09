@@ -18,11 +18,10 @@
 </head>
 <body class="create_contact_body">
 <jsp:include page="header.jsp"/>
-<%--<div><p>${requestScope.message}</p></div>--%>
 <div class="contact_form" id="contact_form">
     <div class="messageInfo">${requestScope.message}</div>
     <form action="/controller?command=createNewContact" method="post" name="createForm"
-          onsubmit="return createContact()"
+          onsubmit="return contactValidation()"
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
         <div class="contactTitle"><h2><fmt:message key="personal_data"/></h2></div>
         <div class="photoInfo"><h3><fmt:message key="contact_photo"/></h3></div>
@@ -338,7 +337,7 @@
             </table>
         </div>
         <br>
-        <input type="submit" onclick="createContact()" value="<fmt:message key="create"/> "
+        <input type="submit" onclick="contactValidation()" value="<fmt:message key="create"/> "
                class="bigCreateButton"/>
     </form>
 </div>

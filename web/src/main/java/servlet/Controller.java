@@ -60,7 +60,7 @@ public class Controller extends HttpServlet {
         processRequest(req, resp);
     }
 
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void processRequest(HttpServletRequest req, HttpServletResponse resp) {
         try {
             if (!((Scheduler) getServletContext().getAttribute("scheduler")).isStarted()) {
                 Scheduler scheduler = ((Scheduler) getServletContext().getAttribute("scheduler"));
@@ -73,24 +73,40 @@ public class Controller extends HttpServlet {
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
-        String page;
+        String page = null;
         ActionFactory client = new ActionFactory();
         ActionCommand command = null;
         try {
             command = client.defineCommand(req);
         } catch (IllegalArgumentException e) {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
-            dispatcher.forward(req, resp);
+            try {
+                dispatcher.forward(req, resp);
+            } catch (ServletException | IOException e1) {
+                logger.error(e.getMessage(), e);
+            }
         }
-        page = command != null ? command.execute(req, resp) : null;
+        try {
+            page = command != null ? command.execute(req, resp) : null;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
         if (!resp.isCommitted()) {
             if (page != null) {
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-                dispatcher.forward(req, resp);
+                try {
+                    dispatcher.forward(req, resp);
+                } catch (ServletException | IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
             } else {
                 req.setAttribute("message", MessageManager.getProperty("error"));
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
-                dispatcher.forward(req, resp);
+                try {
+                    dispatcher.forward(req, resp);
+                } catch (ServletException | IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
             }
         }
     }

@@ -35,7 +35,9 @@ public class EmptyCommand implements ActionCommand {
         }
         HttpSession session = req.getSession(true);
         session.setAttribute("startContactNumber", 0L);
+        session.setAttribute("startMessageNumber", 0L);
         session.setAttribute("quantityOfContacts", 10L);
+        session.setAttribute("quantityOfMessages", 10L);
         req.setAttribute("startContactNumber", 0L);
         req.setAttribute("quantityOfContacts", 10L);
         req.setAttribute("command", "listOfContacts");

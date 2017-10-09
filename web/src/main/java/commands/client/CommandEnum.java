@@ -60,6 +60,16 @@ public enum CommandEnum {
         {
             this.command = new EditContact();
         }
+    },
+    SHOWMESSAGES {
+        {
+            this.command = new ShowMessages();
+        }
+    },
+    GETMESSAGE {
+        {
+            this.command = new GetMessage();
+        }
     }
     ;
     ActionCommand command;

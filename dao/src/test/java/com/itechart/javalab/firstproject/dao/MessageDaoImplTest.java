@@ -57,7 +57,7 @@ public class MessageDaoImplTest {
 
     @After
     public void afterTesting() throws SQLException {
-        dao.deleteAll(connection);
+//        dao.deleteAll(connection);
     }
 
     @Test
@@ -94,16 +94,16 @@ public class MessageDaoImplTest {
 
     @Test
     public void shouldGetMessages() throws SQLException {
-        long id = messageDao.save(message, connection);
-        messageDao.addDependencyFromContact(id, firstContactId, connection);
-        messageDao.addDependencyFromContact(id, secondContactId, connection);
-        Set<Contact> contacts = new HashSet<>();
-        contacts.add(firstContact);
-        contacts.add(secondContact);
-        Message secondMessage = new Message(0, "anotherTopic", contacts, "text of message1", Timestamp.valueOf(LocalDateTime.now()), 0);
-        long anId = messageDao.save(secondMessage, connection);
-        messageDao.addDependencyFromContact(anId, firstContactId, connection);
-        messageDao.addDependencyFromContact(anId, secondContactId, connection);
+//        long id = messageDao.save(message, connection);
+//        messageDao.addDependencyFromContact(id, firstContactId, connection);
+//        messageDao.addDependencyFromContact(id, secondContactId, connection);
+//        Set<Contact> contacts = new HashSet<>();
+//        contacts.add(firstContact);
+//        contacts.add(secondContact);
+//        Message secondMessage = new Message(0, "anotherTopic", contacts, "text of message1", Timestamp.valueOf(LocalDateTime.now()), 0);
+//        long anId = messageDao.save(secondMessage, connection);
+//        messageDao.addDependencyFromContact(anId, firstContactId, connection);
+//        messageDao.addDependencyFromContact(anId, secondContactId, connection);
         Set<Message> messages = messageDao.getMessages(0, 10, connection);
         Assert.assertEquals(2, messages.size());
         for (Message message : messages) {
