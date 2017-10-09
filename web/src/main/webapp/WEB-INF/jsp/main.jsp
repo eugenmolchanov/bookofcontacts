@@ -29,9 +29,6 @@
         <input type="submit" value="<fmt:message key="send_email"/> "
                formaction="/controller?command=redirect&form=sendEmail" onclick="return chooseEmail()"
                class="emailButton"/>
-        <div class="bookImage">
-            <img src="${pageContext.request.contextPath}/assests/images/002-agenda-1.png">
-        </div>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -98,7 +95,7 @@
             ${" - "}${start + size}${" "}
             <fmt:message key="from"/>
             ${" "}${count}</div>
-        ${"  "}
+        ${"  "}<br>
         <fmt:message key="page"/>${" "}
         <c:if test="${start != 0}">
             <div id="previous"><a
@@ -126,6 +123,10 @@
                     href="/controller?command=${requestScope.command}&startContactNumber=${start + step}&quantityOfContacts=${step}"><fmt:message
                     key="next"/></a></div>
         </c:if>
+        <div class="rowNumber">
+            <fmt:message key="display"/>${" "}<a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=10">10</a>${" "}
+            <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=20">20</a>${" "}
+        </div>
     </div>
 </div>
 </body>

@@ -13,10 +13,9 @@ public interface MessageService extends GenericService<Message> {
      * Method saves message.
      *
      * @param message    message object which should be saved
-     * @param contactIds ids of contacts for which email was sent
      * @throws SQLException
      */
-    void save(Message message, Set<Long> contactIds) throws SQLException;
+    void save(Message message) throws SQLException;
 
     /**
      * Method finds message by id.
@@ -62,4 +61,12 @@ public interface MessageService extends GenericService<Message> {
      * @throws SQLException
      */
     long getNumberOfAllDeletedMessages() throws SQLException;
+
+    /**
+     * Method deletes messages by their ids.
+     *
+     * @param messageIds ids of message objects
+     * @throws SQLException
+     */
+    void deleteMessages(Set<Long> messageIds) throws SQLException;
 }

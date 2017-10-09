@@ -31,15 +31,16 @@ input {
 }
 .mainPagePagination, .messagePagePagination {
     display: inline;
+    padding-bottom: 3%;
 }
 .main_page {
     cursor: pointer;
     color: #ffffff;
     display: inline-block;
-    margin: 0 0 0 5%;
-    padding: 1% 1% 1% 1%;
+    margin-left: 5%;
+    /*padding: 1% 1% 1% 1%;*/
 }
-.main_page:hover, .messages:hover, .createContact:hover, .search:hover, .en:hover, .ru:hover, .by:hover {
+.messages:hover, .createContact:hover, .search:hover, .en:hover, .ru:hover, .by:hover {
     background-color: #000000;
 }
 .messages, .createContact, .search, .en, .ru, .by {
@@ -74,9 +75,6 @@ input {
 .contact_form.roll {
     opacity: 0.3;
     pointer-events: none;
-}
-.phonePopup {
-    text-align: right;
 }
 .phoneInfo {
     width: 75%;
@@ -309,11 +307,18 @@ input {
     width: auto;
     padding: 8px 16px;
 }
+.emailSubmit {
+    margin-top: 2%;
+}
+.editButton {
+    margin-left: 0.6%;
+}
 .searchButton {
     margin-top: 3%;
     width: auto;
 }
-.searchButton:hover, .emailButton:hover, .deleteButton:hover {
+.searchButton:hover, .emailButton:hover, .deleteButton:hover, .emailSubmit:hover, .createButton:hover, .editButton:hover, .bigCreateButton:hover, .chooseButton:hover,
+.bigEditButton:hover {
     box-shadow: 1px 1px 1px 1px grey;
 }
 .searchButtonDiv {
@@ -342,9 +347,7 @@ input {
 }
 .bookImage {
     display: inline;
-    position: fixed;
-    top: 9%;
-    left: 90.7%;
+    float: left;
 }
 .photo {
     pointer-events: none;
@@ -402,6 +405,12 @@ input {
 }
 .phoneButtons, .attachmentButtons {
     visibility: hidden;
+    margin-bottom: 3%;
+    width: 100%;
+}
+.phonePopup, .attachmentPopup {
+    margin-bottom: 3%;
+    width: 100%;
 }
 .phoneTd, .attachmentTd {
     padding: 1% 0 1% 0;

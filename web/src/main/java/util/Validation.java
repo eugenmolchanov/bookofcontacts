@@ -6,16 +6,13 @@ import com.itechart.javalab.firstproject.entities.Phone;
 import com.itechart.javalab.firstproject.entities.Photo;
 import dto.AttachmentDataDto;
 import dto.PhoneDataDto;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import resources.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Yauhen Malchanau on 14.09.2017.
@@ -63,13 +60,16 @@ public class Validation {
         return result;
     }
 
+    public static boolean deleteMessagesDataIsValid(HttpServletRequest req, Logger logger) {
+        return deleteContactsDataIsValid(req, logger);
+    }
+
     public static Map<String, Object> createContactData(Map<String, Object> parameters, Logger logger) {
         Map<String, String> validationMessages = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
-        String invalid = "Not valid";
         Contact contact = new Contact();
         if (parameters.get("firstName") == null) {
-            validationMessages.put("firstNameMessage", invalid);
+            validationMessages.put("firstNameMessage", MessageManager.getProperty("must_be_filled"));
         } else {
             String firstName = String.valueOf(parameters.get("firstName"));
             if (firstName.isEmpty() || firstName.length() > 255) {
@@ -473,7 +473,7 @@ public class Validation {
     public static boolean languageDataIsValid(HttpServletRequest request, Logger logger) {
         boolean result = false;
         String language = request.getParameter("language");
-        if (language.equals("en_US") || language.equals("ru_RU") || language.equals("be_BY")) {
+        if (Objects.equals(language, "en_US") || Objects.equals(language, "ru_RU") || Objects.equals(language, "be_BY")) {
             result = true;
         }
         return result;

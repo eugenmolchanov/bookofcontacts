@@ -26,8 +26,7 @@
             <input type="checkbox" onclick="toggle(this)" id="chooseAll"/>
         </div>
         <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="deleteContacts()"/>
-        <input type="submit" value="<fmt:message key="send_email"/> "
-               formaction="/controller?command=redirect&form=sendEmail" class="emailButton"/>
+        <input type="button" value="<fmt:message key="send_email"/> " onclick="toEmailForm()" class="emailButton"/>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -45,10 +44,10 @@
                     </td>
                     <td onclick="findMessage(${message.id})">
                         <c:forEach var="contact" items="${message.addressees}">
-                            <span title="${contact.email}">${contact.firstName}${" "}${contact.lastName}${" "}</span>
+                            <span title="${contact.email}">${contact.firstName}${" "}${contact.lastName}</span><br>
                         </c:forEach>
                     </td>
-                    <td onclick="findMessage(${message.id})">${message.topic}${" "}${message.text}</td>
+                    <td onclick="findMessage(${message.id})"><b>${message.topic}</b>${"  "}${message.text}</td>
                     <td onclick="findMessage(${message.id})">${message.sendingDate}</td>
                 </tr>
             </c:forEach>
@@ -82,7 +81,7 @@
             ${" - "}${start + size}${" "}
             <fmt:message key="from"/>
             ${" "}${count}</div>
-        ${"  "}
+        ${"  "}<br>
         <fmt:message key="page"/>${" "}
         <c:if test="${start != 0}">
             <div id="previous"><a
@@ -110,6 +109,10 @@
                     href="/controller?command=${requestScope.command}&startMessageNumber=${start + step}&quantityOfMessages=${step}"><fmt:message
                     key="next"/></a></div>
         </c:if>
+        <div class="rowNumber">
+            <fmt:message key="display"/>${" "}<a href="/controller?command=${requestScope.command}&startMessageNumber=0&quantityOfMessages=10">10</a>${" "}
+            <a href="/controller?command=${requestScope.command}&startMessageNumber=0&quantityOfMessages=20">20</a>${" "}
+        </div>
     </div>
 </div>
 </body>

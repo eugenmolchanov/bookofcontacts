@@ -333,18 +333,16 @@
 
         <div class="phonesInfo"><h3><fmt:message key="phones"/></h3></div>
         <div class="phoneInfo" id="phoneInfo">
+            <div class="phoneButtons" id="phoneButtons">
+                <button type="button" name="phonePopup" onclick="addPhone()" class="createButton">
+                    <fmt:message key="create"/></button>
+                <button type="button" name="phonePopup"
+                        onclick="editPhone()" class="editButton">
+                    <fmt:message key="edit"/></button>
+                <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
+                        class="deleteButton"><fmt:message key="delete"/></button>
+            </div>
             <table class="phoneTable" id="phoneTable">
-                <caption class="phoneTitle">
-                    <div class="phoneButtons" id="phoneButtons">
-                        <button type="button" name="phonePopup" onclick="addPhone()" class="createButton">
-                            <fmt:message key="create"/></button>
-                        <button type="button" name="phonePopup"
-                                onclick="editPhone()" class="editButton">
-                            <fmt:message key="edit"/></button>
-                        <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
-                                class="deleteButton"><fmt:message key="delete"/></button>
-                    </div>
-                </caption>
                 <thead>
                 <tr>
                     <th class="phoneCheckbox"></th>
@@ -391,17 +389,15 @@
         <br>
         <div class="attachmentsInfo"><h3><fmt:message key="attachments"/></h3></div>
         <div class="attachmentInfo" id="attachmentInfo">
+            <div class="attachmentButtons" id="attachmentButtons">
+                <button type="button" name="attachmentPopup" onclick="addAttachments()" class="createButton">
+                    <fmt:message key="create"/></button>
+                <button type="button" name="attachmentPopup" onclick="editAttachment()" class="editButton">
+                    <fmt:message key="edit"/></button>
+                <button type="button" name="deleteAttachment" onclick="deleteAttachmentFromTable()"
+                        class="deleteButton"><fmt:message key="delete"/></button>
+            </div>
             <table class="attachmentTable">
-                <caption class="attachmentTitle">
-                    <div class="attachmentButtons" id="attachmentButtons">
-                        <button type="button" name="attachmentPopup" onclick="addAttachments()" class="createButton">
-                            <fmt:message key="create"/></button>
-                        <button type="button" name="attachmentPopup" onclick="editAttachment()" class="editButton">
-                            <fmt:message key="edit"/></button>
-                        <button type="button" name="deleteAttachment" onclick="deleteAttachmentFromTable()"
-                                class="deleteButton"><fmt:message key="delete"/></button>
-                    </div>
-                </caption>
                 <thead>
                 <tr>
                     <th class="attachmentCheckbox"></th>

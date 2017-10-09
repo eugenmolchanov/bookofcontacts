@@ -24,7 +24,6 @@ import java.util.*;
  * Created by Yauhen Malchanau on 15.09.2017.
  */
 public class Data {
-
     public static Map<String, Object> upload(HttpServletRequest req) throws IOException, ServletException, FileUploadException {
         if (!ServletFileUpload.isMultipartContent(req)) {
             return null;

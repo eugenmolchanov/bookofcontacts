@@ -394,13 +394,14 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public Contact findByEmail(String email, Connection connection) throws SQLException {
-        final String FIND_CONTACT_BY_EMAIL = "select first_name, last_name, middle_name, birth_date, gender, nationality, marital_status, website, email, " +
+        final String FIND_CONTACT_BY_EMAIL = "select id, first_name, last_name, middle_name, birth_date, gender, nationality, marital_status, website, email, " +
                 "employment_place, contact_group, country, city, street, house_number, flat_number, postcode from contact where email=?;";
         PreparedStatement statement = connection.prepareStatement(FIND_CONTACT_BY_EMAIL);
         statement.setString(1, email);
         ResultSet resultSet = statement.executeQuery();
         Contact contact = new Contact();
         while (resultSet.next()) {
+            contact.setId(resultSet.getLong("id"));
             contact.setFirstName(resultSet.getString("first_name"));
             contact.setLastName(resultSet.getString("last_name"));
             contact.setMiddleName(resultSet.getString("middle_name"));

@@ -62,8 +62,50 @@ function deleteContacts() {
     return !dataIsValid;
 }
 
-function sendEmail() {
+function deleteMessages() {
+    var dataIsValid = true;
+    var dataForDelete = 0;
+    var elms = document.querySelectorAll("[name='id']");
+    for (var i = 0; i < elms.length; i++)
+        if (elms[i].checked && elms[i] != 0) {
+            dataForDelete++;
+        }
+    if (dataForDelete > 0) {
+        return dataIsValid;
+    }
+    return !dataIsValid;
+}
 
+function sendEmail() {
+    var dataIsValid = true;
+    cleanMessageValidation();
+    var addressees = document.getElementById('addressees').value;
+    var topic = document.getElementById('topic').value;
+    var message = document.getElementById('message').value;
+    if (addressees) {
+        var emails = addressees.split(" ");
+        for (var i = 0; i < emails.length; i++) {
+            if (emails[i].length > 255 || !/(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(emails[i])) {
+                document.getElementById('addresseesMessage').innerHTML = 'Invalid email';
+                document.getElementById('addressees').style.borderColor = "#A94442";
+                dataIsValid = false;
+            }
+        }
+    } else {
+        document.getElementById('addresseesMessage').innerHTML = 'Must be filled';
+        document.getElementById('addressees').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    if (!message) {
+        document.getElementById('textMessage').innerHTML = 'Must be filled';
+        document.getElementById('message').style.borderColor = "#A94442";
+        dataIsValid = false;
+    }
+    return dataIsValid;
+}
+function cleanMessageValidation() {
+    document.getElementById('addresseesMessage').innerHTML = document.getElementById('textMessage').innerHTML = '';
+    document.getElementById('addressees').style.borderColor = document.getElementById('message').style.borderColor = "";
 }
 
 function chooseTemplate() {
@@ -83,24 +125,35 @@ function chooseTemplate() {
 function toMainPage() {
     window.location = "http://localhost:8080/controller";
 }
+
+function toEmailForm() {
+    window.location = "http://localhost:8080/controller?command=redirect&form=sendEmail";
+}
+
 function toCreateContact() {
     window.location = "http://localhost:8080/controller?command=redirect&form=createContact";
 }
+
 function toSearchPage() {
     window.location = "http://localhost:8080/controller?command=redirect&form=search";
 }
+
 function toMessagePage() {
     window.location = "http://localhost:8080/controller?command=showMessages";
 }
+
 function toEnglish() {
     window.location = "http://localhost:8080/controller?command=language&language=en_US";
 }
+
 function toRussian() {
     window.location = "http://localhost:8080/controller?command=language&language=ru_RU";
 }
+
 function toBelorussian() {
     window.location = "http://localhost:8080/controller?command=language&language=be_BY";
 }
+
 function findMessage(id) {
     window.location = "http://localhost:8080/controller?command=getMessage&id=" + id;
 }
@@ -117,6 +170,7 @@ function cleanContactValidation() {
                 document.getElementById('city').style.borderColor = document.getElementById('street').style.borderColor = document.getElementById('houseNumber').style.borderColor =
                     document.getElementById('flatNumber').style.borderColor = document.getElementById('postalIndex').style.borderColor = "#ccc";
 }
+
 function cleanSerchValidation() {
     document.getElementById("firstNameMessage").innerHTML = document.getElementById("secondNameMessage").innerHTML = document.getElementById("middleNameMessage").innerHTML =
         document.getElementById("birthdayToMessage").innerHTML = document.getElementById("birthdayFromMessage").innerHTML = document.getElementById("nationalityMessage").innerHTML =
@@ -128,6 +182,7 @@ function cleanSerchValidation() {
                 document.getElementById('houseNumber').style.borderColor = document.getElementById('flatNumber').style.borderColor =
                     document.getElementById('postalIndex').style.borderColor = "#ccc";
 }
+
 function contactValidation() {
     cleanContactValidation();
     var dataIsValid = true;
@@ -330,6 +385,7 @@ function addPhone() {
     var popup = document.getElementById("phonePopup");
     popup.classList.toggle("show");
 }
+
 function closePhonePopup() {
     var body = document.getElementById('contact_form');
     body.classList.toggle("roll");
@@ -352,21 +408,25 @@ function cleanPhonePopup() {
         document.getElementById('type').value = document.getElementById('comment').value = "";
     cleanPhoneValidation();
 }
+
 function cleanPhoneValidation() {
     document.getElementById('countryCodeMessage').innerHTML = document.getElementById('operatorCodeMessage').innerHTML = document.getElementById('numberMessage').innerHTML =
         document.getElementById('typeMessage').innerHTML = document.getElementById('commentMessage').innerHTML = "";
     document.getElementById('countryCode').style.borderColor = document.getElementById('operatorCode').style.borderColor = document.getElementById('number').style.borderColor =
         document.getElementById('type').style.borderColor = document.getElementById('comment').style.borderColor = "";
 }
+
 function cleanAttachmentValidation() {
     document.getElementById('attachmentMessage').innerHTML = document.getElementById('attachTitleMessage').innerHTML = document.getElementById('attachCommentMessage').innerHTML =
         "";
     document.getElementById('attachTitle').style.borderColor = document.getElementById('attachComment').style.borderColor = "";
 }
+
 function cleanAttachmentPopup() {
     document.getElementById('attachTitle').value = document.getElementById('attachComment').value = "";
     cleanAttachmentValidation()
 }
+
 function validatePhone(countryCode, operatorCode, number, type, comment) {
     var dataIsValid = true;
     if (!countryCode || countryCode.length > 255 || countryCode.toString().search(/[^\d]/) != -1) {
@@ -396,6 +456,7 @@ function validatePhone(countryCode, operatorCode, number, type, comment) {
     }
     return dataIsValid;
 }
+
 function addPhoneTable() {
     cleanPhoneValidation();
     var countryCodeName = "countryCode";
@@ -483,18 +544,21 @@ function addPhoneTable() {
     cleanPhonePopup();
     addPhone();
 }
+
 function addAttachments() {
     var body = document.getElementById('contact_form');
     body.classList.toggle("roll");
     var popup = document.getElementById("attachmentPopup");
     popup.classList.toggle("show");
 }
+
 function addPhoto() {
     var body = document.getElementById('contact_form');
     body.classList.toggle("roll");
     var popup = document.getElementById("photoPopup");
     popup.classList.toggle("show");
 }
+
 function showAlertMessage() {
     var popup = document.getElementById("alertMessagePopup");
     popup.classList.toggle("show");
@@ -511,6 +575,7 @@ function savePhotoFile() {
         document.getElementById('fotoMessage').innerHTML = 'Фото сохранено'
     }
 }
+
 function deletePhoto() {
     if (document.getElementById('photoPath').textContent == "") {
         var body = document.getElementById('contact_form');
@@ -531,6 +596,7 @@ function deletePhoto() {
 }
 
 var counter = 0;
+
 function createInputTypeFileForAttachment() {
     var body = document.getElementById("attachmentRows");
     var fileInput = document.createElement("input");
@@ -541,6 +607,7 @@ function createInputTypeFileForAttachment() {
     fileInput.setAttribute("number", counter.toString());
     body.appendChild(fileInput)
 }
+
 function createInputTypeFileForPhoto() {
     if (document.getElementById('photoFile') == null) {
         var photoDiv = document.getElementById("image");
@@ -553,10 +620,12 @@ function createInputTypeFileForPhoto() {
         photoDiv.appendChild(fileInput)
     }
 }
+
 function putPath() {
     var path = document.getElementById('photoFile').value;
     document.getElementById('photoPath').innerHTML = path;
 }
+
 function findPhoto() {
     createInputTypeFileForPhoto();
     document.getElementById('photoFile').click();
@@ -572,6 +641,7 @@ function uploadAttachment() {
         }
     }
 }
+
 function validateAttachment(title, comment) {
     var dataIsValid = true;
     if (document.getElementById('attachment').getAttribute('type') == 'button') {
@@ -599,6 +669,7 @@ function validateAttachment(title, comment) {
     }
     return dataIsValid;
 }
+
 function addAttachmentTable() {
     cleanAttachmentValidation();
     var commentName = "attachComment";
@@ -658,6 +729,7 @@ function addAttachmentTable() {
     document.getElementById('attachment').setAttribute('type', 'button');
     addAttachments();
 }
+
 function deletePhoneFromTable() {
     var elms = document.getElementsByName('phoneId');
     for (var i = 0; i < elms.length; i++)
@@ -677,6 +749,7 @@ function deletePhoneFromTable() {
             i--;
         }
 }
+
 function deleteAttachmentFromTable() {
     var elms = document.getElementsByName('attachmentId');
     for (var i = 0; i < elms.length; i++)
@@ -703,6 +776,7 @@ function deleteAttachmentFromTable() {
             i--;
         }
 }
+
 function editPhone() {
     var counter = 0;
     var id;
@@ -762,6 +836,7 @@ function editPhoneFields() {
     }
     closePhonePopup();
 }
+
 function editAttachmentFields() {
     var counter = 0;
     var id;

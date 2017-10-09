@@ -90,6 +90,12 @@ public class Controller extends HttpServlet {
             page = command != null ? command.execute(req, resp) : null;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
+            try {
+                dispatcher.forward(req, resp);
+            } catch (ServletException | IOException e1) {
+                logger.error(e1.getMessage(), e1);
+            }
         }
         if (!resp.isCommitted()) {
             if (page != null) {

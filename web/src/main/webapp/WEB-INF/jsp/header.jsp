@@ -13,14 +13,14 @@
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=96">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=6">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=51"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=5"></script>
 </head>
 <body>
 <div class="header">
     <div class="main_page" onclick="toMainPage()">
-        <fmt:message key="to_main_page"/>
+        <img src="${pageContext.request.contextPath}/assests/images/book.png">
     </div>
     <div class="messages" onclick="toMessagePage()">
         <fmt:message key="messages"/>

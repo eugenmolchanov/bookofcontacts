@@ -79,9 +79,9 @@ public class MessageDaoImplTest {
 
     @Test
     public void shouldGetNumberOfAllMessages() throws SQLException {
-        messageDao.save(message, connection);
+//        messageDao.save(message, connection);
         long number = messageDao.getNumberOfAllMessages(connection);
-        Assert.assertEquals(1, number);
+        Assert.assertEquals(2, number);
     }
 
     @Test

@@ -18,18 +18,19 @@
 <body class="sendEmailBody">
 <jsp:include page="header.jsp"/>
 <div class="sendEmail">
-    <%--<div class="message">${requestScope.message}</div>--%>
+    <div class="message">${requestScope.messageText}</div>
     <form class="emailForm" id="emailForm" name="emailForm" action="/controller" method="post"
           onsubmit="return sendEmail()">
         <input type="hidden" name="command" value="sendEmail"/>
         <c:if test="${requestScope.message != null}">
-            <input type="submit" value="<fmt:message key="send_email"/> "
-                   formaction="/controller?command=redirect&form=sendEmail" class="emailButton"/><br><br>
+            <input type="button" value="<fmt:message key="send_email"/> "
+                   onclick="toEmailForm()" class="emailButton"/><br><br>
         </c:if>
         <label for="addressees"><fmt:message key="to_whom"/> </label><br>
         <input type="text" id="addressees" name="addressees"
                value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>"
-               class="form-control"/><br>
+               class="form-control"/>
+        <div class="nameMessage" id="addresseesMessage">${requestScope.validation.addresseesMessage}</div><br><br>
         <label for="topic"><fmt:message key="topic"/> </label><br>
         <input type="text" id="topic" name="topic" placeholder="<fmt:message key="topic"/> " class="form-control"
                value="${requestScope.message.topic}"/><br>
@@ -44,7 +45,8 @@
     <br>
     <label for="message"><fmt:message key="message"/> </label><br>
     <textarea name="message" id="message" form="emailForm" rows="10" cols="100"
-              class="form-control">${requestScope.message.text}</textarea><br>
+              class="form-control">${requestScope.message.text}</textarea>
+    <div class="nameMessage" id="textMessage">${requestScope.validation.textMessage}</div><br>
     <c:if test="${requestScope.message == null}">
         <input type="submit" onclick="sendEmail() " value="<fmt:message key="send"/> " form="emailForm"
                class="emailSubmit"/>

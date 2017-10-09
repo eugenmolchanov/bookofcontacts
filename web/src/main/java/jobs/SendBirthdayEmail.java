@@ -19,7 +19,10 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
@@ -70,18 +73,29 @@ public class SendBirthdayEmail implements Job {
             try {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(from));
-                message.setSubject("Happy Birthday!");
+                String subject = MessageManager.getProperty("birthday");
+                message.setSubject(subject);
                 String messageText = MessageManager.getProperty("birthday_congratulations");
                 message.setText(messageText);
+                Set<Contact> addressees = new HashSet<>();
                 for (Contact contact : contacts) {
                     if (contact.getEmail() != null) {
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
                         Transport.send(message);
+                        addressees.add(contact);
                     }
+                }
+                com.itechart.javalab.firstproject.entities.Message sendingMessage = new com.itechart.javalab.firstproject.entities.Message();
+                sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
+                sendingMessage.setText(messageText);
+                sendingMessage.setTopic(subject);
+                sendingMessage.setAddressees(addressees);
+                if (addressees.size() > 0) {
+                    messageService.save(sendingMessage);
                 }
                 assert servletContext != null;
                 servletContext.setAttribute("alertMessage", contacts);
-            } catch (MessagingException e) {
+            } catch (MessagingException | SQLException e) {
                 logger.error(e);
             }
         }

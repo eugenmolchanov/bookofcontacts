@@ -70,6 +70,11 @@ public enum CommandEnum {
         {
             this.command = new GetMessage();
         }
+    },
+    DELETEMESSAGES {
+        {
+            this.command = new DeleteMessages();
+        }
     }
     ;
     ActionCommand command;

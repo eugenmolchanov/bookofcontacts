@@ -285,16 +285,14 @@
         </div>
         <div class="phonesInfo"><h3><fmt:message key="phones"/></h3></div>
         <div class="phoneInfo" id="phoneInfo">
+            <div class="phonePopup">
+                <button type="button" name="phonePopup" onclick="addPhone()" class="createButton">
+                    <fmt:message key="create"/></button>
+                <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
+                        class="deleteButton"><fmt:message key="delete"/></button>
+            </div>
+            <div class="phoneMessage">${requestScope.validation.phoneMessage}</div>
             <table class="phoneTable" id="phoneTable">
-                <caption class="phoneTitle">
-                    <div class="phonePopup">
-                        <button type="button" name="phonePopup" onclick="addPhone()" class="createButton">
-                            <fmt:message key="create"/></button>
-                        <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
-                                class="deleteButton"><fmt:message key="delete"/></button>
-                    </div>
-                    <div class="phoneMessage">${requestScope.validation.phoneMessage}</div>
-                </caption>
                 <thead>
                 <tr>
                     <th class="phoneCheckbox"></th>
@@ -315,15 +313,13 @@
         <div class="attachmentsInfo"><h3><fmt:message key="attachments"/></h3></div>
         <div class="attachmentInfo" id="attachmentInfo">
             <table class="attachmentTable">
-                <caption class="attachmentTitle">
-                    <div class="attachmentPopup">
-                        <button type="button" name="attachmentPopup" onclick="addAttachments()" class="createButton">
-                            <fmt:message key="create"/></button>
-                        <button type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()"
-                                class="deleteButton"><fmt:message key="delete"/></button>
-                    </div>
-                    <div class="attachmentMessage">${requestScope.validation.attachmentMessage}</div>
-                </caption>
+                <div class="attachmentPopup">
+                    <button type="button" name="attachmentPopup" onclick="addAttachments()" class="createButton">
+                        <fmt:message key="create"/></button>
+                    <button type="button" name="deleteAtatchment" onclick="deleteAttachmentFromTable()"
+                            class="deleteButton"><fmt:message key="delete"/></button>
+                </div>
+                <div class="attachmentMessage">${requestScope.validation.attachmentMessage}</div>
                 <thead>
                 <tr>
                     <th class="attachmentCheckbox"></th>

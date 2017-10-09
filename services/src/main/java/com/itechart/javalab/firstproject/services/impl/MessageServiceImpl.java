@@ -2,6 +2,7 @@ package com.itechart.javalab.firstproject.services.impl;
 
 import com.itechart.javalab.firstproject.dao.MessageDao;
 import com.itechart.javalab.firstproject.dao.impl.MessageDaoImpl;
+import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Message;
 import com.itechart.javalab.firstproject.services.MessageService;
 import com.itechart.javalab.firstproject.services.database.Database;
@@ -36,13 +37,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void save(Message message, Set<Long> contactIds) throws SQLException {
+    public void save(Message message) throws SQLException {
         Connection connection = Database.getConnection();
         connection.setAutoCommit(false);
         try {
             long messageId = messageDao.save(message, connection);
-            for (Long id : contactIds) {
-                messageDao.addDependencyFromContact(messageId, id, connection);
+            for (Contact contact : message.getAddressees()) {
+                messageDao.addDependencyFromContact(messageId, contact.getId(), connection);
             }
             connection.commit();
         } catch (Exception e) {
@@ -91,5 +92,22 @@ public class MessageServiceImpl implements MessageService {
         long number = messageDao.getNumberOfAllDeletedMessages(connection);
         connection.close();
         return number;
+    }
+
+    @Override
+    public void deleteMessages(Set<Long> messageIds) throws SQLException {
+        Connection connection = Database.getConnection();
+        connection.setAutoCommit(false);
+        try {
+            for (Long id : messageIds) {
+                messageDao.delete(id, connection);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.close();
+        }
     }
 }

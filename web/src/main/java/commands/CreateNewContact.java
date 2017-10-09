@@ -32,6 +32,11 @@ public class CreateNewContact implements ActionCommand {
         logger.setLevel(Level.DEBUG);
         try {
             Map<String, Object> parameters = Data.upload(req);
+            if (parameters == null) {
+                logger.debug("Uploaded files are not multipart content.");
+                req.setAttribute("message", MessageManager.getProperty("unsuccessful_create"));
+                return page;
+            }
             Map<String, Object> result = Validation.createContactData(parameters, logger);
             Map<String, String> validationMessages = (Map<String, String>) result.get("validation");
             if (validationMessages.size() == 0) {

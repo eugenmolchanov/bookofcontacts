@@ -43,6 +43,7 @@ public class ChangeLanguage implements ActionCommand {
                 resp.sendRedirect(resp.encodeRedirectURL(referrer));
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
+                return new EmptyCommand().execute(req, resp);
             }
             return new EmptyCommand().execute(req, resp);
         }

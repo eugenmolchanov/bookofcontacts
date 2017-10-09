@@ -132,7 +132,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public long getNumberOfAllMessages(Connection connection) throws SQLException {
-        final String GET_NUMBER_OF_ALL_NOT_DELETED_MESSAGES = "select count(id) from message where is_deleted = 0 group by id";
+        final String GET_NUMBER_OF_ALL_NOT_DELETED_MESSAGES = "select count(id) from message where is_deleted = 0";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(GET_NUMBER_OF_ALL_NOT_DELETED_MESSAGES);
         long number = 0;
@@ -183,7 +183,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public long getNumberOfAllDeletedMessages(Connection connection) throws SQLException {
-        final String GET_NUMBER_OF_ALL_DELETED_MESSAGES = "select count(id) from message where is_deleted = 1 group by id";
+        final String GET_NUMBER_OF_ALL_DELETED_MESSAGES = "select count(id) from message where is_deleted = 1";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(GET_NUMBER_OF_ALL_DELETED_MESSAGES);
         long number = 0;

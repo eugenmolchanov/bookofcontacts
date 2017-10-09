@@ -1,7 +1,7 @@
 package commands;
 
-import com.itechart.javalab.firstproject.services.ContactService;
-import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
+import com.itechart.javalab.firstproject.services.MessageService;
+import com.itechart.javalab.firstproject.services.impl.MessageServiceImpl;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
@@ -14,33 +14,32 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Yauhen Malchanau on 14.09.2017.
+ * Created by Yauhen Malchanau on 09.10.2017.
  */
-public class DeleteContacts implements ActionCommand {
+public class DeleteMessages implements ActionCommand{
 
-    private ContactService service = ContactServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
+    private MessageService service = MessageServiceImpl.getInstance();
+    private static Logger logger = Logger.getLogger(DeleteMessages.class);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        if (Validation.deleteContactsDataIsValid(req, logger)) {
+        if (Validation.deleteMessagesDataIsValid(req, logger)) {
             String[] parameters = req.getParameterMap().get("id");
             Set<Long> ids = new HashSet<>();
             for (String parameter : parameters) {
                 ids.add(Long.parseLong(parameter));
             }
             try {
-                service.deleteContacts(ids);
+                service.deleteMessages(ids);
             } catch (SQLException e) {
                 logger.error(e);
-                req.setAttribute("message", MessageManager.getProperty(""));
+                req.setAttribute("message", MessageManager.getProperty("error"));
                 return ConfigurationManager.getProperty("error");
             }
-            req.setAttribute("deleteMessage", MessageManager.getProperty("contact_successful_delete"));
-            return new ShowListOfContacts().execute(req, resp);
+            req.setAttribute("deleteMessage", MessageManager.getProperty("message_successful_delete"));
+            return new ShowMessages().execute(req, resp);
         } else {
-
-            return new ShowListOfContacts().execute(req, resp);
+            return new ShowMessages().execute(req, resp);
         }
     }
 }
