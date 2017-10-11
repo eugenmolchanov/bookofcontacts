@@ -19,7 +19,7 @@
 <jsp:include page="header.jsp"/>
 <div>${requestScope.message}</div>
 <div class="searchForm">
-    <form action="/controller" method="post" onsubmit="return search()">
+    <form action="/controller" method="post" onsubmit="return searchModule.search()">
         <input type="hidden" value="search" name="command"/>
         <div class="generalInfo"><h3><fmt:message key="general_info"/></h3></div>
         <div id="full-name">
@@ -98,7 +98,7 @@
                    pattern="[0-9]" title="Only digits" class="form-control"/>
         </div>
         <div class="searchButtonDiv">
-            <input type="submit" value="<fmt:message key="search"/> " onclick="search()" class="searchButton"/>
+            <input type="submit" value="<fmt:message key="search"/> " onclick="searchModule.search()" class="searchButton"/>
         </div>
     </form>
 </div>

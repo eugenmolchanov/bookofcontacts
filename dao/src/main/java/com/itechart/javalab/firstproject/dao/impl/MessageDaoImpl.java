@@ -115,7 +115,9 @@ public class MessageDaoImpl implements MessageDao {
             message.setAddressees(contacts);
             messageId = message.getId();
         }
-        messages.add(message);
+        if (message.getId() > 0) {
+            messages.add(message);
+        }
         statement.close();
         return messages;
     }

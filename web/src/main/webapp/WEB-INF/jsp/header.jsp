@@ -15,7 +15,8 @@
 <head>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=6">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=5"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=6"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js_with_modules.js"></script>
 </head>
 <body>
 <div class="header">

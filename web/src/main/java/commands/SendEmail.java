@@ -39,7 +39,8 @@ public class SendEmail implements ActionCommand {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String page = ConfigurationManager.getProperty("send_email");
-        if (Validation.sendEmailDataIsValid(req, logger)) {
+        Map<String, String> validationMessages = Validation.sendEmailDataIsValid(req, logger);
+        if (validationMessages.size() == 0) {
             logger.setLevel(Level.DEBUG);
             Properties properties = System.getProperties();
             String host = "smtp.gmail.com";
@@ -88,7 +89,7 @@ public class SendEmail implements ActionCommand {
                             Transport.send(message);
                             sendingMessage.getAddressees().add(contact);
                             logger.debug("Email was sent to ".concat(contact.getLastName()).concat(" ").concat(contact.getFirstName()).concat(". ")
-                            .concat(stringTemplate.toString()));
+                                    .concat(stringTemplate.toString()));
                         }
                         BaseContact baseContact = new BaseContact();
                         stringTemplate.removeAttribute("contact");
@@ -130,8 +131,10 @@ public class SendEmail implements ActionCommand {
             }
             req.setAttribute("messageText", MessageManager.getProperty("successful_sending"));
             return page;
+        } else {
+            req.setAttribute("messageText", MessageManager.getProperty("params_are_not_valid"));
+            req.setAttribute("validation", validationMessages);
+            return page;
         }
-        req.setAttribute("messageText", MessageManager.getProperty("params_are_not_valid"));
-        return page;
     }
 }

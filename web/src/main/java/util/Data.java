@@ -98,7 +98,7 @@ public class Data {
                 if (!fileName.equals("")) {
                     InputStream fileContent = item.getInputStream();
                     String[] array = fileName.split("\\.");
-                    String format = array[1];
+                    String format = array[array.length - 1];
                     if (fieldName.equals("photoFile")) {
                         String uuid = UUID.randomUUID().toString();
                         String fileTitle = uuid.concat(".").concat(format);

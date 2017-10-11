@@ -19,7 +19,7 @@ import java.sql.SQLException;
  */
 public class DownloadAttachment implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(CreateNewContact.class);
+    private static Logger logger = Logger.getLogger(DownloadAttachment.class);
     private AttachmentService service = AttachmentServiceImpl.getInstance();
     private String page = ConfigurationManager.getProperty("contact");
 
@@ -29,9 +29,17 @@ public class DownloadAttachment implements ActionCommand {
         try {
             Attachment attachment = service.findById(id);
             String path = attachment.getPathToFile().concat(attachment.getUuid());
-            byte[] attachmentBytes = Files.readAllBytes(new File(path).toPath());
-            resp.setContentType("text/plain");
-            resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", attachment.getFileName()));
+            File file = new File(path);
+            byte[] attachmentBytes = Files.readAllBytes(file.toPath());
+            String mimeType = req.getServletContext().getMimeType(path);
+            if (mimeType == null) {
+                mimeType = "application/octet-stream";
+            }
+            resp.setContentType(mimeType);
+            resp.setContentLength((int) file.length());
+            String [] array = attachment.getUuid().split("\\.");
+            String extension = array[array.length - 1];
+            resp.setHeader("Content-Disposition", "attachment; filename*=UTF-8''%c2%a3%20and%20%e2%82%ac%20rates" + attachment.getFileName().concat(".").concat(extension));
             OutputStream outputStream = resp.getOutputStream();
             outputStream.write(attachmentBytes);
             outputStream.flush();
