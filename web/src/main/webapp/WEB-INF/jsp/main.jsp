@@ -21,13 +21,13 @@
 <jsp:include page="header.jsp"/>
 <div class="main">
     <form action="/controller?command=deleteContacts" method="post" name="deleteForm"
-          onsubmit="return deleteContacts()">
+          onsubmit="return mainModule.deleteContacts()">
         <div class="mainCheckbox">
-            <input type="checkbox" onclick="toggle(this)" id="chooseAll"/>
+            <input type="checkbox" onclick="mainModule.toggle(this)" id="chooseAll"/>
         </div>
-        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="deleteContacts()"/>
+        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="mainModule.deleteContacts()"/>
         <input type="submit" value="<fmt:message key="send_email"/> "
-               formaction="/controller?command=redirect&form=sendEmail" onclick="return chooseEmail()"
+               formaction="/controller?command=redirect&form=sendEmail" onclick="return mainModule.chooseEmail()"
                class="emailButton"/>
         <table class="table table-bordered">
             <thead>
@@ -129,5 +129,12 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/main_module.js?v=1"></script>
+<script>
+    var messages = {};
+    <c:forEach var="message" items="${requestScope.validationMessages}">
+    messages['${message.key}'] = '${message.value}';
+    </c:forEach>
+</script>
 </body>
 </html>

@@ -441,7 +441,7 @@
                                    value="${attachment.fileName}" class="attachmentTitle" readonly/>
                         </td>
                         <td class="attachmentTd" name="date">
-                            <input id="attachmentDateId_${attachment.id}" value="${attachment.date}"
+                            <input id="attachmentDateId_${attachment.id}" value="<fmt:formatDate value="${attachment.date}" pattern="dd.MM.yyyy HH:mm"/>"
                                    class="attachmentDate" readonly>
                         </td>
                         <td class="attachmentTd">

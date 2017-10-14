@@ -104,7 +104,7 @@ public class Controller extends HttpServlet {
             if (page != null) {
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
                 try {
-                    Map<String, String> map = Convertion.convertResourceBundleToMap(ResourceBundle.getBundle("messages"));
+                    Map<String, String> map = Convertion.convertResourceBundleToMap(ResourceBundle.getBundle("js_messages"));
                     req.setAttribute("validationMessages", map);
                     dispatcher.forward(req, resp);
                 } catch (ServletException | IOException e) {

@@ -39,7 +39,7 @@ var contactModule = (function () {
             var attachments = document.getElementsByName('attachmentFile');
             var counterInput = 0;
             for (var i = 0; i < attachments.length; i++) {
-                if (attachments[i].getAttribute('number') == counter.toString()) {
+                if (attachments[i].getAttribute('number') == (counter - 1).toString()) {
                     counterInput++;
                 }
             }
@@ -77,6 +77,7 @@ var contactModule = (function () {
         fileInput.setAttribute("name", "attachmentFile");
         fileInput.setAttribute("id", "attachmentFile");
         fileInput.setAttribute("number", counter.toString());
+        counter++;
         body.appendChild(fileInput)
     };
     var editAttachmentFields = function () {
@@ -486,7 +487,7 @@ var contactModule = (function () {
             createInputTypeFileForAttachment();
             var attachments = document.getElementsByName('attachmentFile');
             for (var i = 0; i < attachments.length; i++) {
-                if (attachments[i].getAttribute('number') == counter.toString()) {
+                if (attachments[i].getAttribute('number') == (counter - 1).toString()) {
                     attachments[i].click();
                 }
             }
@@ -507,8 +508,7 @@ var contactModule = (function () {
                 return;
             }
             var tr = document.createElement("tr");
-            tr.setAttribute("number", counter.toString());
-            counter++;
+            tr.setAttribute("number", (counter - 1).toString());
             var checkTd = document.createElement("td");
             checkTd.setAttribute("style", "border-bottom: 1px solid #ddd");
             var checkInput = document.createElement("input");
@@ -581,7 +581,7 @@ var contactModule = (function () {
                 body.classList.toggle("roll");
                 var popup = document.getElementById("photoPopup");
                 popup.classList.toggle("show");
-                document.getElementById('fotoMessage').innerHTML = 'Фото удалено'
+                document.getElementById('fotoMessage').innerHTML = messages['photo.deleted']
             }
         },
         putPath: function () {

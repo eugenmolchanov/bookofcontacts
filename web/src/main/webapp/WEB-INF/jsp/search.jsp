@@ -105,7 +105,6 @@
     </form>
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/search_module.js?v=1"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/general_module.js?v=1"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

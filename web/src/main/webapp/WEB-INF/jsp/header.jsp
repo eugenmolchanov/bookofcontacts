@@ -14,35 +14,34 @@
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=23">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/js.js?v=10"></script>
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=27">
 </head>
 <body>
 <div class="header">
-    <div class="main_page" onclick="toMainPage()">
+    <div class="main_page" onclick="headerModule.toMainPage()">
         <img src="${pageContext.request.contextPath}/assests/images/book.png">
     </div>
-    <div class="messages" onclick="toMessagePage()">
+    <div class="messages" onclick="headerModule.toMessagePage()">
         <fmt:message key="messages"/>
     </div>
-    <div class="createContact" onclick="toCreateContact()">
+    <div class="createContact" onclick="headerModule.toCreateContact()">
         <fmt:message key="create_contact"/>
     </div>
-    <div class="search" onclick="toSearchPage()">
+    <div class="search" onclick="headerModule.toSearchPage()">
         <fmt:message key="search"/>
     </div>
     <c:if test="${applicationScope.alertMessage != null}">
-        <div class="alertMessage" onclick="showAlertMessage()">
+        <div class="alertMessage" onclick="headerModule.showAlertMessage()">
             <img src="${pageContext.request.contextPath}/assests/images/envelope.png"/>
         </div>
     </c:if>
-    <div class="en" onclick="toEnglish()">
+    <div class="en" onclick="headerModule.toEnglish()">
         En
     </div>
-    <div class="ru" onclick="toRussian()">
+    <div class="ru" onclick="headerModule.toRussian()">
         Ru
     </div>
-    <div class="by" onclick="toBelorussian()">
+    <div class="by" onclick="headerModule.toBelorussian()">
         By
     </div>
 </div>
@@ -55,5 +54,12 @@
         </c:forEach>
     </div>
 </c:if>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/header_module.js?v=1"></script>
+<script>
+    var messages = {};
+    <c:forEach var="message" items="${requestScope.validationMessages}">
+    messages['${message.key}'] = '${message.value}';
+    </c:forEach>
+</script>
 </body>
 </html>

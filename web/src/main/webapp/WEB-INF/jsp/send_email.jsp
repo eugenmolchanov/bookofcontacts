@@ -20,11 +20,11 @@
 <div class="sendEmail">
     <div class="message">${requestScope.messageText}</div>
     <form class="emailForm" id="emailForm" name="emailForm" action="/controller" method="post"
-          onsubmit="return sendEmail()">
+          onsubmit="return sendEmailModule.sendEmail()">
         <input type="hidden" name="command" value="sendEmail"/>
         <c:if test="${requestScope.message != null}">
             <input type="button" value="<fmt:message key="send_email"/> "
-                   onclick="toEmailForm()" class="emailButton"/><br><br>
+                   onclick="sendEmailModule.toEmailForm()" class="emailButton"/><br><br>
         </c:if>
         <label for="addressees"><fmt:message key="to_whom"/> </label><br>
         <c:choose>
@@ -44,7 +44,7 @@
         <label for="topic"><fmt:message key="topic"/> </label><br>
         <c:choose>
             <c:when test="${requestScope.validation.topicMessage == null}">
-                <input type="text" id="topic" name="topic" placeholder="<fmt:message key="topic"/> "
+                <input type="text" id="topic" name="topic"
                        class="form-control"
                        value="${requestScope.message.topic}"/>
             </c:when>
@@ -54,16 +54,16 @@
                        value="${requestScope.message.topic}" style="border-color: #A94442;"/>
             </c:otherwise>
         </c:choose>
-        <div class="nameMessage" id="topicMessage">${requestScope.validation.topicMessage}</div><br><br>
+        <div class="nameMessage" id="topicMessage">${requestScope.validation.topicMessage}</div>
+        <br><br>
         <c:if test="${requestScope.message == null}">
-            <select id="template" name="template" onchange="chooseTemplate()" class="form-control">
+            <select id="template" name="template" onchange="sendEmailModule.chooseTemplate()" class="form-control">
                 <option selected disabled hidden><fmt:message key="choose_template"/></option>
                 <option value="birthday"><fmt:message key="birthday_congratulations"/></option>
                 <option value="newYear"><fmt:message key="new_year_congratulations"/></option>
             </select>
         </c:if>
     </form>
-    <br>
     <label for="message"><fmt:message key="message"/> </label><br>
     <c:choose>
     <c:when test="${requestScope.validation.textMessage == null}">
@@ -78,9 +78,16 @@
     <div class="nameMessage" id="textMessage">${requestScope.validation.textMessage}</div>
     <br>
     <c:if test="${requestScope.message == null}">
-        <input type="submit" onclick="sendEmail() " value="<fmt:message key="send"/> " form="emailForm"
+        <input type="submit" onclick="sendEmailModule.sendEmail() " value="<fmt:message key="send"/> " form="emailForm"
                class="emailSubmit"/>
     </c:if>
 </div>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/send_email_module.js?v=1"></script>
+<script>
+    var messages = {};
+    <c:forEach var="message" items="${requestScope.validationMessages}">
+    messages['${message.key}'] = '${message.value}';
+    </c:forEach>
+</script>
 </body>
 </html>

@@ -21,12 +21,12 @@
 <jsp:include page="header.jsp"/>
 <div class="messageDiv">
     <form action="/controller?command=deleteMessages" method="post" name="deleteForm"
-          onsubmit="return deleteMessages()">
+          onsubmit="return messageModule.deleteMessages()">
         <div class="mainCheckbox">
-            <input type="checkbox" onclick="toggle(this)" id="chooseAll"/>
+            <input type="checkbox" onclick="messageModule.toggle(this)" id="chooseAll"/>
         </div>
-        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="deleteContacts()"/>
-        <input type="button" value="<fmt:message key="send_email"/> " onclick="toEmailForm()" class="emailButton"/>
+        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="messageModule.deleteMessages()"/>
+        <input type="button" value="<fmt:message key="send_email"/> " onclick="messageModule.toEmailForm()" class="emailButton"/>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -42,13 +42,13 @@
                     <td class="th">
                         <input type="checkbox" name="id" value="${message.id}"/>
                     </td>
-                    <td onclick="findMessage(${message.id})">
+                    <td onclick="messageModule.findMessage(${message.id})">
                         <c:forEach var="contact" items="${message.addressees}">
                             <span title="${contact.email}">${contact.firstName}${" "}${contact.lastName}</span><br>
                         </c:forEach>
                     </td>
-                    <td onclick="findMessage(${message.id})"><b>${message.topic}</b>${"  "}${message.text}</td>
-                    <td onclick="findMessage(${message.id})">${message.sendingDate}</td>
+                    <td onclick="messageModule.findMessage(${message.id})"><b>${message.topic}</b>${"  "}${message.text}</td>
+                    <td onclick="messageModule.findMessage(${message.id})"><fmt:formatDate value="${message.sendingDate}" pattern="dd.MM.yyyy HH:mm"/></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -115,5 +115,12 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=2"></script>
+<script>
+    var messages = {};
+    <c:forEach var="message" items="${requestScope.validationMessages}">
+    messages['${message.key}'] = '${message.value}';
+    </c:forEach>
+</script>
 </body>
 </html>
