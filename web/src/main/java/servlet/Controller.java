@@ -10,6 +10,7 @@ import org.quartz.impl.JobExecutionContextImpl;
 import org.quartz.impl.StdSchedulerFactory;
 import resources.ConfigurationManager;
 import resources.MessageManager;
+import util.Convertion;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -101,6 +104,8 @@ public class Controller extends HttpServlet {
             if (page != null) {
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
                 try {
+                    Map<String, String> map = Convertion.convertResourceBundleToMap(ResourceBundle.getBundle("messages"));
+                    req.setAttribute("validationMessages", map);
                     dispatcher.forward(req, resp);
                 } catch (ServletException | IOException e) {
                     logger.error(e.getMessage(), e);

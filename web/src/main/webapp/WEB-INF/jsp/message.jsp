@@ -39,7 +39,7 @@
             <tbody>
             <c:forEach var="message" items="${requestScope.messages}">
                 <tr class="messageRow">
-                    <td>
+                    <td class="th">
                         <input type="checkbox" name="id" value="${message.id}"/>
                     </td>
                     <td onclick="findMessage(${message.id})">

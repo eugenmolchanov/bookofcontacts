@@ -21,12 +21,12 @@
 <div class="contact_form" id="contact_form">
     <div class="messageInfo">${requestScope.message}</div>
     <form action="/controller?command=editContact" method="post" name="createForm"
-          onsubmit="return contactValidation()"
+          onsubmit="return contactModule.contactValidation()"
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
         <input type="hidden" name="contactId" value="${requestScope.contact.id}">
         <input type="hidden" name="photoId" value="${requestScope.contact.photo.id}">
-        <div class="contactTitle"><h2><fmt:message key="personal_data"/></h2></div>
-        <div class="edit" onclick="edit()">
+        <div class="contactTitle"><fmt:message key="personal_data"/></div>
+        <div class="edit" onclick="contactModule.edit()">
             <img src="${pageContext.request.contextPath}/assests/images/edit.png"/>
         </div>
         <br>
@@ -34,11 +34,12 @@
             <c:choose>
                 <c:when test="${requestScope.contact.photo.pathToFile != null}">
                     <img src="/controller?command=displayContactPhoto&id=${requestScope.contact.photo.id}"
-                         class="photoImage" id="photoImage" onclick="addPhoto()"/>
+                         class="photoImage" id="photoImage" onclick="contactModule.addPhoto()"/>
                 </c:when>
                 <c:otherwise>
-                    <img src="${pageContext.request.contextPath}/assests/images/profile_photo.png" class="defaultImage" id="defaultImage"
-                         onclick="addPhoto()"/>
+                    <img src="${pageContext.request.contextPath}/assests/images/profile_photo.png" class="defaultImage"
+                         id="defaultImage"
+                         onclick="contactModule.addPhoto()"/>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="fotoMessage"></div>
@@ -159,7 +160,8 @@
                     </select><br>
                 </c:when>
                 <c:otherwise>
-                    <select name="maritalStatus" id="maritalStatus" class="form-control" readonly style="border-color: #A94442;">
+                    <select name="maritalStatus" id="maritalStatus" class="form-control" readonly
+                            style="border-color: #A94442;">
                         <option selected hidden>${requestScope.contact.maritalStatus}</option>
                         <option value="Не женат"><fmt:message key="not_married_male"/></option>
                         <option value="Не замужем"><fmt:message key="not_married_female"/></option>
@@ -202,7 +204,8 @@
                     </select><br>
                 </c:when>
                 <c:otherwise>
-                    <select name="contactGroup" id="contactGroup" class="form-control" readonly style="border-color: #A94442;">
+                    <select name="contactGroup" id="contactGroup" class="form-control" readonly
+                            style="border-color: #A94442;">
                         <option selected hidden>${requestScope.contact.contactGroup}</option>
                         <option value="Семья"><fmt:message key="family"/></option>
                         <option value="Друзья"><fmt:message key="friends"/></option>
@@ -222,7 +225,8 @@
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="url" name="webSite" id="webSite" value="${requestScope.contact.webSite}" readonly style="border-color: #A94442;"
+                    <input type="url" name="webSite" id="webSite" value="${requestScope.contact.webSite}" readonly
+                           style="border-color: #A94442;"
                            class="form-control"/><br>
                 </c:otherwise>
             </c:choose>
@@ -232,11 +236,13 @@
             <label for="email"><fmt:message key="email"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.emailMessage == null}">
-                    <input type="email" name="email" id="email" value="${requestScope.contact.email}" class="form-control"
+                    <input type="email" name="email" id="email" value="${requestScope.contact.email}"
+                           class="form-control"
                            readonly/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="email" name="email" id="email" value="${requestScope.contact.email}" class="form-control" style="border-color: #A94442;" readonly/><br>
+                    <input type="email" name="email" id="email" value="${requestScope.contact.email}"
+                           class="form-control" style="border-color: #A94442;" readonly/><br>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="emailMessage">${requestScope.validation.emailMessage}</div>
@@ -250,7 +256,8 @@
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="country" id="country" value="${requestScope.contact.country}" readonly style="border-color: #A94442;"
+                    <input type="text" name="country" id="country" value="${requestScope.contact.country}" readonly
+                           style="border-color: #A94442;"
                            class="form-control"/><br>
                 </c:otherwise>
             </c:choose>
@@ -292,7 +299,8 @@
                            value="${requestScope.contact.houseNumber}" readonly/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="houseNumber" id="houseNumber" class="form-control" style="border-color: #A94442;"
+                    <input type="text" name="houseNumber" id="houseNumber" class="form-control"
+                           style="border-color: #A94442;"
                            value="${requestScope.contact.houseNumber}" readonly/><br>
                 </c:otherwise>
             </c:choose>
@@ -302,12 +310,14 @@
             <label for="flatNumber"><fmt:message key="flat_number"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.flatNumberMessage == null}">
-                    <input type="number" min="1" name="flatNumber" id="flatNumber" pattern="[0-9]" title="Only digits" readonly
+                    <input type="number" min="1" name="flatNumber" id="flatNumber" pattern="[0-9]" title="Only digits"
+                           readonly
                            <c:if test="${requestScope.contact.flatNumber > 0}">value="${requestScope.contact.flatNumber}"</c:if>
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="number" min="1" name="flatNumber" id="flatNumber" pattern="[0-9]" title="Only digits" readonly style="border-color: #A94442;"
+                    <input type="number" min="1" name="flatNumber" id="flatNumber" pattern="[0-9]" title="Only digits"
+                           readonly style="border-color: #A94442;"
                            <c:if test="${requestScope.contact.flatNumber > 0}">value="${requestScope.contact.flatNumber}"</c:if>
                            class="form-control"/><br>
                 </c:otherwise>
@@ -323,7 +333,8 @@
                            pattern="[0-9]" title="Only digits" class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="number" min="1" name="postalIndex" id="postalIndex" readonly style="border-color: #A94442;"
+                    <input type="number" min="1" name="postalIndex" id="postalIndex" readonly
+                           style="border-color: #A94442;"
                            <c:if test="${requestScope.contact.postcode > 0}">value="${requestScope.contact.postcode}" </c:if>
                            pattern="[0-9]" title="Only digits" class="form-control"/><br>
                 </c:otherwise>
@@ -340,12 +351,12 @@
             <div class="nameMessage">${requestScope.validation.phoneTypeMessage}</div>
             <div class="nameMessage">${requestScope.validation.phoneCommentMessage}</div>
             <div class="phoneButtons" id="phoneButtons">
-                <button type="button" name="phonePopup" onclick="addPhone()" class="createButton">
+                <button type="button" name="phonePopup" onclick="contactModule.addPhone()" class="createButton">
                     <fmt:message key="create"/></button>
                 <button type="button" name="phonePopup"
-                        onclick="editPhone()" class="editButton">
+                        onclick="contactModule.editPhone()" class="editButton">
                     <fmt:message key="edit"/></button>
-                <button type="button" name="deletePhone" onclick="deletePhoneFromTable()"
+                <button type="button" name="deletePhone" onclick="contactModule.deletePhoneFromTable()"
                         class="deleteButton"><fmt:message key="delete"/></button>
             </div>
             <table class="phoneTable" id="phoneTable">
@@ -400,11 +411,11 @@
             <div class="nameMessage">${requestScope.validation.attachTitleMessage}</div>
             <div class="nameMessage">${requestScope.validation.attachCommentMessage}</div>
             <div class="attachmentButtons" id="attachmentButtons">
-                <button type="button" name="attachmentPopup" onclick="addAttachments()" class="createButton">
+                <button type="button" name="attachmentPopup" onclick="contactModule.addAttachments()" class="createButton">
                     <fmt:message key="create"/></button>
-                <button type="button" name="attachmentPopup" onclick="editAttachment()" class="editButton">
+                <button type="button" name="attachmentPopup" onclick="contactModule.editAttachment()" class="editButton">
                     <fmt:message key="edit"/></button>
-                <button type="button" name="deleteAttachment" onclick="deleteAttachmentFromTable()"
+                <button type="button" name="deleteAttachment" onclick="contactModule.deleteAttachmentFromTable()"
                         class="deleteButton"><fmt:message key="delete"/></button>
             </div>
             <table class="attachmentTable">
@@ -443,8 +454,10 @@
             </table>
         </div>
         <br>
-        <input type="submit" onclick="contactValidation()" value="<fmt:message key="edit"/> "
-               class="bigEditButton" id="bigEditButton"/>
+        <div class="bigEditButtonDiv">
+            <input type="submit" onclick="contactModule.contactValidation()" value="<fmt:message key="edit"/>"
+                   class="bigEditButton" id="bigEditButton"/>
+        </div>
     </form>
 </div>
 <div class="phonePopupText" id="phonePopup">
@@ -472,9 +485,9 @@
         <input type="text" id="comment" name="comment"
                placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
         <div id="phone_buttons" class="phone_buttons">
-            <button type="button" id="savePhone" onclick="addPhoneTable()" class="btn btn-primary"><fmt:message
+            <button type="button" id="savePhone" onclick="contactModule.addPhoneTable()" class="btn btn-primary"><fmt:message
                     key="save"/></button>
-            <button type="button" id="cancelPhone" onclick="closePhonePopup()" class="btn btn-success"><fmt:message
+            <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-success"><fmt:message
                     key="exit"/></button>
         </div>
 
@@ -487,7 +500,7 @@
     <div class="attachmentForm" id="attachmentForm">
         <form>
             <div class="attachmentMessage" id="attachmentMessage"></div>
-            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="uploadAttachment()"
+            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="contactModule.uploadAttachment()"
                    value="<fmt:message key="choose_file"/>"/>
             <div class="attachmentMessage" id="attachTitleMessage"></div>
             <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
@@ -496,9 +509,9 @@
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
             <div class="attachments_buttons">
-                <button type="button" id="saveAttachment" onclick="addAttachmentTable()" class="btn btn-primary">
+                <button type="button" id="saveAttachment" onclick="contactModule.addAttachmentTable()" class="btn btn-primary">
                     <fmt:message key="save"/></button>
-                <button type="button" id="cancelAttachment" onclick="closeAttachmentPopup()" class="btn btn-success">
+                <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()" class="btn btn-success">
                     <fmt:message
                             key="exit"/></button>
             </div>
@@ -508,18 +521,25 @@
 <div class="photoPopupText" id="photoPopup">
     <div class="photoForm" id="photoForm">
         <div class="photoPathMessage" id="photoPathMessage"></div>
-        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="findPhoto()"
+        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="contactModule.findPhoto()"
                value="<fmt:message key="find"/>"/>
         <div class="photoPath" id="photoPath"></div>
         <div class="photo_buttons">
-            <button type="button" id="savePhoto" onclick="savePhotoFile()" class="btn btn-primary"><fmt:message
+            <button type="button" id="savePhoto" onclick="contactModule.savePhotoFile()" class="btn btn-primary"><fmt:message
                     key="save"/></button>
-            <button type="button" id="cancelPhoto" onclick="deletePhoto()" class="btn btn-success">
+            <button type="button" id="cancelPhoto" onclick="contactModule.deletePhoto()" class="btn btn-success">
                 <fmt:message
                         key="cancel"/></button>
         </div>
     </div>
 </div>
 <input type="hidden" id="page" value="edit"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=3"></script>
+<script>
+    var messages = {};
+    <c:forEach var="message" items="${requestScope.validationMessages}">
+    messages['${message.key}'] = '${message.value}';
+    </c:forEach>
+</script>
 </body>
 </html>

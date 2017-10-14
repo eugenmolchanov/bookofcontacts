@@ -33,22 +33,22 @@
             <thead>
             <tr>
                 <th></th>
-                <th><fmt:message key="full_name"/></th>
-                <th><fmt:message key="birthday"/></th>
-                <th><fmt:message key="country"/></th>
-                <th><fmt:message key="city"/></th>
-                <th><fmt:message key="street"/></th>
-                <th><fmt:message key="house_number"/></th>
-                <th><fmt:message key="flat_number"/></th>
-                <th><fmt:message key="postcode"/></th>
-                <th><fmt:message key="employment_place"/></th>
-                <th><fmt:message key="contact_group"/></th>
+                <th class="th"><fmt:message key="full_name"/></th>
+                <th class="th"><fmt:message key="birthday"/></th>
+                <th class="th"><fmt:message key="country"/></th>
+                <th class="th"><fmt:message key="city"/></th>
+                <th class="th"><fmt:message key="street"/></th>
+                <th class="th"><fmt:message key="house_number"/></th>
+                <th class="th"><fmt:message key="flat_number"/></th>
+                <th class="th"><fmt:message key="postcode"/></th>
+                <th class="th"><fmt:message key="employment_place"/></th>
+                <th class="th"><fmt:message key="contact_group"/></th>
             </tr>
             </thead>
             <tbody>
             <c:forEach var="contact" items="${requestScope.contacts}">
                 <tr>
-                    <td><input type="checkbox" name="id" email="${contact.email}" value="${contact.id}"/>
+                    <td class="th"><input type="checkbox" name="id" email="${contact.email}" value="${contact.id}"/>
                         <input type="hidden" name="email" id="useEmail_${contact.email}" value=""/>
                     </td>
                     <td>

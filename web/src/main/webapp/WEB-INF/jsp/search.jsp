@@ -21,42 +21,44 @@
 <div class="searchForm">
     <form action="/controller" method="post" onsubmit="return searchModule.search()">
         <input type="hidden" value="search" name="command"/>
-        <div class="generalInfo"><h3><fmt:message key="general_info"/></h3></div>
+        <div class="generalInfo">
+            <h3><fmt:message key="general_info"/></h3>
+        </div>
         <div id="full-name">
             <div class="nameMessage" id="firstNameMessage"></div>
             <div class="nameMessage" id="secondNameMessage"></div>
             <div class="nameMessage" id="middleNameMessage"></div>
-            <input type="text" name="firstName" id="firstName" placeholder="<fmt:message key="first_name"/>${'*'} "
+            <input type="text" name="firstName" id="firstName" placeholder="<fmt:message key="first_name"/>"
                    class="form-control"/>
-            <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}"
+            <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>"
                    class="form-control"/>
             <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
                    class="form-control"/>
         </div>
-        <div id="secondLine">
+        <div id="secondLine" class="secondLine">
             <div class="nameMessage" id="birthdayFromMessage"></div>
             <div class="nameMessage" id="birthdayToMessage"></div>
             <div class="nameMessage" id="genderMessage"></div>
             <input type="text" name="birthdayFrom" id="birthdayFrom" onfocus="this.type = 'date'"
                    onblur="if(this.value==''){this.type='text'}"
-                   placeholder="<fmt:message key="birthday"/> " class="form-control"/>
+                   placeholder="<fmt:message key="birthday_with"/> " class="form-control"/>
             <input type="text" name="birthdayTo" id="birthdayTo" onfocus="this.type = 'date'"
                    onblur="if(this.value==''){this.type='text'}"
-                   placeholder="<fmt:message key="birthday"/> " class="form-control"/>
-            <select name="gender" id="gender" class="form-control">
+                   placeholder="<fmt:message key="birthday_up_to"/> " class="form-control"/>
+            <select name="gender" id="gender" class="form-control" onchange="searchModule.changeGender()">
                 <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
                 <option value="Мужчина"><fmt:message key="male"/></option>
                 <option value="Женщина"><fmt:message key="female"/></option>
             </select>
         </div>
-        <div id="thirdLine">
+        <div id="thirdLine" class="thirdLine">
             <div class="nameMessage" id="nationalityMessage"></div>
             <div class="nameMessage" id="maritalStatusMessage"></div>
             <div class="nameMessage" id="groupMessage"></div>
             <input type="text" name="nationality" id="nationality" placeholder="<fmt:message key="nationality"/>"
                    class="form-control"/>
-            <select name="maritalStatus" id="maritalStatus" class="form-control">
-                <option selected disabled hidden><fmt:message key="marital_status"/></option>
+            <select name="maritalStatus" id="maritalStatus" class="form-control" onchange="searchModule.changeMaritalStatus()">
+                <option selected="selected" disabled hidden><fmt:message key="marital_status"/></option>
                 <option value="Не женат"><fmt:message key="not_married_male"/></option>
                 <option value="Не замужем"><fmt:message key="not_married_female"/></option>
                 <option value="Женат"><fmt:message key="married_male"/></option>
@@ -65,7 +67,7 @@
                 <option value="Вдовец"><fmt:message key="widower"/></option>
                 <option value="Вдова"><fmt:message key="widow"/></option>
             </select>
-            <select name="contactGroup" id="contactGroup" class="form-control">
+            <select name="contactGroup" id="contactGroup" class="form-control" onchange="searchModule.changeContactGroup()">
                 <option selected disabled hidden><fmt:message key="contact_group"/></option>
                 <option value="Семья"><fmt:message key="family"/></option>
                 <option value="Друзья"><fmt:message key="friends"/></option>
@@ -98,9 +100,17 @@
                    pattern="[0-9]" title="Only digits" class="form-control"/>
         </div>
         <div class="searchButtonDiv">
-            <input type="submit" value="<fmt:message key="search"/> " onclick="searchModule.search()" class="searchButton"/>
+            <input type="submit" value="<fmt:message key="search"/>" onclick="searchModule.search()" class="searchButton"/>
         </div>
     </form>
 </div>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/search_module.js?v=1"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/general_module.js?v=1"></script>
+<script>
+    var messages = {};
+    <c:forEach var="message" items="${requestScope.validationMessages}">
+    messages['${message.key}'] = '${message.value}';
+    </c:forEach>
+</script>
 </body>
 </html>

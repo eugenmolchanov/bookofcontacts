@@ -13,7 +13,7 @@
 .delete_form {
     border: none;
 }
-input {
+input, select {
     margin-bottom: 5px;
 }
 #previous, #pageNumbers, #next, #pageInfo, .ru, .by, .en, .main_page, .nameMessage {
@@ -59,15 +59,15 @@ input {
 }
 .en {
     position: fixed;
-    left: 87.5%;
+    left: 86%;
 }
 .ru {
     position: fixed;
-    left: 91%;
+    left: 89.5%;
 }
 .by {
     position: fixed;
-    left: 94.5%;
+    left: 93%;
 }
 .phonePopupText.show {
     visibility: visible;
@@ -143,14 +143,31 @@ input {
 .attachmentTitle {
     text-align: right;
 }
+.create_contact_body label {
+    color: #8f8f8f;
+}
 .contactTitle {
-    padding-left: 38%;
+    left: 15%;
+    width: 70%;
     display: inline-block;
     position: relative;
     text-align: center;
-    padding-bottom: 3%;
+    padding-bottom: 4%;
+    font-size: 33px;
+    font-weight: 700;
+    color: #0099c5;
+    margin-top: 2%;
 }
-.generalInfo {
+.createContactTitle {
+    margin-top: 2%;
+    color: #0099c5;
+    text-align: center;
+    padding-bottom: 3%;
+    font-weight: 700;
+    font-size: 33px;
+}
+.generalInfo, .addressInfo, .photoInfo, .phonesInfo, .attachmentsInfo {
+    color: #0099c5;
 }
 .edit {
     cursor: hand;
@@ -158,6 +175,7 @@ input {
     float: right;
     display: inline-block;
 }
+
 .contact_form, .searchForm {
     background-color: #ffffff;
     padding-left: 3%;
@@ -165,23 +183,41 @@ input {
     position: relative;
     border: solid 1px #ffffff;
     box-shadow: 2px 2px 12px 2px grey;
-    top: 15%;
+    top: 14%;
     left: 18%;
     width: 64%;
     margin-bottom: 2%;
 }
 #full-name>input, #secondLine>input, #thirdLine>input, #full-name>.nameMessage, #secondLine>.nameMessage, #thirdLine>.nameMessage, #fourthLine>.nameMessage,
-#fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage, #secondLine>select, #thirdLine>select, #fourthLine>select, .genderError input {
+#fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage, #secondLine>select, #thirdLine>select, #fourthLine>select, .genderError input,
+#emailLine>.nameMessage {
     display: inline-block;
     width: 31%;
     margin-right: 1%;
     margin-left: 1%;
 }
 .nameMessage {
+    font-style: italic;
     color: #A94442;
+}
+.photoMessage {
+    display: inline-block;
+    font-style: italic;
 }
 #secondLine, #thirdLine, #fourthLine, #sixthLine {
     padding-top: 1.5%;
+}
+.thirdLine select.form-control option {
+    color: #555;
+}
+.thirdLine select.form-control {
+    color: #999;
+}
+.secondLine select.form-control option {
+    color: #555;
+}
+.secondLine select.form-control {
+    color: #999;
 }
 .phoneTable, .attachmentTable {
     table-layout: fixed;
@@ -193,42 +229,50 @@ input {
     padding-bottom: 1%;
 }
 .phoneCountryCode {
+    color: #808080;
     width: 11%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
 .phoneOperatorCode {
+    color: #808080;
     width: 12%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 
 }
 .phoneNumber {
+    color: #808080;
     width: 25%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
 .phoneType {
+    color: #808080;
     width: 12%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
 .phoneComment {
+    color: #808080;
     width: 36%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
 .attachmentName {
+    color: #808080;
     width: 30%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
 .attachmentComment {
+    color: #808080;
     width: 42%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
 .attachmentDate {
+    color: #808080;
     width: 25%;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
@@ -251,12 +295,14 @@ input {
 .phoneForm {
     position: fixed;
     left: 43%;
-    top: 20%;
+    top: 21%;
+    width: 20%;
 }
 .attachmentForm {
     position: fixed;
     left: 43%;
     top: 31%;
+    width: 20%;
 }
 .photoForm {
     position: fixed;
@@ -264,23 +310,11 @@ input {
     top: 31%;
     width: 50%;
 }
-#phonePopup input, #phonePopup select {
-    width: 180%;
-    /*margin-bottom: 7%;*/
-}
 .phoneTitle {
     text-align: right;
 }
-#countryCodeMessage, #operatorCodeMessage, #numberMessage, #typeMessage, #commentMessage {
-    margin-top: 10%;
-    margin-bottom: 3%;
-    line-height: 8%;
-}
 #phone_buttons input {
     width: 50%;
-}
-#attachmentMessage, #attachCommentMessage, #attachTitleMessage {
-    padding-top: 10%;
 }
 .attachments_buttons {
     padding-top: 20%;
@@ -292,9 +326,6 @@ input {
 }
 .photo_buttons>button {
     display: inline-block;
-}
-#attachmentPopup input {
-    width: 120%;
 }
 .gender, .maritalStatus {
     color: #999;
@@ -324,12 +355,14 @@ input {
 .searchButtonDiv {
     text-align: center;
 }
-.bigEditButton {
-    width: 100%;
+.bigEditButtonDiv {
+    padding-top: 2%;
+    text-align: center;
     visibility: hidden;
 }
-.bigCreateButton {
-    width: 100%;
+.bigCreateButtonDiv {
+    padding-top: 2%;
+    text-align: center;
 }
 .emailButton {
     margin-left: 0.6%;
@@ -435,8 +468,15 @@ input {
     display: inline-block;
 }
 .phoneMessage, .attachmentMessage {
-    text-align: left;
     color: #A94442;
+    font-style: italic;
+    min-height: 20px;
+}
+.addAttachmentMessage {
+    display: inline-block;
+    color: #A94442;
+    font-style: italic;
+    min-height: 20px;
 }
 .error {
     padding-top: 20%;
@@ -452,17 +492,27 @@ input {
     box-shadow: 2px 2px 12px 2px grey;
 }
 .messageCheckTh {
-    width: 2%;
+    width: 3%;
 }
 .recipientTh {
+    font-family: sans-serif;
     width: 20%;
 }
 .messageTh {
-    width: 63%;
+    font-family: sans-serif;
+    width: 62%;
 }
 .dateTh {
+    font-family: sans-serif;
     width: 15%;
 }
 .messageRow {
     cursor: pointer;
+}
+.th {
+    text-align: center;
+    font-family: sans-serif;
+}
+.selectHead {
+    color: #ccc;
 }
