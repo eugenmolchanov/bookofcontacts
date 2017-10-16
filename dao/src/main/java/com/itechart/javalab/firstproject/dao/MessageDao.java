@@ -9,10 +9,9 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 06.09.2017.
  */
-public interface
-MessageDao extends GenericDao<Message> {
+public interface MessageDao extends GenericDao<Message> {
     /**
-     * Method returns messages stored in database.
+     * Method returns not deleted messages stored in database.
      *
      * @param startContactNumber the first id number of collection for pagination will start after this id
      * @param quantityOfContacts the quantity of messages which is necessary for pagination
@@ -33,7 +32,7 @@ MessageDao extends GenericDao<Message> {
     void addDependencyFromContact(long messageId, long contactId, Connection connection) throws SQLException;
 
     /**
-     * Method returns number of all messages in database. Used for pagination.
+     * Method returns number of all not deleted messages in database. Used for pagination.
      *
      * @param connection connection to database
      * @return number of all message objects

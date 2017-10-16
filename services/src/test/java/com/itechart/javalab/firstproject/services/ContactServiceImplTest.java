@@ -9,10 +9,7 @@ import com.itechart.javalab.firstproject.entities.Attachment;
 import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Photo;
 import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -27,6 +24,7 @@ import java.util.UUID;
 /**
  * Created by Yauhen Malchanau on 25.09.2017.
  */
+@Ignore
 public class ContactServiceImplTest {
 
     private ContactService service = ContactServiceImpl.getInstance();

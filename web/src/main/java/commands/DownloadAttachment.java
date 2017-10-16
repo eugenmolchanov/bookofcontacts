@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.sql.SQLException;
 
@@ -39,7 +41,10 @@ public class DownloadAttachment implements ActionCommand {
             resp.setContentLength((int) file.length());
             String [] array = attachment.getUuid().split("\\.");
             String extension = array[array.length - 1];
-            resp.setHeader("Content-Disposition", "attachment; filename*=UTF-8''%c2%a3%20and%20%e2%82%ac%20rates" + attachment.getFileName().concat(".").concat(extension));
+            String fileName = attachment.getFileName().concat(".").concat(extension);
+            fileName = URLEncoder.encode(fileName, "UTF-8");
+            fileName = URLDecoder.decode(fileName, "ISO8859_1");
+            resp.setHeader("Content-disposition", "attachment; filename="+ fileName);
             OutputStream outputStream = resp.getOutputStream();
             outputStream.write(attachmentBytes);
             outputStream.flush();

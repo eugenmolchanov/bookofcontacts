@@ -40,7 +40,7 @@ input, select {
     margin-left: 5%;
     /*padding: 1% 1% 1% 1%;*/
 }
-.messages:hover, .createContact:hover, .search:hover, .en:hover, .ru:hover, .by:hover {
+.messages:hover, .createContact:hover, .search:hover, .by:hover, .ru:hover, .en:hover {
     background-color: #000000;
 }
 .messages, .createContact, .search, .en, .ru, .by {
@@ -307,9 +307,24 @@ input, select {
 }
 .photoForm {
     position: fixed;
-    left: 38%;
-    top: 31%;
+    left: 33%;
+    top: 30%;
     width: 50%;
+}
+.photoRestriction {
+    margin-bottom: 3%;
+    width: 68%;
+    text-align: center;
+}
+.attachmentRestriction {
+    width: 100%;
+    text-align: center;
+    margin-top: 3%;
+}
+.photoPathMessage {
+    min-height: 20px;
+    color: #A94442;
+    font-style: italic;
 }
 .phoneTitle {
     text-align: right;
@@ -322,8 +337,9 @@ input, select {
     padding-left: 5%;
 }
 .photo_buttons {
-    padding-top: 27%;
-    padding-left: 10%;
+    padding-top: 18%;
+    width: 68%;
+    text-align: center;
 }
 .photo_buttons>button {
     display: inline-block;
@@ -458,14 +474,17 @@ input, select {
     border-bottom: 1px solid #ddd;
     visibility: hidden;
 }
-.photoPath {
-    border: none;
-}
 #photoForm>input {
     display: inline-block;
 }
 .photoPath {
     display: inline-block;
+    border: solid 1px;
+    width: 60%;
+    height: 35px;
+    vertical-align: top;
+    text-align: left;
+    padding-top: 5px;
 }
 .phoneMessage, .attachmentMessage {
     color: #A94442;
@@ -473,7 +492,6 @@ input, select {
     min-height: 20px;
 }
 .addAttachmentMessage {
-    display: inline-block;
     color: #A94442;
     font-style: italic;
     min-height: 20px;
@@ -515,4 +533,7 @@ input, select {
 }
 .selectHead {
     color: #ccc;
+}
+.messageInfo {
+    padding-top: 1%;
 }

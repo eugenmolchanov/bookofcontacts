@@ -226,9 +226,7 @@ public class ContactDaoImpl implements ContactDao {
                 "flat_number, postcode from contact ");
 
         Builder query = new Builder();
-        StringBuilder where = new StringBuilder("");
-        where.append(query.getWhereClause(entity, lowerLimit, upperLimit));
-        String whereClause = where.toString();
+        String whereClause = "" + query.getWhereClause(entity, lowerLimit, upperLimit);
         if (!whereClause.equals("")) {
             query.where(getContacts);
             whereClause = whereClause.substring(0, whereClause.length() - 4);
@@ -313,9 +311,7 @@ public class ContactDaoImpl implements ContactDao {
         StringBuilder getContacts = new StringBuilder("select count(id) from contact ");
 
         Builder query = new Builder();
-        StringBuilder where = new StringBuilder("");
-        where.append(query.getWhereClause(entity, lowerLimit, upperLimit));
-        String whereClause = where.toString();
+        String whereClause = "" + query.getWhereClause(entity, lowerLimit, upperLimit);
         if (!whereClause.equals("")) {
             query.where(getContacts);
             whereClause = whereClause.substring(0, whereClause.length() - 4);
@@ -369,7 +365,6 @@ public class ContactDaoImpl implements ContactDao {
         if (upperLimit != null) {
             statement.setDate(++counter, upperLimit);
         }
-
         ResultSet resultSet = statement.executeQuery();
         long totalQuantity = 0;
         while (resultSet.next()) {

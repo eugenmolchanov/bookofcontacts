@@ -494,6 +494,7 @@
     </div>
 </div>
 <div class="attachmentPopupText" id="attachmentPopup">
+    <div class="attachmentRestriction" id="attachmentRestriction"><fmt:message key="restriction.attachment"/></div>
     <div class="fileImage">
         <img src="${pageContext.request.contextPath}/assests/images/file.jpg">
     </div>
@@ -520,6 +521,7 @@
 </div>
 <div class="photoPopupText" id="photoPopup">
     <div class="photoForm" id="photoForm">
+        <div class="photoRestriction"><fmt:message key="restriction.photo"/></div>
         <div class="photoPathMessage" id="photoPathMessage"></div>
         <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="contactModule.findPhoto()"
                value="<fmt:message key="find"/>"/>
@@ -534,7 +536,7 @@
     </div>
 </div>
 <input type="hidden" id="page" value="edit"/>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=3"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=5"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

@@ -5,6 +5,7 @@ import com.itechart.javalab.firstproject.dao.impl.PhoneDaoImpl;
 import com.itechart.javalab.firstproject.entities.Phone;
 import com.itechart.javalab.firstproject.services.PhoneService;
 import com.itechart.javalab.firstproject.services.database.Database;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.Set;
  */
 public class PhoneServiceImpl implements PhoneService {
 
+    private static Logger logger = Logger.getLogger(PhoneServiceImpl.class);
     private static PhoneServiceImpl instance;
     private PhoneDao phoneDao = PhoneDaoImpl.getInstance();
 
@@ -30,9 +32,23 @@ public class PhoneServiceImpl implements PhoneService {
 
     @Override
     public void delete(long id) throws SQLException {
-        Connection connection = Database.getConnection();
-        phoneDao.delete(id, connection);
-        connection.close();
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            phoneDao.delete(id, connection);
+        } catch (SQLException e) {
+            logger.error("Can't delete phone. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't delete phone. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     protected long create(Phone entity, Connection connection) throws SQLException {

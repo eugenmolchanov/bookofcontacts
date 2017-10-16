@@ -4,24 +4,19 @@ import com.itechart.javalab.firstproject.dao.database.Database;
 import com.itechart.javalab.firstproject.dao.impl.ContactDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
 import com.itechart.javalab.firstproject.entities.*;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Created by Yauhen Malchanau on 06.09.2017.
  */
+@Ignore
 public class ContactDaoImplTest {
 
     private ContactDao dao = ContactDaoImpl.getInstance();
@@ -41,7 +36,7 @@ public class ContactDaoImplTest {
 
     @After
     public void afterTesting() throws SQLException {
-//        dao.deleteAll(connection);
+        dao.deleteAll(connection);
     }
 
     @Test
@@ -89,7 +84,7 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldGetContacts() throws SQLException {
-//        dao.save(contact, connection);
+        dao.save(contact, connection);
         long startContactNumber = 0;
         long quantityOfContacts = 10;
         Set<Contact> contacts = dao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
@@ -100,7 +95,7 @@ public class ContactDaoImplTest {
     public void shouldGetSearchedContacts() throws SQLException {
         long startContactNumber = 0;
         long quantityOfContacts = 10;
-//        dao.save(contact, connection);
+        dao.save(contact, connection);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
@@ -111,7 +106,7 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldGetTotalQuantityOfSearchedContacts() throws SQLException {
-//        dao.save(contact, connection);
+        dao.save(contact, connection);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();

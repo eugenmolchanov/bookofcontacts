@@ -3,16 +3,11 @@ package com.itechart.javalab.firstproject.dao;
 import com.itechart.javalab.firstproject.dao.database.Database;
 import com.itechart.javalab.firstproject.dao.impl.*;
 import com.itechart.javalab.firstproject.entities.*;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +16,7 @@ import java.util.UUID;
 /**
  * Created by Yauhen Malchanau on 10.09.2017.
  */
+@Ignore
 public class AttachmentDaoImplTest {
     private AttachmentDao attachmentDao = AttachmentDaoImpl.getInstance();
     private PhotoDao photoDao = PhotoDaoImpl.getInstance();

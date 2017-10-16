@@ -100,6 +100,9 @@ public class Data {
                     String[] array = fileName.split("\\.");
                     String format = array[array.length - 1];
                     if (fieldName.equals("photoFile")) {
+                        if (item.getSize() > 1_500_000) {
+                            return null;
+                        }
                         String uuid = UUID.randomUUID().toString();
                         String fileTitle = uuid.concat(".").concat(format);
                         File file = new File(folder.concat(fileTitle));
@@ -108,6 +111,9 @@ public class Data {
                         photo.setUuid(fileTitle);
                         parameters.put(fieldName, photo);
                     } else if (fieldName.equals("attachmentFile")) {
+                        if (item.getSize() > 10_000_000) {
+                            return null;
+                        }
                         String uuid = UUID.randomUUID().toString();
                         String fileTitle = uuid.concat(".").concat(format);
                         File file = new File(folder.concat(fileTitle));

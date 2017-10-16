@@ -5,6 +5,7 @@ import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
 import com.itechart.javalab.firstproject.entities.Photo;
 import com.itechart.javalab.firstproject.services.PhotoService;
 import com.itechart.javalab.firstproject.services.database.Database;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
  */
 public class PhotoServiceImpl implements PhotoService {
 
+    private static Logger logger = Logger.getLogger(PhotoServiceImpl.class);
     private static PhotoServiceImpl instance;
     private PhotoDao photoDao = PhotoDaoImpl.getInstance();
 
@@ -29,9 +31,44 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Override
     public void delete(long id) throws SQLException {
-        Connection connection = Database.getConnection();
-        photoDao.delete(id, connection);
-        connection.close();
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            photoDao.delete(id, connection);
+        } catch (SQLException e) {
+            logger.error("Can't delete photo. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't delete photo. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    @Override
+    public Photo findById(long id) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return photoDao.findById(id, connection);
+        } catch (SQLException e) {
+            logger.error("Can't find photo by id. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't find photo by id. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     protected long create(Photo entity, Connection connection) throws SQLException {
@@ -40,13 +77,5 @@ public class PhotoServiceImpl implements PhotoService {
 
     protected void update(Photo entity, Connection connection) throws SQLException {
         photoDao.update(entity, connection);
-    }
-
-    @Override
-    public Photo findById(long id) throws SQLException {
-        Connection connection = Database.getConnection();
-        Photo photo = photoDao.findById(id, connection);
-        connection.close();
-        return photo;
     }
 }

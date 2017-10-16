@@ -7,10 +7,7 @@ import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
 import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Message;
 import com.itechart.javalab.firstproject.entities.Photo;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -24,6 +21,7 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 23.09.2017.
  */
+@Ignore
 public class MessageDaoImplTest {
 
     private ContactDao dao = ContactDaoImpl.getInstance();
@@ -57,7 +55,7 @@ public class MessageDaoImplTest {
 
     @After
     public void afterTesting() throws SQLException {
-//        dao.deleteAll(connection);
+        dao.deleteAll(connection);
     }
 
     @Test
@@ -79,7 +77,7 @@ public class MessageDaoImplTest {
 
     @Test
     public void shouldGetNumberOfAllMessages() throws SQLException {
-//        messageDao.save(message, connection);
+        messageDao.save(message, connection);
         long number = messageDao.getNumberOfAllMessages(connection);
         Assert.assertEquals(2, number);
     }
@@ -94,16 +92,16 @@ public class MessageDaoImplTest {
 
     @Test
     public void shouldGetMessages() throws SQLException {
-//        long id = messageDao.save(message, connection);
-//        messageDao.addDependencyFromContact(id, firstContactId, connection);
-//        messageDao.addDependencyFromContact(id, secondContactId, connection);
-//        Set<Contact> contacts = new HashSet<>();
-//        contacts.add(firstContact);
-//        contacts.add(secondContact);
-//        Message secondMessage = new Message(0, "anotherTopic", contacts, "text of message1", Timestamp.valueOf(LocalDateTime.now()), 0);
-//        long anId = messageDao.save(secondMessage, connection);
-//        messageDao.addDependencyFromContact(anId, firstContactId, connection);
-//        messageDao.addDependencyFromContact(anId, secondContactId, connection);
+        long id = messageDao.save(message, connection);
+        messageDao.addDependencyFromContact(id, firstContactId, connection);
+        messageDao.addDependencyFromContact(id, secondContactId, connection);
+        Set<Contact> contacts = new HashSet<>();
+        contacts.add(firstContact);
+        contacts.add(secondContact);
+        Message secondMessage = new Message(0, "anotherTopic", contacts, "text of message1", Timestamp.valueOf(LocalDateTime.now()), 0);
+        long anId = messageDao.save(secondMessage, connection);
+        messageDao.addDependencyFromContact(anId, firstContactId, connection);
+        messageDao.addDependencyFromContact(anId, secondContactId, connection);
         Set<Message> messages = messageDao.getMessages(0, 10, connection);
         Assert.assertEquals(2, messages.size());
         for (Message message : messages) {

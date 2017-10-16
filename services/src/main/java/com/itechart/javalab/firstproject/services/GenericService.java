@@ -7,7 +7,7 @@ import java.sql.SQLException;
  */
 public interface GenericService<T> {
     /**
-     * Method deletes entity from util by id.
+     * Method deletes entity from data base by id.
      *
      * @param id id of entity which should be deleted
      * @throws SQLException

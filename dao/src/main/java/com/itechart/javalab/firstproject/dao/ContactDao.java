@@ -11,7 +11,6 @@ import java.util.Set;
  * Created by Yauhen Malchanau on 06.09.2017.
  */
 public interface ContactDao extends GenericDao<Contact> {
-
     /**
      * Method deletes all contacts and reset the counter.
      * This method is used only for testing.
@@ -62,8 +61,8 @@ public interface ContactDao extends GenericDao<Contact> {
     /**
      * Method returns number of all contacts in database. Used for pagination.
      *
-     * @param connection number of all contact objects
-     * @return number of contact objects
+     * @param connection connection to database
+     * @return number of all contact objects in database
      * @throws SQLException
      */
     long getNumberOfContacts(Connection connection) throws SQLException;
@@ -79,8 +78,9 @@ public interface ContactDao extends GenericDao<Contact> {
     Contact findByEmail(String email, Connection connection) throws SQLException;
 
     /**
+     * Method finds contacts which were born on required date
      *
-     * @param date birthday
+     * @param date       birthday
      * @param connection connection to database
      * @return collection of contact objects
      * @throws SQLException

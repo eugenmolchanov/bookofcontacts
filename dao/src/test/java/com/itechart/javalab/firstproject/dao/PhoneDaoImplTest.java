@@ -5,22 +5,17 @@ import com.itechart.javalab.firstproject.dao.impl.ContactDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.PhoneDaoImpl;
 import com.itechart.javalab.firstproject.dao.impl.PhotoDaoImpl;
 import com.itechart.javalab.firstproject.entities.*;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Created by Yauhen Malchanau on 08.09.2017.
  */
+@Ignore
 public class PhoneDaoImplTest {
 
     private PhoneDao phoneDao = PhoneDaoImpl.getInstance();
@@ -44,7 +39,7 @@ public class PhoneDaoImplTest {
 
     @After
     public void afterTesting() throws SQLException {
-//        contactDao.deleteAll(connection);
+        contactDao.deleteAll(connection);
     }
 
 
@@ -83,7 +78,7 @@ public class PhoneDaoImplTest {
 
     @Test
     public void shouldGetAllPhonesOfContact() throws SQLException {
-//        phoneDao.save(phone, connection);
+        phoneDao.save(phone, connection);
         Set<Phone> phones = phoneDao.getAllPhonesOfContact(4, connection);
         Assert.assertEquals(0, phones.size());
     }

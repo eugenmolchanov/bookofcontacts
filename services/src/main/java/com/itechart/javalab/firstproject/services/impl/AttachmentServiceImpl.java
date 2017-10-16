@@ -5,6 +5,7 @@ import com.itechart.javalab.firstproject.dao.impl.AttachmentDaoImpl;
 import com.itechart.javalab.firstproject.entities.Attachment;
 import com.itechart.javalab.firstproject.services.AttachmentService;
 import com.itechart.javalab.firstproject.services.database.Database;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.Set;
  */
 public class AttachmentServiceImpl implements AttachmentService {
 
+    private static Logger logger = Logger.getLogger(AttachmentServiceImpl.class);
     private static AttachmentServiceImpl instance;
     private AttachmentDao attachmentDao = AttachmentDaoImpl.getInstance();
 
@@ -30,9 +32,44 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     public void delete(long id) throws SQLException {
-        Connection connection = Database.getConnection();
-        attachmentDao.delete(id, connection);
-        connection.close();
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            attachmentDao.delete(id, connection);
+        } catch (SQLException e) {
+            logger.error("Can't delete attachment by id. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't delete attachment by id. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    @Override
+    public Attachment findById(long id) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return attachmentDao.findById(id, connection);
+        } catch (SQLException e) {
+            logger.error("Can't find attachment by id. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't find attachment by id. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     protected long create(Attachment entity, Connection connection) throws SQLException {
@@ -45,13 +82,5 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     protected void update(Attachment entity, Connection connection) throws SQLException {
         attachmentDao.update(entity, connection);
-    }
-
-    @Override
-    public Attachment findById(long id) throws SQLException {
-        Connection connection = Database.getConnection();
-        Attachment attachment = attachmentDao.findById(id, connection);
-        connection.close();
-        return attachment;
     }
 }

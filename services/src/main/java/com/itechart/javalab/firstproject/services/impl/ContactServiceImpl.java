@@ -5,6 +5,7 @@ import com.itechart.javalab.firstproject.dao.impl.*;
 import com.itechart.javalab.firstproject.entities.*;
 import com.itechart.javalab.firstproject.services.ContactService;
 import com.itechart.javalab.firstproject.services.database.Database;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -17,6 +18,7 @@ import java.util.Set;
  */
 public class ContactServiceImpl implements ContactService {
 
+    private static Logger logger = Logger.getLogger(ContactServiceImpl.class);
     private static ContactServiceImpl instance;
     private ContactDao contactDao = ContactDaoImpl.getInstance();
     private PhotoServiceImpl photoService = PhotoServiceImpl.getInstance();
@@ -35,24 +37,42 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public void delete(long id) throws SQLException {
-        Connection connection = Database.getConnection();
-        connection.setAutoCommit(false);
+        Connection connection = null;
         try {
+            connection = Database.getConnection();
+            connection.setAutoCommit(false);
             contactDao.delete(id, connection);
             connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
-            connection.rollback();
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't delete contact by id. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't delete contact by id. Exception.");
+            logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
     @Override
     public void create(Contact contact) throws SQLException {
-        Connection connection = Database.getConnection();
-        connection.setAutoCommit(false);
+        Connection connection = null;
         try {
+            connection = Database.getConnection();
+            connection.setAutoCommit(false);
             long photoId = photoService.create(contact.getPhoto(), connection);
             contact.getPhoto().setId(photoId);
             long contactId = contactDao.save(contact, connection);
@@ -62,7 +82,7 @@ public class ContactServiceImpl implements ContactService {
                     attachmentService.create(attachment, connection);
                 }
             }
-            if (contact.getPhones()!= null) {
+            if (contact.getPhones() != null) {
                 for (Phone phone : contact.getPhones()) {
                     phone.setContactId(contactId);
                     phoneService.create(phone, connection);
@@ -71,26 +91,55 @@ public class ContactServiceImpl implements ContactService {
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            connection.rollback();
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't create contact. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't create contact. Exception.");
+            logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
     @Override
     public Contact findById(long id) throws SQLException {
-        Connection connection = Database.getConnection();
-        Contact contact = contactDao.findById(id, connection);
-        connection.close();
-        return contact;
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return contactDao.findById(id, connection);
+        } catch (SQLException e) {
+            logger.error("Can't find contact by id. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't find contact by id. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public void update(Contact contact, Set<Long> phonesForDelete, Set<Long> attachmentsForDelete) throws SQLException {
-        Connection connection = Database.getConnection();
-        connection.setAutoCommit(false);
+        Connection connection = null;
         try {
+            connection = Database.getConnection();
+            connection.setAutoCommit(false);
             contactDao.update(contact, connection);
             Set<Attachment> attachments = attachmentService.getAllAttachmentsOfContact(contact.getId(), connection);
             if (attachments.size() != 0) {
@@ -154,76 +203,187 @@ public class ContactServiceImpl implements ContactService {
                 photoService.update(contact.getPhoto(), connection);
             }
             connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
-            connection.rollback();
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't update contact. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't update contact. Exception.");
+            logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
     @Override
     public Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException {
-        Connection connection = Database.getConnection();
-        Set<Contact> contacts = contactDao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
-        connection.close();
-        return contacts;
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return contactDao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
+        } catch (SQLException e) {
+            logger.error("Can't get set of contacts. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't get set of contacts. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public Set<Contact> searchContacts(Contact contact, Date lowerLimit, Date upperLimit, long startContactNumber, long quantityOfContacts) throws SQLException {
-        Connection connection = Database.getConnection();
-        Set<Contact> contacts = contactDao.searchContacts(contact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
-        connection.close();
-        return contacts;
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return contactDao.searchContacts(contact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
+        } catch (SQLException e) {
+            logger.error("Can't search contacts. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't search contacts. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public long getNumberOfSearchContacts(Contact contact, Date lowerLimit, Date upperLimit) throws SQLException {
-        Connection connection = Database.getConnection();
-        long totalQuantity = contactDao.getNumberOfSearchContacts(contact, lowerLimit, upperLimit, connection);
-        connection.close();
-        return totalQuantity;
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return contactDao.getNumberOfSearchContacts(contact, lowerLimit, upperLimit, connection);
+        } catch (SQLException e) {
+            logger.error("Can't get number of searched contacts. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't get number of searched contacts. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public void deleteContacts(Set<Long> contactIds) throws SQLException {
-        Connection connection = Database.getConnection();
-        connection.setAutoCommit(false);
+        Connection connection = null;
         try {
+            connection = Database.getConnection();
+            connection.setAutoCommit(false);
             for (Long id : contactIds) {
                 contactDao.delete(id, connection);
             }
             connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
-            connection.rollback();
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't delete group of contacts. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't delete group of contacts. Exception.");
+            logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
     @Override
     public long getNumberOfContacts() throws SQLException {
-        Connection connection = Database.getConnection();
-        long number = contactDao.getNumberOfContacts(connection);
-        connection.close();
-        return number;
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return contactDao.getNumberOfContacts(connection);
+        } catch (SQLException e) {
+            logger.error("Can't get number of all contacts. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't get number of all contacts. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public Contact findByEmail(String email) throws SQLException {
-        Connection connection = Database.getConnection();
-        Contact contact = contactDao.findByEmail(email, connection);
-        connection.close();
-        return contact;
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return contactDao.findByEmail(email, connection);
+        } catch (SQLException e) {
+            logger.error("Can't find contact by email. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't find contact by email. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public Set<Contact> findContactsByBirthday(Date date) throws SQLException {
-        Connection connection = Database.getConnection();
-        Set<Contact> contacts = contactDao.findContactsByBirthday(date, connection);
-        connection.close();
-        return contacts;
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            return contactDao.findContactsByBirthday(date, connection);
+        } catch (SQLException e) {
+            logger.error("Can't find contacts by birth date. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Can't find contacts by birth date. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 }

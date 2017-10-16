@@ -12,7 +12,7 @@ public interface MessageService extends GenericService<Message> {
     /**
      * Method saves message.
      *
-     * @param message    message object which should be saved
+     * @param message message object which should be saved
      * @throws SQLException
      */
     void save(Message message) throws SQLException;
@@ -27,7 +27,7 @@ public interface MessageService extends GenericService<Message> {
     Message findById(long id) throws SQLException;
 
     /**
-     * Method returns messages stored in database.
+     * Method returns not deleted messages stored in database.
      *
      * @param startContactNumber the first id number of collection for pagination will start after this id
      * @param quantityOfContacts the quantity of messages which is necessary for pagination
@@ -37,7 +37,7 @@ public interface MessageService extends GenericService<Message> {
     Set<Message> getMessages(long startContactNumber, long quantityOfContacts) throws SQLException;
 
     /**
-     * Method returns number of all messages in database. Used for pagination.
+     * Method returns number of all not deleted messages in database. Used for pagination.
      *
      * @return number of all message objects
      * @throws SQLException

@@ -62,7 +62,6 @@ public class Builder {
         return query;
     }
 
-
     public Builder where(StringBuilder builder) {
         builder.append("where ");
         return this;

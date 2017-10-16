@@ -14,7 +14,7 @@
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=27">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=33">
 </head>
 <body>
 <div class="header">
@@ -36,13 +36,13 @@
         </div>
     </c:if>
     <div class="en" onclick="headerModule.toEnglish()">
-        En
+        <img src="${pageContext.request.contextPath}/assests/images/britain_flag.png"/>
     </div>
     <div class="ru" onclick="headerModule.toRussian()">
-        Ru
+        <img src="${pageContext.request.contextPath}/assests/images/russia_flag.png"/>
     </div>
     <div class="by" onclick="headerModule.toBelorussian()">
-        By
+        <img src="${pageContext.request.contextPath}/assests/images/belarus_flag.png"/>
     </div>
 </div>
 <div class="alertMessageArrow" id="alertMessageArrow"></div>

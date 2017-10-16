@@ -29,9 +29,10 @@ public interface ContactService extends GenericService<Contact> {
 
     /**
      * Method updates contact and all phones, attachments and photo which belong to it.
-     * @param contact
-     * @param phonesForDelete
-     * @param attachmentsForDelete
+     *
+     * @param contact              contact which should be updated
+     * @param phonesForDelete      ids of contact phones which should be deleted
+     * @param attachmentsForDelete ids of contact attachments which should be deleted
      * @throws SQLException
      */
     void update(Contact contact, Set<Long> phonesForDelete, Set<Long> attachmentsForDelete) throws SQLException;
@@ -89,7 +90,7 @@ public interface ContactService extends GenericService<Contact> {
     /**
      * Method finds entity by email.
      *
-     * @param email      email of entity
+     * @param email email of entity
      * @return entity object
      * @throws SQLException
      */
@@ -97,6 +98,7 @@ public interface ContactService extends GenericService<Contact> {
 
     /**
      * Method get collection of contacts which have the required birth date.
+     *
      * @param date birthday
      * @return collection of contact objects
      * @throws SQLException

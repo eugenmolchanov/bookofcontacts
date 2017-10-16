@@ -22,6 +22,7 @@ var contactModule = (function () {
         popup.classList.toggle("show");
     };
     var addAttachments = function () {
+        counter++;
         var body = document.getElementById('contact_form');
         body.classList.toggle("roll");
         var popup = document.getElementById("attachmentPopup");
@@ -39,7 +40,12 @@ var contactModule = (function () {
             var attachments = document.getElementsByName('attachmentFile');
             var counterInput = 0;
             for (var i = 0; i < attachments.length; i++) {
-                if (attachments[i].getAttribute('number') == (counter - 1).toString()) {
+                if (attachments[i].files[0] && attachments[i].getAttribute('number') == (counter - 1).toString()) {
+                    if (attachments[i].files[0].size > 5000000) {
+                        attachments[i].parentNode.removeChild(attachments[i]);
+                        document.getElementById('attachmentMessage').innerHTML = messages['restriction.attachment'];
+                        dataIsValid = false;
+                    }
                     counterInput++;
                 }
             }
@@ -98,6 +104,29 @@ var contactModule = (function () {
         closeAttachmentPopup();
     };
     var closeAttachmentPopup = function () {
+        var attachments = document.getElementsByName('attachmentFile');
+        for (var i = 0; i < attachments.length; i++) {
+            if (!attachments[i].files[0]) {
+                var attachment = attachments[i];
+                var number = attachment.getAttribute('number');
+                attachment.parentNode.removeChild(attachment);
+                i--;
+            } else {
+                var count = 0;
+                var attachment = attachments[i];
+                var number = attachment.getAttribute('number');
+                var trs = document.getElementsByName('attachmentTr');
+                for (var j = 0; j < trs.length; j++) {
+                    if (trs[j].getAttribute('number') == number) {
+                        count++;
+                    }
+                }
+                if (!count) {
+                    attachment.parentNode.removeChild(attachment);
+                    i--;
+                }
+            }
+        }
         var body = document.getElementById('contact_form');
         body.classList.toggle("roll");
         var popup = document.getElementById("attachmentPopup");
@@ -509,6 +538,7 @@ var contactModule = (function () {
             }
             var tr = document.createElement("tr");
             tr.setAttribute("number", (counter - 1).toString());
+            tr.setAttribute("name", "attachmentTr");
             var checkTd = document.createElement("td");
             checkTd.setAttribute("style", "border-bottom: 1px solid #ddd");
             var checkInput = document.createElement("input");
@@ -546,11 +576,13 @@ var contactModule = (function () {
 
 
             body.appendChild(tr);
-            cleanAttachmentPopup();
+
+            closeAttachmentPopup();
             document.getElementById('attachment').setAttribute('type', 'button');
-            addAttachments();
+            document.getElementById('attachmentRestriction').innerHTML = messages['restriction.head.attachment'];
         },
         closeAttachmentPopup: function () {
+            document.getElementById('attachmentRestriction').innerHTML = messages['restriction.head.attachment'];
             closeAttachmentPopup();
         },
         findPhoto: function () {
@@ -559,11 +591,18 @@ var contactModule = (function () {
         },
         savePhotoFile: function () {
             if (document.getElementById('photoPath').textContent != "") {
-                var body = document.getElementById('contact_form');
-                body.classList.toggle("roll");
-                var popup = document.getElementById("photoPopup");
-                popup.classList.toggle("show");
-                document.getElementById('fotoMessage').innerHTML = messages['photo.saved'];
+                var photoFile = document.getElementById('photoFile');
+                if (photoFile.files[0].size < 1500000) {
+                    var body = document.getElementById('contact_form');
+                    body.classList.toggle("roll");
+                    var popup = document.getElementById("photoPopup");
+                    popup.classList.toggle("show");
+                    document.getElementById('fotoMessage').innerHTML = messages['photo.saved'];
+                } else {
+                    document.getElementById('photoPathMessage').innerHTML = messages['validation.photo'];
+                    var file = document.getElementById('photoFile');
+                    file.parentNode.removeChild(file);
+                }
             }
         },
         deletePhoto: function () {
@@ -575,13 +614,14 @@ var contactModule = (function () {
                 document.getElementById('fotoMessage').innerHTML = ''
             } else if (document.getElementById('photoPath').textContent != "") {
                 var photo = document.getElementById('photoFile');
-                photo.parentNode.removeChild(photo);
+                if (photo) {
+                    photo.parentNode.removeChild(photo);
+                }
                 document.getElementById('photoPath').innerHTML = "";
                 var body = document.getElementById('contact_form');
                 body.classList.toggle("roll");
                 var popup = document.getElementById("photoPopup");
                 popup.classList.toggle("show");
-                document.getElementById('fotoMessage').innerHTML = messages['photo.deleted']
             }
         },
         putPath: function () {
@@ -597,7 +637,8 @@ var contactModule = (function () {
                     id = attachmentIds[i].value;
                 }
             }
-            if (counter == 1) {
+            if (counter == 1 && id > 0) {
+                document.getElementById('attachmentRestriction').innerHTML = '';
                 document.getElementById('attachTitle').value = document.getElementById('attachmentFileId_'.concat(id)).value;
                 document.getElementById('attachComment').value = document.getElementById('attachCommentId_'.concat(id)).value;
                 document.getElementById('attachment').setAttribute('type', 'hidden');

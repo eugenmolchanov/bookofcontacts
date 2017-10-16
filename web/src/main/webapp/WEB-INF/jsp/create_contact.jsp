@@ -19,12 +19,15 @@
 <body class="create_contact_body">
 <jsp:include page="header.jsp"/>
 <div class="contact_form" id="contact_form">
-    <div class="messageInfo">${requestScope.message}</div>
+    <c:if test="${requestScope.message != null}">
+        <div class="messageInfo"><img src="${pageContext.request.contextPath}/assests/images/check.png">${requestScope.message}</div>
+    </c:if>
     <form action="/controller?command=createNewContact" method="post" name="createForm"
           onsubmit="return contactModule.contactValidation()"
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
         <div class="createContactTitle"><fmt:message key="personal_data"/></div>
-        <input type="button" value="<fmt:message key="choose_photo"/>" class="chooseButton" onclick="contactModule.addPhoto()"/>
+        <input type="button" value="<fmt:message key="choose_photo"/>" class="chooseButton"
+               onclick="contactModule.addPhoto()"/>
         <div class="photoMessage" id="fotoMessage"></div>
         <div id="image" class="image">
 
@@ -95,7 +98,8 @@
                     </select>
                 </c:when>
                 <c:otherwise>
-                    <select name="gender" id="gender" class="form-control" style="border-color: #A94442;" onchange="contactModule.changeGender()">
+                    <select name="gender" id="gender" class="form-control" style="border-color: #A94442;"
+                            onchange="contactModule.changeGender()">
                         <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
                         <option value="Мужчина"><fmt:message key="male"/></option>
                         <option value="Женщина"><fmt:message key="female"/></option>
@@ -121,7 +125,8 @@
             <div class="nameMessage" id="contactGroupMessage">${requestScope.validation.contactGroupMessage}</div>
             <c:choose>
                 <c:when test="${requestScope.validation.maritalStatusMessage == null}">
-                    <select name="maritalStatus" id="maritalStatus" class="form-control" onchange="contactModule.changeMaritalStatus()">
+                    <select name="maritalStatus" id="maritalStatus" class="form-control"
+                            onchange="contactModule.changeMaritalStatus()">
                         <option selected disabled hidden><fmt:message key="marital_status"/></option>
                         <option value="Не женат"><fmt:message key="not_married_male"/></option>
                         <option value="Не замужем"><fmt:message key="not_married_female"/></option>
@@ -133,7 +138,8 @@
                     </select>
                 </c:when>
                 <c:otherwise>
-                    <select name="maritalStatus" id="maritalStatus" class="form-control" style="border-color: #A94442;" onchange="contactModule.changeMaritalStatus()">
+                    <select name="maritalStatus" id="maritalStatus" class="form-control" style="border-color: #A94442;"
+                            onchange="contactModule.changeMaritalStatus()">
                         <option selected disabled hidden><fmt:message key="marital_status"/></option>
                         <option value="Не женат"><fmt:message key="not_married_male"/></option>
                         <option value="Не замужем"><fmt:message key="not_married_female"/></option>
@@ -158,7 +164,8 @@
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.contactGroupMessage == null}">
-                    <select name="contactGroup" id="contactGroup" class="form-control" onchange="contactModule.changeContactGroup()">
+                    <select name="contactGroup" id="contactGroup" class="form-control"
+                            onchange="contactModule.changeContactGroup()">
                         <option selected disabled hidden><fmt:message key="contact_group"/></option>
                         <option value="Семья"><fmt:message key="family"/></option>
                         <option value="Друзья"><fmt:message key="friends"/></option>
@@ -167,7 +174,8 @@
                     </select>
                 </c:when>
                 <c:otherwise>
-                    <select name="contactGroup" id="contactGroup" class="form-control" style="border-color: #A94442;" onchange="contactModule.changeContactGroup()">
+                    <select name="contactGroup" id="contactGroup" class="form-control" style="border-color: #A94442;"
+                            onchange="contactModule.changeContactGroup()">
                         <option selected disabled hidden><fmt:message key="contact_group"/></option>
                         <option value="Семья"><fmt:message key="family"/></option>
                         <option value="Друзья"><fmt:message key="friends"/></option>
@@ -319,7 +327,8 @@
             <div class="nameMessage">${requestScope.validation.attachCommentMessage}</div>
             <table class="attachmentTable">
                 <div class="attachmentPopup">
-                    <button type="button" name="attachmentPopup" onclick="contactModule.addAttachments()" class="createButton">
+                    <button type="button" name="attachmentPopup" onclick="contactModule.addAttachments()"
+                            class="createButton">
                         <fmt:message key="create"/></button>
                     <button type="button" name="deleteAtatchment" onclick="contactModule.deleteAttachmentFromTable()"
                             class="deleteButton"><fmt:message key="delete"/></button>
@@ -349,43 +358,47 @@
         <img src="${pageContext.request.contextPath}/assests/images/phone.jpg">
     </div>
     <div class="phoneForm" id="phoneForm">
-            <div class="phoneMessage" id="countryCodeMessage"></div>
-            <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
-                   class="form-control" required/>
-            <div class="phoneMessage" id="operatorCodeMessage"></div>
-            <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
-                   class="form-control" required/>
-            <div class="phoneMessage" id="numberMessage"></div>
-            <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
-                   class="form-control" required/>
-            <div class="phoneMessage" id="typeMessage"></div>
-            <select id="type" name="type" class="form-control" required>
-                <option selected disabled><fmt:message key="type"/></option>
-                <option value="Рабочий"><fmt:message key="work_phone"/></option>
-                <option value="Домашний"><fmt:message key="home_phone"/></option>
-                <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
-            </select>
-            <div class="phoneMessage" id="commentMessage"></div>
-            <input type="text" id="comment" name="comment"
-                   placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
-            <div id="phone_buttons" class="phone_buttons">
-                <button type="button" id="savePhone" onclick="contactModule.addPhoneTable()" class="btn btn-primary"><fmt:message
+        <div class="phoneMessage" id="countryCodeMessage"></div>
+        <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
+               class="form-control" required/>
+        <div class="phoneMessage" id="operatorCodeMessage"></div>
+        <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
+               class="form-control" required/>
+        <div class="phoneMessage" id="numberMessage"></div>
+        <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
+               class="form-control" required/>
+        <div class="phoneMessage" id="typeMessage"></div>
+        <select id="type" name="type" class="form-control" required>
+            <option selected disabled><fmt:message key="type"/></option>
+            <option value="Рабочий"><fmt:message key="work_phone"/></option>
+            <option value="Домашний"><fmt:message key="home_phone"/></option>
+            <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
+        </select>
+        <div class="phoneMessage" id="commentMessage"></div>
+        <input type="text" id="comment" name="comment"
+               placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
+        <div id="phone_buttons" class="phone_buttons">
+            <button type="button" id="savePhone" onclick="contactModule.addPhoneTable()" class="btn btn-success">
+                <fmt:message
                         key="save"/></button>
-                <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-success"><fmt:message
+            <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-primary">
+                <fmt:message
                         key="exit"/></button>
-            </div>
+        </div>
 
     </div>
 </div>
 <div class="attachmentPopupText" id="attachmentPopup">
+    <div class="attachmentRestriction" id="attachmentRestriction"><fmt:message key="restriction.attachment"/></div>
     <div class="fileImage">
         <img src="${pageContext.request.contextPath}/assests/images/file.jpg">
     </div>
     <div class="attachmentForm" id="attachmentForm">
         <form>
-
-            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="contactModule.uploadAttachment()"
-                   value="<fmt:message key="choose_file"/>"/>  <div class="addAttachmentMessage" id="attachmentMessage"></div>
+            <div class="addAttachmentMessage" id="attachmentMessage"></div>
+            <input type="button" name="attachment" id="attachment" class="chooseButton"
+                   onclick="contactModule.uploadAttachment()"
+                   value="<fmt:message key="choose_file"/>"/>
             <div class="attachmentMessage" id="attachTitleMessage"></div>
             <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
                    class="form-control"/>
@@ -393,9 +406,11 @@
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
             <div class="attachments_buttons">
-                <button type="button" id="saveAttachment" onclick="contactModule.addAttachmentTable()" class="btn btn-primary">
+                <button type="button" id="saveAttachment" onclick="contactModule.addAttachmentTable()"
+                        class="btn btn-success">
                     <fmt:message key="save"/></button>
-                <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()" class="btn btn-success">
+                <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()"
+                        class="btn btn-primary">
                     <fmt:message
                             key="exit"/></button>
             </div>
@@ -404,20 +419,24 @@
 </div>
 <div class="photoPopupText" id="photoPopup">
     <div class="photoForm" id="photoForm">
+        <div class="photoRestriction"><fmt:message key="restriction.photo"/></div>
         <div class="photoPathMessage" id="photoPathMessage"></div>
-        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="contactModule.findPhoto()"
+        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton"
+               onclick="contactModule.findPhoto()"
                value="<fmt:message key="find"/>"/>
         <div class="photoPath" id="photoPath"></div>
         <div class="photo_buttons">
-            <button type="button" id="savePhoto" onclick="contactModule.savePhotoFile()" class="btn btn-primary"><fmt:message
-                    key="save"/></button>
-            <button type="button" id="cancelPhoto" onclick="contactModule.deletePhoto()" class="btn btn-success">
+            <button type="button" id="savePhoto" onclick="contactModule.savePhotoFile()" class="btn btn-success">
+                <fmt:message
+                        key="save"/></button>
+            <button type="button" id="cancelPhoto" onclick="contactModule.deletePhoto()" class="btn btn-primary">
                 <fmt:message
                         key="cancel"/></button>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=2"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=4"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">
