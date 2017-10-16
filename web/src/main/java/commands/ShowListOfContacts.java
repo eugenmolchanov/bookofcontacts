@@ -21,6 +21,8 @@ public class ShowListOfContacts implements ActionCommand {
 
     private ContactService service = ContactServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
+    private final String ACTIVE_PAGE = ConfigurationManager.getProperty("main");
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -29,38 +31,37 @@ public class ShowListOfContacts implements ActionCommand {
             try {
                 startContactNumber = Long.parseLong(req.getParameter("startContactNumber"));
             } catch (Exception e) {
-                logger.debug("Getting attribute for variable from the server.");
+                logger.debug("Getting attribute for startContactNumber variable from session.");
                 startContactNumber = (long) req.getSession().getAttribute("startContactNumber");
             }
             long quantityOfContacts;
             try {
                 quantityOfContacts = Long.parseLong(req.getParameter("quantityOfContacts"));
             } catch (Exception e) {
-                logger.debug("");
+                logger.debug("Getting attribute for quantityOfContacts variable from session");
                 quantityOfContacts = (long) req.getSession().getAttribute("quantityOfContacts");
             }
-            HttpSession session = req.getSession(true);
-            session.setAttribute("startContactNumber", startContactNumber);
-            session.setAttribute("quantityOfContacts", quantityOfContacts);
-            Set<Contact> contacts;
-            long numberOfContacts;
             try {
+                HttpSession session = req.getSession(true);
+                session.setAttribute("startContactNumber", startContactNumber);
+                session.setAttribute("quantityOfContacts", quantityOfContacts);
+                Set<Contact> contacts;
+                long numberOfContacts;
                 contacts = service.getSetOfContacts(startContactNumber, quantityOfContacts);
                 numberOfContacts = service.getNumberOfContacts();
-            } catch (SQLException e) {
-                logger.error(e);
-                req.setAttribute("message", MessageManager.getProperty(""));
-                return ConfigurationManager.getProperty("error");
+                req.setAttribute("numberOfContacts", numberOfContacts);
+                req.setAttribute("startContactNumber", startContactNumber);
+                req.setAttribute("quantityOfContacts", quantityOfContacts);
+                req.setAttribute("command", "listOfContacts");
+                req.setAttribute("contacts", contacts);
+                return ACTIVE_PAGE;
+            } catch (Exception e) {
+                req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+                return ERROR_PAGE;
             }
-            req.setAttribute("numberOfContacts", numberOfContacts);
-            req.setAttribute("startContactNumber", startContactNumber);
-            req.setAttribute("quantityOfContacts", quantityOfContacts);
-            req.setAttribute("command", "listOfContacts");
-            req.setAttribute("contacts", contacts);
-            return ConfigurationManager.getProperty("main");
         } else {
-            req.setAttribute("message", MessageManager.getProperty("invalid.data"));
-            return ConfigurationManager.getProperty("error");
+            req.setAttribute("warningMessage", MessageManager.getProperty("invalid.data"));
+            return ERROR_PAGE;
         }
     }
 }

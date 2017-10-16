@@ -18,7 +18,6 @@
 <body class="sendEmailBody">
 <jsp:include page="header.jsp"/>
 <div class="sendEmail">
-    <div class="message">${requestScope.messageText}</div>
     <form class="emailForm" id="emailForm" name="emailForm" action="/controller" method="post"
           onsubmit="return sendEmailModule.sendEmail()">
         <input type="hidden" name="command" value="sendEmail"/>
@@ -26,6 +25,20 @@
             <input type="button" value="<fmt:message key="send_email"/> "
                    onclick="sendEmailModule.toEmailForm()" class="emailButton"/><br><br>
         </c:if>
+        <c:choose>
+            <c:when test="${requestScope.successMessage != null}">
+                <div class="messageInfo">
+                    <div class="successImage">
+                        <img src="${pageContext.request.contextPath}/assests/images/check.png"/></div>
+                        ${requestScope.successMessage}</div><br>
+            </c:when>
+            <c:when test="${requestScope.warningMessage != null}">
+                <div class="messageInfo">
+                    <div class="warningImage">
+                        <img src="${pageContext.request.contextPath}/assests/images/warning.png"/></div>
+                        ${requestScope.warningMessage}</div><br>
+            </c:when>
+        </c:choose>
         <label for="addressees"><fmt:message key="to_whom"/> </label><br>
         <c:choose>
             <c:when test="${requestScope.validation.addresseesMessage == null}">
@@ -55,7 +68,7 @@
             </c:otherwise>
         </c:choose>
         <div class="nameMessage" id="topicMessage">${requestScope.validation.topicMessage}</div>
-        <br><br>
+        <br>
         <c:if test="${requestScope.message == null}">
             <select id="template" name="template" onchange="sendEmailModule.chooseTemplate()" class="form-control">
                 <option selected disabled hidden><fmt:message key="choose_template"/></option>
@@ -75,14 +88,13 @@
                   class="form-control" style="border-color: #A94442;">${requestScope.message.text}</textarea>
     </c:otherwise>
     </c:choose>
-    <div class="nameMessage" id="textMessage">${requestScope.validation.textMessage}</div>
-    <br>
+    <div class="nameMessage" id="textMessage">${requestScope.validation.textMessage}</div><br>
     <c:if test="${requestScope.message == null}">
         <input type="submit" onclick="sendEmailModule.sendEmail() " value="<fmt:message key="send"/> " form="emailForm"
                class="emailSubmit"/>
     </c:if>
 </div>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/send_email_module.js?v=1"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/send_email_module.js?v=7"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

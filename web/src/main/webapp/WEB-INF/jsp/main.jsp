@@ -20,12 +20,11 @@
 <body class="mainBody">
 <jsp:include page="header.jsp"/>
 <div class="main">
-    <form action="/controller?command=deleteContacts" method="post" name="deleteForm"
-          onsubmit="return mainModule.deleteContacts()">
+    <form action="/controller?command=deleteContacts" method="post" name="deleteForm">
         <div class="mainCheckbox">
             <input type="checkbox" onclick="mainModule.toggle(this)" id="chooseAll"/>
         </div>
-        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="mainModule.deleteContacts()"/>
+        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="return mainModule.deleteContacts()"/>
         <input type="submit" value="<fmt:message key="send_email"/> "
                formaction="/controller?command=redirect&form=sendEmail" onclick="return mainModule.chooseEmail()"
                class="emailButton"/>
@@ -68,7 +67,7 @@
                     <td>
                         <a href="controller?command=displayContact&id=${contact.id}">${contact.lastName} ${" "} ${contact.firstName}</a>
                     </td>
-                    <td>${contact.birthday}</td>
+                    <td><fmt:formatDate value="${contact.birthday}" pattern="dd.MM.yyyy"/></td>
                     <td>${contact.country}</td>
                     <td>${contact.city}</td>
                     <td>${contact.street}</td>
@@ -143,7 +142,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/main_module.js?v=1"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/main_module.js?v=10"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

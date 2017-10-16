@@ -400,7 +400,7 @@ public class Validation {
                 }
             } catch (Exception e) {
                 logger.debug(e.getMessage(), e);
-                validationMessages.put("attachmentMessage",  MessageManager.getProperty("invalid_phone_data"));
+                validationMessages.put("attachmentMessage", MessageManager.getProperty("invalid_phone_data"));
             }
         }
 
@@ -512,7 +512,7 @@ public class Validation {
         if (emails == null || emails.isEmpty()) {
             validationMessages.put("addresseesMessage", MessageManager.getProperty("validation.fill"));
         } else {
-            String [] emailArray = emails.split("\\s");
+            String[] emailArray = emails.split("\\s+");
             for (String email : emailArray) {
                 if (!Pattern.compile("(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$").matcher(email).matches()) {
                     validationMessages.put("addresseesMessage", MessageManager.getProperty("validation.email"));

@@ -12,7 +12,10 @@ var messageModule = (function () {
                     dataForDelete++;
                 }
             if (dataForDelete > 0) {
-                return dataIsValid;
+                var agree = confirm(messages['agreement']);
+                if (agree) {
+                    return dataIsValid;
+                }
             }
             return !dataIsValid;
         },

@@ -6,7 +6,6 @@ import jobs.SendBirthdayEmail;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.quartz.*;
-import org.quartz.impl.JobExecutionContextImpl;
 import org.quartz.impl.StdSchedulerFactory;
 import resources.ConfigurationManager;
 import resources.MessageManager;
@@ -35,7 +34,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class Controller extends HttpServlet {
 
     private Logger logger = Logger.getLogger(Controller.class);
-    private String errorPage = ConfigurationManager.getProperty("error");
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -74,7 +73,8 @@ public class Controller extends HttpServlet {
                 scheduler.scheduleJob(job, trigger);
             }
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            logger.error("Quartz is not working properly. SchedulerException.");
+            logger.error(e.getMessage(), e);
         }
         String page = null;
         ActionFactory client = new ActionFactory();
@@ -82,40 +82,48 @@ public class Controller extends HttpServlet {
         try {
             command = client.defineCommand(req);
         } catch (IllegalArgumentException e) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
             try {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
                 dispatcher.forward(req, resp);
-            } catch (ServletException | IOException e1) {
-                logger.error(e.getMessage(), e);
+            } catch (Exception e1) {
+                logger.error(e1.getMessage(), e1);
             }
         }
         try {
             page = command != null ? command.execute(req, resp) : null;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
+            req.setAttribute("warningMessage", MessageManager.getProperty("error"));
             try {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
                 dispatcher.forward(req, resp);
-            } catch (ServletException | IOException e1) {
+            } catch (Exception e1) {
                 logger.error(e1.getMessage(), e1);
             }
         }
         if (!resp.isCommitted()) {
             if (page != null) {
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
                 try {
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
                     Map<String, String> map = Convertion.convertResourceBundleToMap(ResourceBundle.getBundle("js_messages"));
                     req.setAttribute("validationMessages", map);
                     dispatcher.forward(req, resp);
-                } catch (ServletException | IOException e) {
+                } catch (Exception e) {
                     logger.error(e.getMessage(), e);
+                    try {
+                        req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+                        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+                        dispatcher.forward(req, resp);
+                    } catch (Exception e1) {
+                        logger.error(e1.getMessage(), e1);
+                    }
                 }
             } else {
-                req.setAttribute("message", MessageManager.getProperty("error"));
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorPage);
                 try {
+                    req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
                     dispatcher.forward(req, resp);
-                } catch (ServletException | IOException e) {
+                } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 }
             }

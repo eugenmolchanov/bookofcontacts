@@ -20,12 +20,11 @@
 <body class="messagesBody">
 <jsp:include page="header.jsp"/>
 <div class="messageDiv">
-    <form action="/controller?command=deleteMessages" method="post" name="deleteForm"
-          onsubmit="return messageModule.deleteMessages()">
+    <form action="/controller?command=deleteMessages" method="post" name="deleteForm">
         <div class="mainCheckbox">
             <input type="checkbox" onclick="messageModule.toggle(this)" id="chooseAll"/>
         </div>
-        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="messageModule.deleteMessages()"/>
+        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="return messageModule.deleteMessages()"/>
         <input type="button" value="<fmt:message key="send_email"/> " onclick="messageModule.toEmailForm()" class="emailButton"/>
         <c:choose>
             <c:when test="${requestScope.successMessage != null}">
@@ -129,7 +128,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=2"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=3"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

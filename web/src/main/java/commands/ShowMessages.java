@@ -19,6 +19,8 @@ public class ShowMessages implements ActionCommand {
 
     private MessageService service = MessageServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ShowMessages.class);
+    private final String ACTIVE_PAGE = ConfigurationManager.getProperty("message");
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -26,31 +28,28 @@ public class ShowMessages implements ActionCommand {
         try {
             startMessageNumber = Long.parseLong(req.getParameter("startMessageNumber"));
         } catch (Exception e) {
-            logger.debug(e.getMessage(), e);
             startMessageNumber = 0;
         }
         long quantityOfMessages;
         try {
             quantityOfMessages = Long.parseLong(req.getParameter("quantityOfMessages"));
         } catch (Exception e) {
-            logger.debug(e.getMessage(), e);
             quantityOfMessages = 10;
         }
-        Set<Message> messages;
-        long numberOfMessages;
         try {
+            Set<Message> messages;
+            long numberOfMessages;
             messages = service.getMessages(startMessageNumber, quantityOfMessages);
             numberOfMessages = service.getNumberOfAllMessages();
-        } catch (SQLException e) {
-            logger.error(e);
-            req.setAttribute("message", MessageManager.getProperty("error"));
-            return ConfigurationManager.getProperty("error");
+            req.setAttribute("numberOfMessages", numberOfMessages);
+            req.setAttribute("startMessageNumber", startMessageNumber);
+            req.setAttribute("quantityOfMessages", quantityOfMessages);
+            req.setAttribute("command", "showMessages");
+            req.setAttribute("messages", messages);
+            return ACTIVE_PAGE;
+        } catch (Exception e) {
+            req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+            return ERROR_PAGE;
         }
-        req.setAttribute("numberOfMessages", numberOfMessages);
-        req.setAttribute("startMessageNumber", startMessageNumber);
-        req.setAttribute("quantityOfMessages", quantityOfMessages);
-        req.setAttribute("command", "showMessages");
-        req.setAttribute("messages", messages);
-        return ConfigurationManager.getProperty("message");
     }
 }

@@ -16,10 +16,12 @@ var sendEmailModule = (function () {
             if (addressees) {
                 var emails = addressees.split(" ");
                 for (var i = 0; i < emails.length; i++) {
-                    if (!/(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(emails[i])) {
-                        document.getElementById('addresseesMessage').innerHTML = messages['validation.email'];
-                        document.getElementById('addressees').style.borderColor = "#A94442";
-                        dataIsValid = false;
+                    if (emails[i]) {
+                        if (!/(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(emails[i])) {
+                            document.getElementById('addresseesMessage').innerHTML = messages['validation.email'];
+                            document.getElementById('addressees').style.borderColor = "#A94442";
+                            dataIsValid = false;
+                        }
                     }
                 }
             } else {

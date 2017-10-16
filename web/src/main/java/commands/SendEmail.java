@@ -35,33 +35,29 @@ public class SendEmail implements ActionCommand {
     private MessageService messageService = MessageServiceImpl.getInstance();
     private String from = ResourceBundle.getBundle("mail_credentials").getString("from");
     private String password = ResourceBundle.getBundle("mail_credentials").getString("password");
+    private final String ACTIVE_PAGE = ConfigurationManager.getProperty("send_email");
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String page = ConfigurationManager.getProperty("send_email");
+        logger.setLevel(Level.DEBUG);
         Map<String, String> validationMessages = Validation.sendEmailDataIsValid(req, logger);
         if (validationMessages.size() == 0) {
-            logger.setLevel(Level.DEBUG);
-            Properties properties = System.getProperties();
-            String host = "smtp.gmail.com";
-            properties.put("mail.smtp.host", host);
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.starttls.enable", "true");
-            String port = "587";
-            properties.put("mail.smtp.port", port);
-            Session session = Session.getInstance(properties, new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(from, password);
-                }
-            });
-            String parameter = null;
             try {
-                parameter = req.getParameter("addressees");
-            } catch (Exception e) {
-                logger.debug(e.getMessage(), e);
-            }
-            try {
+                Properties properties = System.getProperties();
+                String host = "smtp.gmail.com";
+                properties.put("mail.smtp.host", host);
+                properties.put("mail.smtp.auth", "true");
+                properties.put("mail.smtp.starttls.enable", "true");
+                String port = "587";
+                properties.put("mail.smtp.port", port);
+                Session session = Session.getInstance(properties, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(from, password);
+                    }
+                });
+                String parameter = req.getParameter("addressees");
                 MimeMessage message = new MimeMessage(session);
                 com.itechart.javalab.firstproject.entities.Message sendingMessage = new com.itechart.javalab.firstproject.entities.Message();
                 String subject = req.getParameter("topic");
@@ -73,12 +69,17 @@ public class SendEmail implements ActionCommand {
                     String[] emails = parameter.split("\\s+");
                     Set<Contact> contacts = new HashSet<>();
                     for (String email : emails) {
-                        Contact contact = contactService.findByEmail(email);
-                        if (contact != null && contact.getId() != 0) {
-                            contacts.add(contact);
-                        } else {
-                            req.setAttribute("messageText", MessageManager.getProperty("invalid_emails"));
-                            return page;
+                        try {
+                            Contact contact = contactService.findByEmail(email);
+                            if (contact != null && contact.getId() != 0) {
+                                contacts.add(contact);
+                            } else {
+                                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.email"));
+                                return ACTIVE_PAGE;
+                            }
+                        } catch (SQLException e) {
+                            req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
+                            return ACTIVE_PAGE;
                         }
                     }
                     if (contacts.size() == emails.length) {
@@ -105,9 +106,14 @@ public class SendEmail implements ActionCommand {
                     String[] emails = parameter.split("\\s+");
                     Set<Contact> contacts = new HashSet<>();
                     for (String email : emails) {
-                        Contact contact = contactService.findByEmail(email);
-                        if (contact != null && contact.getId() != 0) {
-                            contacts.add(contact);
+                        try {
+                            Contact contact = contactService.findByEmail(email);
+                            if (contact != null && contact.getId() != 0) {
+                                contacts.add(contact);
+                            }
+                        } catch (SQLException e) {
+                            req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
+                            return ACTIVE_PAGE;
                         }
                     }
                     for (String email : emails) {
@@ -120,21 +126,23 @@ public class SendEmail implements ActionCommand {
                     sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
                     messageService.save(sendingMessage);
                 }
+                req.setAttribute("successMessage", MessageManager.getProperty("successful.sending"));
+                return ACTIVE_PAGE;
             } catch (MessagingException e) {
                 logger.error(e.getMessage(), e);
-                req.setAttribute("messageText", MessageManager.getProperty("send_message_error"));
-                return page;
+                req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
+                return ACTIVE_PAGE;
             } catch (SQLException e) {
-                logger.error(e.getMessage(), e);
-                req.setAttribute("messageText", MessageManager.getProperty("save_error"));
-                return page;
+                req.setAttribute("warningMessage", MessageManager.getProperty("save.error"));
+                return ACTIVE_PAGE;
+            } catch (Exception e) {
+                req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+                return ERROR_PAGE;
             }
-            req.setAttribute("messageText", MessageManager.getProperty("successful_sending"));
-            return page;
         } else {
-            req.setAttribute("messageText", MessageManager.getProperty("invalid.data"));
+            req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
             req.setAttribute("validation", validationMessages);
-            return page;
+            return ACTIVE_PAGE;
         }
     }
 }

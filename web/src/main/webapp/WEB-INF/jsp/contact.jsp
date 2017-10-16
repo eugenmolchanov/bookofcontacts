@@ -499,9 +499,9 @@
         <input type="text" id="comment" name="comment"
                placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
         <div id="phone_buttons" class="phone_buttons">
-            <button type="button" id="savePhone" onclick="contactModule.addPhoneTable()" class="btn btn-primary"><fmt:message
+            <button type="button" id="savePhone" onclick="contactModule.addPhoneTable()" class="btn btn-success"><fmt:message
                     key="save"/></button>
-            <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-success"><fmt:message
+            <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-primary"><fmt:message
                     key="exit"/></button>
         </div>
 
@@ -524,9 +524,9 @@
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
             <div class="attachments_buttons">
-                <button type="button" id="saveAttachment" onclick="contactModule.addAttachmentTable()" class="btn btn-primary">
+                <button type="button" id="saveAttachment" onclick="contactModule.addAttachmentTable()" class="btn btn-success">
                     <fmt:message key="save"/></button>
-                <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()" class="btn btn-success">
+                <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()" class="btn btn-primary">
                     <fmt:message
                             key="exit"/></button>
             </div>
@@ -541,9 +541,9 @@
                value="<fmt:message key="find"/>"/>
         <div class="photoPath" id="photoPath"></div>
         <div class="photo_buttons">
-            <button type="button" id="savePhoto" onclick="contactModule.savePhotoFile()" class="btn btn-primary"><fmt:message
+            <button type="button" id="savePhoto" onclick="contactModule.savePhotoFile()" class="btn btn-success"><fmt:message
                     key="save"/></button>
-            <button type="button" id="cancelPhoto" onclick="contactModule.deletePhoto()" class="btn btn-success">
+            <button type="button" id="cancelPhoto" onclick="contactModule.deletePhoto()" class="btn btn-primary">
                 <fmt:message
                         key="cancel"/></button>
         </div>
