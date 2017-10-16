@@ -19,9 +19,20 @@
 <body class="create_contact_body">
 <jsp:include page="header.jsp"/>
 <div class="contact_form" id="contact_form">
-    <c:if test="${requestScope.message != null}">
-        <div class="messageInfo"><img src="${pageContext.request.contextPath}/assests/images/check.png">${requestScope.message}</div>
-    </c:if>
+    <c:choose>
+        <c:when test="${requestScope.successMessage != null}">
+            <div class="messageInfo">
+                <div class="successImage">
+                    <img src="${pageContext.request.contextPath}/assests/images/check.png"/></div>
+                    ${requestScope.successMessage}</div>
+        </c:when>
+        <c:when test="${requestScope.warningMessage != null}">
+            <div class="messageInfo">
+                <div class="warningImage">
+                    <img src="${pageContext.request.contextPath}/assests/images/warning.png"/></div>
+                    ${requestScope.warningMessage}</div>
+        </c:when>
+    </c:choose>
     <form action="/controller?command=createNewContact" method="post" name="createForm"
           onsubmit="return contactModule.contactValidation()"
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
@@ -436,7 +447,7 @@
     </div>
 </div>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=4"></script>
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=5"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

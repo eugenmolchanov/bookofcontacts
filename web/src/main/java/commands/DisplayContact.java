@@ -6,6 +6,7 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
+import resources.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,8 @@ public class DisplayContact implements ActionCommand {
 
     private static Logger logger = Logger.getLogger(DisplayContact.class);
     private ContactService service = ContactServiceImpl.getInstance();
-    private String page;
+    private final String ACTIVE_PAGE = ConfigurationManager.getProperty("contact");
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -27,20 +29,20 @@ public class DisplayContact implements ActionCommand {
         try {
             id = Long.parseLong(req.getParameter("id"));
         } catch (Exception e) {
-            logger.debug(e);
+            logger.debug("id of contact is not valid or id param is absent.");
         }
         try {
             id = (long) req.getAttribute("id");
         } catch (Exception e) {
-            logger.debug(e);
+            logger.debug("id of contact is not valid or id attribute is absent.");
         }
-        Contact contact = null;
         try {
-            contact = service.findById(id);
-        } catch (SQLException  e) {
-            logger.error(e);
+            Contact contact = service.findById(id);
+            req.setAttribute("contact", contact);
+            return ACTIVE_PAGE;
+        } catch (Exception  e) {
+            req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+            return ERROR_PAGE;
         }
-        req.setAttribute("contact", contact);
-        return page = ConfigurationManager.getProperty("contact");
     }
 }

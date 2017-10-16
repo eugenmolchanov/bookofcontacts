@@ -59,7 +59,7 @@ public class ShowListOfContacts implements ActionCommand {
             req.setAttribute("contacts", contacts);
             return ConfigurationManager.getProperty("main");
         } else {
-            req.setAttribute("message", MessageManager.getProperty("params_are_not_valid"));
+            req.setAttribute("message", MessageManager.getProperty("invalid.data"));
             return ConfigurationManager.getProperty("error");
         }
     }

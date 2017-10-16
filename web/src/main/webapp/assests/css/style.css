@@ -159,7 +159,7 @@ input, select {
     margin-top: 2%;
 }
 .createContactTitle {
-    margin-top: 2%;
+    margin-top: 1%;
     color: #0099c5;
     text-align: center;
     padding-bottom: 3%;
@@ -187,6 +187,7 @@ input, select {
     left: 18%;
     width: 64%;
     margin-bottom: 2%;
+    padding-top: 1%;
 }
 #full-name>input, #secondLine>input, #thirdLine>input, #full-name>.nameMessage, #secondLine>.nameMessage, #thirdLine>.nameMessage, #fourthLine>.nameMessage,
 #fifthLine>input, #fifthLine>.nameMessage, #sixthLine>input, #sixthLine>.nameMessage, #secondLine>select, #thirdLine>select, #fourthLine>select, .genderError input,
@@ -535,5 +536,9 @@ input, select {
     color: #ccc;
 }
 .messageInfo {
-    padding-top: 1%;
+    display: inline-block;
+}
+.warningImage, .successImage {
+    vertical-align: bottom;
+    display: inline-block;
 }

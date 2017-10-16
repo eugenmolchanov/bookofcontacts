@@ -48,24 +48,39 @@ public class Validation {
                 try {
                     Long.parseLong(parameter);
                 } catch (Exception e) {
+                    logger.debug("id param for deleting contact is not valid. Group of contacts was not deleted.");
                     result = false;
-                    logger.debug("id param is not valid.", e);
                 }
             }
         } else {
+            logger.debug("Nothing to delete. There was no id params in request.");
             return false;
         }
         return result;
     }
 
     public static boolean deleteMessagesDataIsValid(HttpServletRequest req, Logger logger) {
-        return deleteContactsDataIsValid(req, logger);
+        boolean result = true;
+        Map<String, String[]> parameters = req.getParameterMap();
+        if (parameters.containsKey("id")) {
+            for (String parameter : parameters.get("id")) {
+                try {
+                    Long.parseLong(parameter);
+                } catch (Exception e) {
+                    logger.debug("id param for deleting message is not valid. Group of messages was not deleted.");
+                    result = false;
+                }
+            }
+        } else {
+            logger.debug("Nothing to delete. There was no id params in request.");
+            return false;
+        }
+        return result;
     }
 
     public static Map<String, Object> createContactData(Map<String, Object> parameters, Logger logger) {
         Map<String, String> validationMessages = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
-        String invalid = "invalid";
         Contact contact = new Contact();
         if (parameters.get("firstName") == null) {
             validationMessages.put("firstNameMessage", MessageManager.getProperty("validation.fill"));
@@ -395,7 +410,6 @@ public class Validation {
                 contact.setPhoto(photo);
             } catch (Exception e) {
                 logger.debug(e.getMessage(), e);
-                validationMessages.put("photoMessage", invalid);
             }
         }
         result.put("contact", contact);
@@ -521,6 +535,7 @@ public class Validation {
         String language = request.getParameter("language");
         if (Objects.equals(language, "en_US") || Objects.equals(language, "ru_RU") || Objects.equals(language, "be_BY")) {
             result = true;
+            logger.debug("Choosing language is valid.");
         }
         return result;
     }

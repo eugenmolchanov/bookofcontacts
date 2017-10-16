@@ -5,6 +5,7 @@ import com.itechart.javalab.firstproject.services.AttachmentService;
 import com.itechart.javalab.firstproject.services.impl.AttachmentServiceImpl;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
+import resources.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,12 +24,13 @@ public class DownloadAttachment implements ActionCommand {
 
     private static Logger logger = Logger.getLogger(DownloadAttachment.class);
     private AttachmentService service = AttachmentServiceImpl.getInstance();
-    private String page = ConfigurationManager.getProperty("contact");
+    private final String ACTIVE_PAGE = ConfigurationManager.getProperty("contact");
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        int id = Integer.parseInt(req.getParameter("id"));
         try {
+            int id = Integer.parseInt(req.getParameter("id"));
             Attachment attachment = service.findById(id);
             String path = attachment.getPathToFile().concat(attachment.getUuid());
             File file = new File(path);
@@ -49,9 +51,15 @@ public class DownloadAttachment implements ActionCommand {
             outputStream.write(attachmentBytes);
             outputStream.flush();
             outputStream.close();
-        } catch (SQLException | IOException e) {
-            logger.error(e);
+            return ACTIVE_PAGE;
+        } catch (SQLException e) {
+            req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+            return ACTIVE_PAGE;
+        } catch (Exception e) {
+            logger.error("Can't load attachment. Exception.");
+            logger.error(e.getMessage(), e);
+            req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+            return ERROR_PAGE;
         }
-        return page;
     }
 }

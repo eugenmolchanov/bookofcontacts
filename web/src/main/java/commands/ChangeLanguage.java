@@ -1,6 +1,8 @@
 package commands;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import resources.ConfigurationManager;
 import resources.MessageManager;
 import util.Validation;
 
@@ -17,9 +19,11 @@ import java.util.ResourceBundle;
 public class ChangeLanguage implements ActionCommand {
 
     private static Logger logger = Logger.getLogger(ChangeLanguage.class);
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        logger.setLevel(Level.DEBUG);
         if (Validation.languageDataIsValid(req, logger)) {
             Locale russian = new Locale("ru", "RU");
             Locale belorussian = new Locale("be", "BY");
@@ -38,15 +42,9 @@ public class ChangeLanguage implements ActionCommand {
             MessageManager.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
             HttpSession session = req.getSession(true);
             session.setAttribute("language", language);
-            String referrer = req.getHeader("referer");
-            try {
-                resp.sendRedirect(resp.encodeRedirectURL(referrer));
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-                return new EmptyCommand().execute(req, resp);
-            }
             return new EmptyCommand().execute(req, resp);
         }
-        return new EmptyCommand().execute(req, resp);
+        req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+        return ERROR_PAGE;
     }
 }

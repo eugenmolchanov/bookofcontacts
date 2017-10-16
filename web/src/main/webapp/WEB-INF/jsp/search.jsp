@@ -19,6 +19,20 @@
 <jsp:include page="header.jsp"/>
 <div>${requestScope.message}</div>
 <div class="searchForm">
+    <c:choose>
+        <c:when test="${requestScope.successMessage != null}">
+            <div class="messageInfo">
+                <div class="successImage">
+                    <img src="${pageContext.request.contextPath}/assests/images/check.png"/></div>
+                    ${requestScope.successMessage}</div>
+        </c:when>
+        <c:when test="${requestScope.warningMessage != null}">
+            <div class="messageInfo">
+                <div class="warningImage">
+                    <img src="${pageContext.request.contextPath}/assests/images/warning.png"/></div>
+                    ${requestScope.warningMessage}</div>
+        </c:when>
+    </c:choose>
     <form action="/controller" method="post" onsubmit="return searchModule.search()">
         <input type="hidden" value="search" name="command"/>
         <div class="generalInfo">

@@ -10,7 +10,6 @@ import resources.MessageManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.Set;
 
 /**
@@ -19,30 +18,32 @@ import java.util.Set;
 public class EmptyCommand implements ActionCommand {
 
     private ContactService service = ContactServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
+    private static Logger logger = Logger.getLogger(EmptyCommand.class);
+    private final String ACTIVE_PAGE = ConfigurationManager.getProperty("main");
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        Set<Contact> contacts;
-        long numberOfContacts;
         try {
+            Set<Contact> contacts;
+            long numberOfContacts;
             contacts = service.getSetOfContacts(0, 10);
             numberOfContacts = service.getNumberOfContacts();
-        } catch (SQLException e) {
+            HttpSession session = req.getSession(true);
+            session.setAttribute("startContactNumber", 0L);
+            session.setAttribute("startMessageNumber", 0L);
+            session.setAttribute("quantityOfContacts", 10L);
+            session.setAttribute("quantityOfMessages", 10L);
+            req.setAttribute("startContactNumber", 0L);
+            req.setAttribute("quantityOfContacts", 10L);
+            req.setAttribute("command", "listOfContacts");
+            req.setAttribute("numberOfContacts", numberOfContacts);
+            req.setAttribute("contacts", contacts);
+            return ACTIVE_PAGE;
+        } catch (Exception e) {
             logger.error(e);
-            req.setAttribute("message", MessageManager.getProperty("error"));
-            return ConfigurationManager.getProperty("error");
+            req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+            return ERROR_PAGE;
         }
-        HttpSession session = req.getSession(true);
-        session.setAttribute("startContactNumber", 0L);
-        session.setAttribute("startMessageNumber", 0L);
-        session.setAttribute("quantityOfContacts", 10L);
-        session.setAttribute("quantityOfMessages", 10L);
-        req.setAttribute("startContactNumber", 0L);
-        req.setAttribute("quantityOfContacts", 10L);
-        req.setAttribute("command", "listOfContacts");
-        req.setAttribute("numberOfContacts", numberOfContacts);
-        req.setAttribute("contacts", contacts);
-        return ConfigurationManager.getProperty("main");
     }
 }

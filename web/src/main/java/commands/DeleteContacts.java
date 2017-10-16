@@ -2,6 +2,7 @@ package commands;
 
 import com.itechart.javalab.firstproject.services.ContactService;
 import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
@@ -19,10 +20,12 @@ import java.util.Set;
 public class DeleteContacts implements ActionCommand {
 
     private ContactService service = ContactServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
+    private static Logger logger = Logger.getLogger(DeleteContacts.class);
+    private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        logger.setLevel(Level.DEBUG);
         if (Validation.deleteContactsDataIsValid(req, logger)) {
             String[] parameters = req.getParameterMap().get("id");
             Set<Long> ids = new HashSet<>();
@@ -31,15 +34,17 @@ public class DeleteContacts implements ActionCommand {
             }
             try {
                 service.deleteContacts(ids);
+                req.setAttribute("successMessage", MessageManager.getProperty("successful.contact.delete"));
+                return new ShowListOfContacts().execute(req, resp);
             } catch (SQLException e) {
-                logger.error(e);
-                req.setAttribute("message", MessageManager.getProperty(""));
-                return ConfigurationManager.getProperty("error");
+                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.contact.delete"));
+                return new ShowListOfContacts().execute(req, resp);
+            } catch (Exception e) {
+                req.setAttribute("warningMessage", MessageManager.getProperty("error"));
+                return ERROR_PAGE;
             }
-            req.setAttribute("deleteMessage", MessageManager.getProperty("contact_successful_delete"));
-            return new ShowListOfContacts().execute(req, resp);
         } else {
-
+            req.setAttribute("warningMessage", MessageManager.getProperty("invalid.data"));
             return new ShowListOfContacts().execute(req, resp);
         }
     }

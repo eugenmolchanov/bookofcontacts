@@ -29,6 +29,20 @@
         <input type="submit" value="<fmt:message key="send_email"/> "
                formaction="/controller?command=redirect&form=sendEmail" onclick="return mainModule.chooseEmail()"
                class="emailButton"/>
+        <c:choose>
+            <c:when test="${requestScope.successMessage != null}">
+                <div class="messageInfo">
+                    <div class="successImage">
+                        <img src="${pageContext.request.contextPath}/assests/images/check.png"/></div>
+                        ${requestScope.successMessage}</div>
+            </c:when>
+            <c:when test="${requestScope.warningMessage != null}">
+                <div class="messageInfo">
+                    <div class="warningImage">
+                        <img src="${pageContext.request.contextPath}/assests/images/warning.png"/></div>
+                        ${requestScope.warningMessage}</div>
+            </c:when>
+        </c:choose>
         <table class="table table-bordered">
             <thead>
             <tr>

@@ -30,11 +30,11 @@ import util.entity.BaseContact;
  */
 public class SendEmail implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
+    private static Logger logger = Logger.getLogger(SendEmail.class);
     private ContactService contactService = ContactServiceImpl.getInstance();
     private MessageService messageService = MessageServiceImpl.getInstance();
-    private String from = "johnnymolchanov@gmail.com";
-    private String password = "1234567abc";
+    private String from = ResourceBundle.getBundle("mail_credentials").getString("from");
+    private String password = ResourceBundle.getBundle("mail_credentials").getString("password");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -132,7 +132,7 @@ public class SendEmail implements ActionCommand {
             req.setAttribute("messageText", MessageManager.getProperty("successful_sending"));
             return page;
         } else {
-            req.setAttribute("messageText", MessageManager.getProperty("params_are_not_valid"));
+            req.setAttribute("messageText", MessageManager.getProperty("invalid.data"));
             req.setAttribute("validation", validationMessages);
             return page;
         }

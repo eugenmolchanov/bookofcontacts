@@ -13,10 +13,13 @@
 <fmt:setBundle basename="translations"/>
 <html>
 <head>
-    <title><fmt:message key="error"/> </title>
+    <title><fmt:message key="error"/></title>
 </head>
 <body class="errorBody">
 <jsp:include page="header.jsp"/>
-<div class="error">${requestScope.message}</div>
+<div class="error">
+    <div class="warningImage">
+        <img src="${pageContext.request.contextPath}/assests/images/warning.png"/></div>
+    ${requestScope.warningMessage}</div>
 </body>
 </html>

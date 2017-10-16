@@ -41,7 +41,7 @@ var contactModule = (function () {
             var counterInput = 0;
             for (var i = 0; i < attachments.length; i++) {
                 if (attachments[i].files[0] && attachments[i].getAttribute('number') == (counter - 1).toString()) {
-                    if (attachments[i].files[0].size > 5000000) {
+                    if (attachments[i].files[0].size > 10000000) {
                         attachments[i].parentNode.removeChild(attachments[i]);
                         document.getElementById('attachmentMessage').innerHTML = messages['restriction.attachment'];
                         dataIsValid = false;

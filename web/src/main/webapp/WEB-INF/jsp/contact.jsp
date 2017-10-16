@@ -19,6 +19,20 @@
 <body class="create_contact_body">
 <jsp:include page="header.jsp"/>
 <div class="contact_form" id="contact_form">
+    <c:choose>
+        <c:when test="${requestScope.successMessage != null}">
+            <div class="messageInfo">
+                <div class="successImage">
+                    <img src="${pageContext.request.contextPath}/assests/images/check.png"/></div>
+                    ${requestScope.successMessage}</div>
+        </c:when>
+        <c:when test="${requestScope.warningMessage != null}">
+            <div class="messageInfo">
+                <div class="warningImage">
+                    <img src="${pageContext.request.contextPath}/assests/images/warning.png"/></div>
+                    ${requestScope.warningMessage}</div>
+        </c:when>
+    </c:choose>
     <div class="messageInfo">${requestScope.message}</div>
     <form action="/controller?command=editContact" method="post" name="createForm"
           onsubmit="return contactModule.contactValidation()"

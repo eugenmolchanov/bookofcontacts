@@ -9,6 +9,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +25,9 @@ import java.util.*;
  * Created by Yauhen Malchanau on 15.09.2017.
  */
 public class Data {
-    public static Map<String, Object> upload(HttpServletRequest req) throws IOException, ServletException, FileUploadException {
+    public static Map<String, Object> upload(HttpServletRequest req, Logger logger  ) throws IOException, FileUploadException {
         if (!ServletFileUpload.isMultipartContent(req)) {
+            logger.debug("Uploaded files are not multipart content.");
             return null;
         }
         Map<String, Object> parameters = new HashMap<>();
@@ -101,6 +103,7 @@ public class Data {
                     String format = array[array.length - 1];
                     if (fieldName.equals("photoFile")) {
                         if (item.getSize() > 1_500_000) {
+                            logger.debug("Photo file is more than 1.5 MB. Contact was not saved.");
                             return null;
                         }
                         String uuid = UUID.randomUUID().toString();
@@ -112,6 +115,7 @@ public class Data {
                         parameters.put(fieldName, photo);
                     } else if (fieldName.equals("attachmentFile")) {
                         if (item.getSize() > 10_000_000) {
+                            logger.debug("Attachment file is more than 10 MB. Contact was not saved.");
                             return null;
                         }
                         String uuid = UUID.randomUUID().toString();

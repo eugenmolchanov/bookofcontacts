@@ -2,20 +2,17 @@ package commands;
 
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
-import util.Convertion;
 import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
 
 /**
  * Created by Yauhen Malchanau on 15.09.2017.
  */
 public class Redirect implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(CreateNewContact.class);
-    private String page;
+    private static Logger logger = Logger.getLogger(Redirect.class);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -28,17 +25,17 @@ public class Redirect implements ActionCommand {
             final String form = req.getParameter("form");
             switch (form) {
                 case createContact:
-                    return page = ConfigurationManager.getProperty("create_contact");
+                    return ConfigurationManager.getProperty("create_contact");
                 case contact:
-                    return page = ConfigurationManager.getProperty("contact");
+                    return ConfigurationManager.getProperty("contact");
                 case search:
-                    return page = ConfigurationManager.getProperty("search");
+                    return ConfigurationManager.getProperty("search");
                 case sendEmail:
                     String[] emails = req.getParameterMap().get("email");
                     req.setAttribute("emails", emails);
-                    return page = ConfigurationManager.getProperty("send_email");
+                    return ConfigurationManager.getProperty("send_email");
                 case message:
-                    return page = ConfigurationManager.getProperty("message");
+                    return ConfigurationManager.getProperty("message");
                 default:
                     return new ShowListOfContacts().execute(req, resp);
             }
