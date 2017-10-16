@@ -23,9 +23,6 @@ This README would normally document whatever steps are necessary to get your app
 * Code review
 * Other guidelines
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+### Preparation for proper and stable work of application ###
 In Dao,Services and Web modules in resources folders you should put credentials for database in credentials.properties files and 
 credentials for mail in mail_credentials.properties.
