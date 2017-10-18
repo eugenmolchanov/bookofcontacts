@@ -86,7 +86,7 @@ public class SendBirthdayEmail implements Job {
             }
         } catch(Exception e){
             logger.error("Quartz failed to send birthday message automatically.");
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 }
