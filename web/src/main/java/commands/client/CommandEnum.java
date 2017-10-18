@@ -85,6 +85,11 @@ public enum CommandEnum {
         {
             this.command = new DeleteMessages();
         }
+    },
+    RESTOREMESSAGES {
+        {
+            this.command = new RestoreMessage();
+        }
     }
     ;
     ActionCommand command;

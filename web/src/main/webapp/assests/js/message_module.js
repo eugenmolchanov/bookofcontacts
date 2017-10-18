@@ -33,6 +33,19 @@ var messageModule = (function () {
         },
         toDeleteMessagePage: function () {
             window.location = "http://localhost:8080/controller?command=showDeletedMessages";
-        }
+        },
+        restoreMessages: function () {
+            var dataIsValid = true;
+            var dataForDelete = 0;
+            var elms = document.querySelectorAll("[name='id']");
+            for (var i = 0; i < elms.length; i++)
+                if (elms[i].checked && elms[i] != 0) {
+                    dataForDelete++;
+                }
+            if (dataForDelete > 0) {
+                return dataIsValid;
+            }
+            return !dataIsValid;
+        },
     }
 }());

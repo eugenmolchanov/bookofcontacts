@@ -245,4 +245,38 @@ public class MessageServiceImpl implements MessageService {
             }
         }
     }
+
+    @Override
+    public void restore(Set<Long> messageIds) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            connection.setAutoCommit(false);
+            for (Long id : messageIds) {
+                messageDao.restore(id, connection);
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't restore group of messages. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't restore group of messages. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 }

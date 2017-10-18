@@ -45,7 +45,7 @@ public class MessageDaoImpl implements MessageDao {
     @Override
     public Message findById(long id, Connection connection) throws SQLException {
         final String GET_MESSAGE_BY_ID = "select m.topic, m.message, m.sending_date, c.id, c.first_name, c.last_name, c.email from message as m " +
-                "inner join contact as c on m.contact_id=c.id where m.id = ? and m.is_deleted = 0;";
+                "inner join contact as c on m.contact_id=c.id where m.id = ?;";
         PreparedStatement statement = connection.prepareStatement(GET_MESSAGE_BY_ID);
         statement.setLong(1, id);
         ResultSet resultSet = statement.executeQuery();
@@ -164,6 +164,15 @@ public class MessageDaoImpl implements MessageDao {
     public void fullDelete(long id, Connection connection) throws SQLException {
         final String DELETE_MESSAGE = "delete from message where id = ?";
         PreparedStatement statement = connection.prepareStatement(DELETE_MESSAGE);
+        statement.setLong(1, id);
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    @Override
+    public void restore(long id, Connection connection) throws SQLException {
+        final String RESTORE_MESSAGE = "update message set is_deleted = 0 where id = ?";
+        PreparedStatement statement = connection.prepareStatement(RESTORE_MESSAGE);
         statement.setLong(1, id);
         statement.executeUpdate();
         statement.close();

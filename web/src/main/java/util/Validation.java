@@ -78,6 +78,25 @@ public class Validation {
         return result;
     }
 
+    public static boolean restoreMessagesDataIsValid(HttpServletRequest req, Logger logger) {
+        boolean result = true;
+        Map<String, String[]> parameters = req.getParameterMap();
+        if (parameters.containsKey("id")) {
+            for (String parameter : parameters.get("id")) {
+                try {
+                    Long.parseLong(parameter);
+                } catch (Exception e) {
+                    logger.debug("id param for restoring message is not valid. Group of messages was not restored.");
+                    result = false;
+                }
+            }
+        } else {
+            logger.debug("Nothing to restore. There was no id params in request.");
+            return false;
+        }
+        return result;
+    }
+
     public static Map<String, Object> createContactData(Map<String, Object> parameters, Logger logger) {
         Map<String, String> validationMessages = new HashMap<>();
         Map<String, Object> result = new HashMap<>();

@@ -77,4 +77,12 @@ public interface MessageService extends GenericService<Message> {
      * @throws SQLException
      */
     void fullDelete(Set<Long> messageIds) throws SQLException;
+
+    /**
+     * Method restores message from bucket by it's id.
+     *
+     * @param messageIds ids of message objects
+     * @throws SQLException
+     */
+    void restore(Set<Long> messageIds) throws SQLException;
 }

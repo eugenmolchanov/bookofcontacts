@@ -30,7 +30,7 @@ public class ContactDaoImplTest {
         Photo photo = new Photo();
         long photoId = photoDao.save(photo, connection);
         photo.setId(photoId);
-        contact = new Contact(0, "name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), "Мужчина", null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
+        contact = new Contact(0, "name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), "Мужчина", null, null, null, "email@gmail.com", null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
                 photo);
     }
 
@@ -48,14 +48,15 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldFindContactByEmail() throws SQLException {
-        Contact actualContact = dao.findByEmail("yauhenmalchanau@gmail.com", connection);
-        Assert.assertEquals("Евгений", actualContact.getFirstName());
+        dao.save(contact, connection);
+        Contact actualContact = dao.findByEmail("email@gmail.com", connection);
+        Assert.assertEquals("name", actualContact.getFirstName());
     }
 
     @Test
     public void shouldCountContacts() throws SQLException {
         dao.save(contact, connection);
-        Assert.assertEquals(2, dao.getNumberOfContacts(connection));
+        Assert.assertEquals(1, dao.getNumberOfContacts(connection));
     }
 
     @Test
@@ -88,7 +89,7 @@ public class ContactDaoImplTest {
         long startContactNumber = 0;
         long quantityOfContacts = 10;
         Set<Contact> contacts = dao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
-        Assert.assertEquals(2, contacts.size());
+        Assert.assertEquals(1, contacts.size());
     }
 
     @Test
@@ -99,9 +100,9 @@ public class ContactDaoImplTest {
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
-        conditionContact.setLastName("Молчанов");
+        conditionContact.setLastName("surname");
         Set<Contact> contacts = dao.searchContacts(conditionContact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
-        Assert.assertEquals(2, contacts.size());
+        Assert.assertEquals(1, contacts.size());
     }
 
     @Test
@@ -111,12 +112,13 @@ public class ContactDaoImplTest {
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
         long count = dao.getNumberOfSearchContacts(conditionContact, lowerLimit, upperLimit, connection);
-        Assert.assertEquals(2, count);
+        Assert.assertEquals(1, count);
     }
 
     @Test
     public void shouldFindContactsByBirthday() throws SQLException {
-        Set<Contact> contacts = dao.findContactsByBirthday(Date.valueOf(LocalDate.now()), connection);
+        dao.save(contact, connection);
+        Set<Contact> contacts = dao.findContactsByBirthday(Date.valueOf("1990-10-10"), connection);
         Assert.assertEquals(1, contacts.size());
     }
 }

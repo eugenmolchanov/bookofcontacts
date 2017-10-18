@@ -57,7 +57,7 @@ public class Builder {
         } else if (lowerLimit == null){
             query.append("birth_date <= ? and ");
         } else {
-            query.append(" and birth_date between ? and ? and ");
+            query.append(" birth_date between ? and ? and ");
         }
         return query;
     }

@@ -34,6 +34,9 @@
                 <input type="hidden" name="command" value="deleteMessagesFromBucket">
                 <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton"
                        onclick="return messageModule.deleteMessages()"/>
+                <input type="submit" value="<fmt:message key="restore"/> "
+                       formaction="/controller?command=restoreMessages" onclick="return messageModule.restoreMessages()"
+                       class="deleteButton"/>
             </c:otherwise>
         </c:choose>
         <input type="button" value="<fmt:message key="send_email"/> " onclick="messageModule.toEmailForm()"
@@ -157,7 +160,7 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=4"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=5"></script>
     <script>
         var messages = {};
         <c:forEach var="message" items="${requestScope.validationMessages}">

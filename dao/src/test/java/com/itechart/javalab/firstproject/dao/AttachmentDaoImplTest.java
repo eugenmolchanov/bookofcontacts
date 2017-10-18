@@ -78,6 +78,7 @@ public class AttachmentDaoImplTest {
     @Test
     public void shouldGetAllAttachmentsOfContact() throws SQLException {
         attachmentDao.save(attachment, connection);
+        attachment = new Attachment(0, "first", "comment", Timestamp.valueOf(LocalDateTime.now()), "path", UUID.randomUUID().toString(), contactId);
         Set<Attachment> attachments = attachmentDao.getAllAttachmentsOfContact(contactId, connection);
         Assert.assertEquals(1, attachments.size());
     }

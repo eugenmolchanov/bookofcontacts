@@ -58,4 +58,13 @@ public interface MessageDao extends GenericDao<Message> {
      * @throws SQLException
      */
     void fullDelete(long id, Connection connection) throws SQLException;
+
+    /**
+     * Method restores message from bucket by it's id.
+     *
+     * @param id         id of entity
+     * @param connection connection to database
+     * @throws SQLException
+     */
+    void restore(long id, Connection connection) throws SQLException;
 }
