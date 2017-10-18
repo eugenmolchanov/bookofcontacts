@@ -87,3 +87,10 @@ CREATE TABLE contact_message (
   FOREIGN KEY (message_id) REFERENCES message (id)
 )
   ENGINE InnoDB;
+  
+  DROP TABLE contact_message;
+  alter table message add contact_id bigint unsigned not null;
+  SET foreign_key_checks = 0;
+  alter table message add constraint fk_message foreign key (contact_id) references contact (id);
+  SET foreign_key_checks = 1;
+  alter table contact add constraint email unique(email);

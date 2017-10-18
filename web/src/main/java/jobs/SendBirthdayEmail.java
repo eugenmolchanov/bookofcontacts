@@ -77,21 +77,17 @@ public class SendBirthdayEmail implements Job {
                 message.setSubject(subject);
                 String messageText = MessageManager.getProperty("birthday_congratulations");
                 message.setText(messageText);
-                Set<Contact> addressees = new HashSet<>();
                 for (Contact contact : contacts) {
                     if (contact.getEmail() != null) {
-                        message.addRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
+                        message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
                         Transport.send(message);
-                        addressees.add(contact);
+                        com.itechart.javalab.firstproject.entities.Message sendingMessage = new com.itechart.javalab.firstproject.entities.Message();
+                        sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
+                        sendingMessage.setText(messageText);
+                        sendingMessage.setTopic(subject);
+                        sendingMessage.setAddressee(contact);
+                        messageService.save(sendingMessage);
                     }
-                }
-                com.itechart.javalab.firstproject.entities.Message sendingMessage = new com.itechart.javalab.firstproject.entities.Message();
-                sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
-                sendingMessage.setText(messageText);
-                sendingMessage.setTopic(subject);
-                sendingMessage.setAddressees(addressees);
-                if (addressees.size() > 0) {
-                    messageService.save(sendingMessage);
                 }
                 assert servletContext != null;
                 servletContext.setAttribute("alertMessage", contacts);

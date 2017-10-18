@@ -9,13 +9,12 @@ import resources.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Created by Yauhen Malchanau on 08.10.2017.
+ * Created by Yauhen Malchanau on 18.10.2017.
  */
-public class ShowMessages implements ActionCommand {
+public class ShowDeletedMessages implements ActionCommand {
 
     private MessageService service = MessageServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(ShowMessages.class);
@@ -38,16 +37,14 @@ public class ShowMessages implements ActionCommand {
         }
         try {
             Set<Message> messages;
-            long numberOfMessages;
             long numberOfDeletedMessages;
-            messages = service.getMessages(startMessageNumber, quantityOfMessages);
-            numberOfMessages = service.getNumberOfAllMessages();
+            messages = service.getDeletedMessages(startMessageNumber, quantityOfMessages);
             numberOfDeletedMessages = service.getNumberOfAllDeletedMessages();
-            req.setAttribute("numberOfMessages", numberOfMessages);
+            req.setAttribute("numberOfMessages", numberOfDeletedMessages);
             req.setAttribute("numberOfDeletedMessages", numberOfDeletedMessages);
             req.setAttribute("startMessageNumber", startMessageNumber);
             req.setAttribute("quantityOfMessages", quantityOfMessages);
-            req.setAttribute("command", "showMessages");
+            req.setAttribute("command", "showDeletedMessages");
             req.setAttribute("messages", messages);
             return ACTIVE_PAGE;
         } catch (Exception e) {

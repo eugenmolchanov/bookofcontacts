@@ -20,12 +20,27 @@
 <body class="messagesBody">
 <jsp:include page="header.jsp"/>
 <div class="messageDiv">
-    <form action="/controller?command=deleteMessages" method="post" name="deleteForm">
+    <form action="/controller" method="post" name="deleteForm">
         <div class="mainCheckbox">
             <input type="checkbox" onclick="messageModule.toggle(this)" id="chooseAll"/>
         </div>
-        <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton" onclick="return messageModule.deleteMessages()"/>
-        <input type="button" value="<fmt:message key="send_email"/> " onclick="messageModule.toEmailForm()" class="emailButton"/>
+        <c:choose>
+            <c:when test="${requestScope.command == \"showMessages\"}">
+                <input type="hidden" name="command" value="deleteMessages">
+                <input type="submit" value="<fmt:message key="to.bucket"/>" class="deleteButton"
+                       onclick="return messageModule.deleteMessages()"/>
+            </c:when>
+            <c:otherwise>
+                <input type="hidden" name="command" value="deleteMessagesFromBucket">
+                <input type="submit" value="<fmt:message key="delete"/>" class="deleteButton"
+                       onclick="return messageModule.deleteMessages()"/>
+            </c:otherwise>
+        </c:choose>
+        <input type="button" value="<fmt:message key="send_email"/> " onclick="messageModule.toEmailForm()"
+               class="emailButton"/>
+        <div class="messageTrash" onclick="messageModule.toDeleteMessagePage()">
+            <img src="${pageContext.request.contextPath}/assests/images/message_trash.png">${" ("}${requestScope.numberOfDeletedMessages}${")"}
+        </div>
         <c:choose>
             <c:when test="${requestScope.successMessage != null}">
                 <div class="messageInfo">
@@ -56,12 +71,12 @@
                         <input type="checkbox" name="id" value="${message.id}"/>
                     </td>
                     <td onclick="messageModule.findMessage(${message.id})">
-                        <c:forEach var="contact" items="${message.addressees}">
-                            <span title="${contact.email}">${contact.firstName}${" "}${contact.lastName}</span><br>
-                        </c:forEach>
+                        <span title="${message.addressee.email}">${message.addressee.firstName}${" "}${message.addressee.lastName}</span><br>
                     </td>
-                    <td onclick="messageModule.findMessage(${message.id})"><b>${message.topic}</b>${"  "}${message.text}</td>
-                    <td onclick="messageModule.findMessage(${message.id})"><fmt:formatDate value="${message.sendingDate}" pattern="dd.MM.yyyy HH:mm"/></td>
+                    <td onclick="messageModule.findMessage(${message.id})"><b>${message.topic}</b>${"  "}${message.text}
+                    </td>
+                    <td onclick="messageModule.findMessage(${message.id})"><fmt:formatDate
+                            value="${message.sendingDate}" pattern="dd.MM.yyyy HH:mm"/></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -81,7 +96,6 @@
                 <c:set var="maxPage" value="${1}"/>
             </c:otherwise>
         </c:choose>
-
         <div id="pageInfo">
             <c:choose>
                 <c:when test="${size != 0}">
@@ -94,46 +108,61 @@
             ${" - "}${start + size}${" "}
             <fmt:message key="from"/>
             ${" "}${count}</div>
-        ${"  "}<br>
-        <fmt:message key="page"/>${" "}
-        <c:if test="${start != 0}">
-            <div id="previous"><a
-                    href="/controller?command=${requestScope.command}&startMessageNumber=${start - step}&quantityOfMessages=${step}">
-                <fmt:message key="previous"/></a></div>
-        </c:if>
-        <div id="pageNumbers">
-            <c:forEach var="i" begin="0" end="4">
-                <c:if test="${((start + step) / step + i - 2) > 0 && ((start + step) / step + i - 2) <= maxPage}">
-                    <c:choose>
-                        <c:when test="${i != 2}">
-                            <fmt:parseNumber var="page" type="number" value="${(start + step) / step + i - 2}"/>
-                            <a href="/controller?command=${requestScope.command}&startMessageNumber=${start + step * (i - 2)}&quantityOfMessages=${step}">
-                                    ${page}</a> </c:when>
-                        <c:otherwise>
-                            <fmt:parseNumber var="presentPage" type="number" value="${(start + step) / step}"/>
-                            ${presentPage}${" "}
-                        </c:otherwise>
-                    </c:choose>
-                </c:if>
-            </c:forEach>
-        </div>
-        <c:if test="${(count - start) gt step}">
-            <div id="next"><a
-                    href="/controller?command=${requestScope.command}&startMessageNumber=${start + step}&quantityOfMessages=${step}"><fmt:message
-                    key="next"/></a></div>
-        </c:if>
-        <div class="rowNumber">
-            <fmt:message key="display"/>${" "}<a href="/controller?command=${requestScope.command}&startMessageNumber=0&quantityOfMessages=10">10</a>${" "}
-            <a href="/controller?command=${requestScope.command}&startMessageNumber=0&quantityOfMessages=20">20</a>${" "}
+    ${"  "}<br>
+            <fmt:message key="page"/>${" "}
+            <c:if test="${start != 0}">
+                <div id="previous"><a
+                        href="/controller?command=${requestScope.command}&startMessageNumber=${start - step}&quantityOfMessages=${step}">
+                    <fmt:message key="previous"/></a></div>
+            </c:if>
+            <div id="pageNumbers">
+                <c:forEach var="i" begin="0" end="4">
+                    <c:if test="${((start + step) / step + i - 2) > 0 && ((start + step) / step + i - 2) <= maxPage}">
+                        <c:choose>
+                            <c:when test="${i != 2}">
+                                <fmt:parseNumber var="page" type="number" value="${(start + step) / step + i - 2}"/>
+                                <a href="/controller?command=${requestScope.command}&startMessageNumber=${start + step * (i - 2)}&quantityOfMessages=${step}">
+                                        ${page}</a> </c:when>
+                            <c:otherwise>
+                                <fmt:parseNumber var="presentPage" type="number" value="${(start + step) / step}"/>
+                                ${presentPage}${" "}
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+                </c:forEach>
+            </div>
+            <c:if test="${(count - start) gt step}">
+                <div id="next"><a
+                        href="/controller?command=${requestScope.command}&startMessageNumber=${start + step}&quantityOfMessages=${step}"><fmt:message
+                        key="next"/></a></div>
+            </c:if>
+            <div class="rowNumber">
+                <fmt:message key="display"/>${" "}
+                <c:choose>
+                    <c:when test="${step == 10}">
+                        10${" "}
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/controller?command=${requestScope.command}&startMessageNumber=0&quantityOfMessages=10">10</a>${" "}
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${step == 20}">
+                        20${" "}
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/controller?command=${requestScope.command}&startMessageNumber=0&quantityOfMessages=20">20</a>${" "}
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </div>
     </div>
-</div>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=3"></script>
-<script>
-    var messages = {};
-    <c:forEach var="message" items="${requestScope.validationMessages}">
-    messages['${message.key}'] = '${message.value}';
-    </c:forEach>
-</script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=4"></script>
+    <script>
+        var messages = {};
+        <c:forEach var="message" items="${requestScope.validationMessages}">
+        messages['${message.key}'] = '${message.value}';
+        </c:forEach>
+    </script>
 </body>
 </html>

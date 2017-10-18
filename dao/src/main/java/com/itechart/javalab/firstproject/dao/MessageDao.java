@@ -22,16 +22,6 @@ public interface MessageDao extends GenericDao<Message> {
     Set<Message> getMessages(long startContactNumber, long quantityOfContacts, Connection connection) throws SQLException;
 
     /**
-     * Method adds dependency between message and contact objects. Creates row in contact_message table.
-     *
-     * @param messageId  id of message object
-     * @param contactId  id of contact object
-     * @param connection connection to database
-     * @throws SQLException
-     */
-    void addDependencyFromContact(long messageId, long contactId, Connection connection) throws SQLException;
-
-    /**
      * Method returns number of all not deleted messages in database. Used for pagination.
      *
      * @param connection connection to database
@@ -59,4 +49,13 @@ public interface MessageDao extends GenericDao<Message> {
      * @throws SQLException
      */
     long getNumberOfAllDeletedMessages(Connection connection) throws SQLException;
+
+    /**
+     * Method deletes message form bucket by it's id.
+     *
+     * @param id         id of entity
+     * @param connection connection to database
+     * @throws SQLException
+     */
+    void fullDelete(long id, Connection connection) throws SQLException;
 }

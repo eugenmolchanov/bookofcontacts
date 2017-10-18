@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import org.antlr.stringtemplate.*;
-import util.entity.BaseContact;
 
 /**
  * Created by Yauhen Malchanau on 17.09.2017.
@@ -61,14 +60,17 @@ public class SendEmail implements ActionCommand {
                 MimeMessage message = new MimeMessage(session);
                 com.itechart.javalab.firstproject.entities.Message sendingMessage = new com.itechart.javalab.firstproject.entities.Message();
                 String subject = req.getParameter("topic");
+                sendingMessage.setTopic(subject);
                 message.setFrom(new InternetAddress(from));
                 message.setSubject(subject);
+                String[] emails = parameter.split("\\s+");
+                Set<String> emailsForSend = new HashSet<>();
+                Collections.addAll(emailsForSend, emails);
                 if (req.getParameter("template") != null && !Objects.equals(req.getParameter("template"), "")) {
                     String template = req.getParameter("message");
                     StringTemplate stringTemplate = new StringTemplate(template);
-                    String[] emails = parameter.split("\\s+");
                     Set<Contact> contacts = new HashSet<>();
-                    for (String email : emails) {
+                    for (String email : emailsForSend) {
                         try {
                             Contact contact = contactService.findByEmail(email);
                             if (contact != null && contact.getId() != 0) {
@@ -82,30 +84,34 @@ public class SendEmail implements ActionCommand {
                             return ACTIVE_PAGE;
                         }
                     }
-                    if (contacts.size() == emails.length) {
-                        for (Contact contact : contacts) {
-                            stringTemplate.setAttribute("contact", contact);
-                            message.setText(stringTemplate.toString());
-                            message.addRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
-                            Transport.send(message);
-                            sendingMessage.getAddressees().add(contact);
-                            logger.debug("Email was sent to ".concat(contact.getLastName()).concat(" ").concat(contact.getFirstName()).concat(". ")
-                                    .concat(stringTemplate.toString()));
-                        }
-                        BaseContact baseContact = new BaseContact();
-                        stringTemplate.removeAttribute("contact");
-                        stringTemplate.setAttribute("contact", baseContact);
-                        sendingMessage.setText(stringTemplate.toString());
-                        sendingMessage.setTopic(subject);
-                        sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
-                        messageService.save(sendingMessage);
+                    if (contacts.size() == emailsForSend.size()) {
+                        Thread thread = new Thread(() -> {
+                            try {
+                                for (Contact contact : contacts) {
+                                    stringTemplate.setAttribute("contact", contact);
+                                    message.setText(stringTemplate.toString());
+                                    message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
+                                    Transport.send(message);
+                                    sendingMessage.setAddressee(contact);
+                                    sendingMessage.setText(stringTemplate.toString());
+                                    stringTemplate.removeAttribute("contact");
+                                    logger.debug("Email was sent to ".concat(contact.getLastName()).concat(" ").concat(contact.getFirstName()).concat(". ")
+                                            .concat(stringTemplate.toString()));
+                                    sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
+                                    messageService.save(sendingMessage);
+                                }
+                            } catch (Exception e) {
+                                logger.error("Message was not sent.");
+                                logger.error(e.getMessage(), e);
+                            }
+                        });
+                        thread.start();
                     }
                 } else {
                     String messageText = req.getParameter("message");
                     message.setText(messageText);
-                    String[] emails = parameter.split("\\s+");
                     Set<Contact> contacts = new HashSet<>();
-                    for (String email : emails) {
+                    for (String email : emailsForSend) {
                         try {
                             Contact contact = contactService.findByEmail(email);
                             if (contact != null && contact.getId() != 0) {
@@ -116,24 +122,30 @@ public class SendEmail implements ActionCommand {
                             return ACTIVE_PAGE;
                         }
                     }
-                    for (String email : emails) {
-                        message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-                        Transport.send(message);
-                    }
-                    sendingMessage.setTopic(subject);
-                    sendingMessage.setText(messageText);
-                    sendingMessage.setAddressees(contacts);
-                    sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
-                    messageService.save(sendingMessage);
+                    Thread thread = new Thread(() -> {
+                        try {
+                            for (Contact contact : contacts) {
+                                sendingMessage.setAddressee(contact);
+                                sendingMessage.setText(messageText);
+                                sendingMessage.setTopic(subject);
+                                sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
+                                message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
+                                Transport.send(message);
+                                logger.debug("Message was sent to ".concat(contact.getEmail()).concat(". "));
+                                messageService.save(sendingMessage);
+                            }
+                        } catch (Exception e) {
+                            logger.error("Message was not sent.");
+                            logger.error(e.getMessage(), e);
+                        }
+                    });
+                    thread.start();
                 }
                 req.setAttribute("successMessage", MessageManager.getProperty("successful.sending"));
                 return ACTIVE_PAGE;
             } catch (MessagingException e) {
                 logger.error(e.getMessage(), e);
                 req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
-                return ACTIVE_PAGE;
-            } catch (SQLException e) {
-                req.setAttribute("warningMessage", MessageManager.getProperty("save.error"));
                 return ACTIVE_PAGE;
             } catch (Exception e) {
                 req.setAttribute("warningMessage", MessageManager.getProperty("error"));

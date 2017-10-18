@@ -447,7 +447,7 @@
     </div>
 </div>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=5"></script>
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=6"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

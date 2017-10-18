@@ -73,6 +73,16 @@ public enum CommandEnum {
     },
     DELETEMESSAGES {
         {
+            this.command = new SendMessagesToBucket();
+        }
+    },
+    SHOWDELETEDMESSAGES {
+        {
+            this.command = new ShowDeletedMessages();
+        }
+    },
+    DELETEMESSAGESFROMBUCKET {
+        {
             this.command = new DeleteMessages();
         }
     }

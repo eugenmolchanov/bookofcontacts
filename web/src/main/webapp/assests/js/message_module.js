@@ -30,6 +30,9 @@ var messageModule = (function () {
         },
         findMessage: function (id) {
             window.location = "http://localhost:8080/controller?command=getMessage&id=" + id;
+        },
+        toDeleteMessagePage: function () {
+            window.location = "http://localhost:8080/controller?command=showDeletedMessages";
         }
     }
 }());

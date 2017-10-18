@@ -139,8 +139,8 @@ public class ContactDaoImpl implements ContactDao {
         final String DELETE_CONTACT = "delete from contact where id = ?;";
         final String DELETE_CONTACT_ATTACHMENTS = "delete from attachment where contact_id=?;";
         final String DELETE_CONTACT_PHONES = "delete from phone where contact_id=?;";
-        final String DELETE_CONTACT_MESSAGE = "delete from contact_message where contact_id = ?;";
-        PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT_MESSAGE);
+        final String DELETE_MESSAGE = "delete from message where contact_id = ?;";
+        PreparedStatement statement = connection.prepareStatement(DELETE_MESSAGE);
         statement.setLong(1, id);
         statement.executeUpdate();
 
@@ -162,7 +162,6 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void deleteAll(Connection connection) throws SQLException {
-        String deleteAllContactMessage = "delete from contact_message;";
         String deleteAllAttachments = "delete from attachment;";
         String deleteAllPhones = "delete from phone;";
         String deleteAllContacts = "delete from contact;";
@@ -175,7 +174,6 @@ public class ContactDaoImpl implements ContactDao {
         String resetContactCounter = "alter table contact auto_increment=1;";
         String resetMessageCounter = "alter table message auto_increment=1;";
         Statement statement = connection.createStatement();
-        statement.executeUpdate(deleteAllContactMessage);
         statement.executeUpdate(deleteAllMessages);
         statement.executeUpdate(deleteAllAttachments);
         statement.executeUpdate(deleteAllPhones);

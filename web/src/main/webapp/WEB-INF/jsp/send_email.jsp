@@ -30,26 +30,46 @@
                 <div class="messageInfo">
                     <div class="successImage">
                         <img src="${pageContext.request.contextPath}/assests/images/check.png"/></div>
-                        ${requestScope.successMessage}</div><br>
+                        ${requestScope.successMessage}</div>
+                <br>
             </c:when>
             <c:when test="${requestScope.warningMessage != null}">
                 <div class="messageInfo">
                     <div class="warningImage">
                         <img src="${pageContext.request.contextPath}/assests/images/warning.png"/></div>
-                        ${requestScope.warningMessage}</div><br>
+                        ${requestScope.warningMessage}</div>
+                <br>
             </c:when>
         </c:choose>
         <label for="addressees"><fmt:message key="to_whom"/> </label><br>
         <c:choose>
-            <c:when test="${requestScope.validation.addresseesMessage == null}">
-                <input type="text" id="addressees" name="addressees"
-                       value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>"
-                       class="form-control"/>
+            <c:when test="${requestScope.emails != null}">
+                <c:choose>
+                    <c:when test="${requestScope.validation.addresseesMessage == null}">
+                        <input type="text" id="addressees" name="addressees"
+                               value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>"
+                               class="form-control"/>
+                    </c:when>
+                    <c:otherwise>
+                        <input type="text" id="addressees" name="addressees"
+                               value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>"
+                               class="form-control" style="border-color: #A94442;"/>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
             <c:otherwise>
-                <input type="text" id="addressees" name="addressees"
-                       value="<c:forEach var="email" items="${requestScope.emails}"><c:if test="${email != \"\"}">${email}${"  "}</c:if></c:forEach>"
-                       class="form-control" style="border-color: #A94442;"/>
+                <c:choose>
+                    <c:when test="${requestScope.validation.addresseesMessage == null}">
+                        <input type="text" id="addressees" name="addressees"
+                               value="${requestScope.message.addressee.email}"
+                               class="form-control"/>
+                    </c:when>
+                    <c:otherwise>
+                        <input type="text" id="addressees" name="addressees"
+                               value="${requestScope.message.addressee.email}"
+                               class="form-control" style="border-color: #A94442;"/>
+                    </c:otherwise>
+                </c:choose>
             </c:otherwise>
         </c:choose>
         <div class="nameMessage" id="addresseesMessage">${requestScope.validation.addresseesMessage}</div>
@@ -79,16 +99,17 @@
     </form>
     <label for="message"><fmt:message key="message"/> </label><br>
     <c:choose>
-    <c:when test="${requestScope.validation.textMessage == null}">
+        <c:when test="${requestScope.validation.textMessage == null}">
         <textarea name="message" id="message" form="emailForm" rows="10" cols="100"
                   class="form-control">${requestScope.message.text}</textarea>
-    </c:when>
-    <c:otherwise>
+        </c:when>
+        <c:otherwise>
         <textarea name="message" id="message" form="emailForm" rows="10" cols="100"
                   class="form-control" style="border-color: #A94442;">${requestScope.message.text}</textarea>
-    </c:otherwise>
+        </c:otherwise>
     </c:choose>
-    <div class="nameMessage" id="textMessage">${requestScope.validation.textMessage}</div><br>
+    <div class="nameMessage" id="textMessage">${requestScope.validation.textMessage}</div>
+    <br>
     <c:if test="${requestScope.message == null}">
         <input type="submit" onclick="sendEmailModule.sendEmail() " value="<fmt:message key="send"/> " form="emailForm"
                class="emailSubmit"/>

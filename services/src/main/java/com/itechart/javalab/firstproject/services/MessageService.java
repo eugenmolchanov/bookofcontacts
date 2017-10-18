@@ -63,10 +63,18 @@ public interface MessageService extends GenericService<Message> {
     long getNumberOfAllDeletedMessages() throws SQLException;
 
     /**
-     * Method deletes messages by their ids.
+     * Method sends messages to bucket by their ids. Soft delete.
      *
      * @param messageIds ids of message objects
      * @throws SQLException
      */
-    void deleteMessages(Set<Long> messageIds) throws SQLException;
+    void sendMessagesToBucket(Set<Long> messageIds) throws SQLException;
+
+    /**
+     * Method deletes message form bucket by it's id.
+     *
+     * @param messageIds ids of message objects
+     * @throws SQLException
+     */
+    void fullDelete(Set<Long> messageIds) throws SQLException;
 }

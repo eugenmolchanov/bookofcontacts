@@ -616,6 +616,7 @@ var contactModule = (function () {
                 var photo = document.getElementById('photoFile');
                 if (photo) {
                     photo.parentNode.removeChild(photo);
+                    document.getElementById('fotoMessage').innerHTML = '';
                 }
                 document.getElementById('photoPath').innerHTML = "";
                 var body = document.getElementById('contact_form');

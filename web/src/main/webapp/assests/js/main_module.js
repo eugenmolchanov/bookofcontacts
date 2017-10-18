@@ -39,6 +39,9 @@ var mainModule = (function () {
             for (var i in checkboxes) {
                 checkboxes[i].checked = source.checked;
             }
+        },
+        findContact: function (id) {
+            window.location = "http://localhost:8080/controller?command=displayContact&id=" + id;
         }
     }
 }());

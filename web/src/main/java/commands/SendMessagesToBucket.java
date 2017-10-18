@@ -15,9 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Yauhen Malchanau on 18.10.2017.
+ * Created by Yauhen Malchanau on 09.10.2017.
  */
-public class DeleteMessages implements ActionCommand {
+public class SendMessagesToBucket implements ActionCommand{
 
     private MessageService service = MessageServiceImpl.getInstance();
     private static Logger logger = Logger.getLogger(SendMessagesToBucket.class);
@@ -33,19 +33,19 @@ public class DeleteMessages implements ActionCommand {
                 ids.add(Long.parseLong(parameter));
             }
             try {
-                service.fullDelete(ids);
-                req.setAttribute("successMessage", MessageManager.getProperty("successful.message.delete"));
-                return new ShowDeletedMessages().execute(req, resp);
+                service.sendMessagesToBucket(ids);
+                req.setAttribute("successMessage", MessageManager.getProperty("successful.message.bucket"));
+                return new ShowMessages().execute(req, resp);
             } catch (SQLException e) {
-                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.message.delete"));
-                return new ShowDeletedMessages().execute(req, resp);
+                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.message.bucket"));
+                return new ShowMessages().execute(req, resp);
             } catch (Exception e) {
                 req.setAttribute("warningMessage", MessageManager.getProperty("error"));
                 return ERROR_PAGE;
             }
         } else {
             req.setAttribute("warningMessage", MessageManager.getProperty("invalid.data"));
-            return new ShowDeletedMessages().execute(req, resp);
+            return new ShowMessages().execute(req, resp);
         }
     }
 }

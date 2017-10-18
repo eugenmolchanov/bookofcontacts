@@ -57,26 +57,12 @@ public class MessageServiceImpl implements MessageService {
         Connection connection = null;
         try {
             connection = Database.getConnection();
-            connection.setAutoCommit(false);
-            long messageId = messageDao.save(message, connection);
-            for (Contact contact : message.getAddressees()) {
-                messageDao.addDependencyFromContact(messageId, contact.getId(), connection);
-            }
-            connection.commit();
-            connection.setAutoCommit(true);
+            messageDao.save(message, connection);
         } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
             logger.error("Can't save message. SqlException.");
             logger.error(e.getMessage(), e);
             throw e;
         } catch (Exception e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
             logger.error("Can't save message. Exception.");
             logger.error(e.getMessage(), e);
             throw e;
@@ -193,7 +179,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void deleteMessages(Set<Long> messageIds) throws SQLException {
+    public void sendMessagesToBucket(Set<Long> messageIds) throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();
@@ -217,6 +203,40 @@ public class MessageServiceImpl implements MessageService {
                 logger.error("Connection rollback.");
             }
             logger.error("Can't delete group of messages. Exception.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    @Override
+    public void fullDelete(Set<Long> messageIds) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = Database.getConnection();
+            connection.setAutoCommit(false);
+            for (Long id : messageIds) {
+                messageDao.fullDelete(id, connection);
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't delete group of messages from bucket. SqlException.");
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback();
+                logger.error("Connection rollback.");
+            }
+            logger.error("Can't delete group of messages from bucket. Exception.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {

@@ -550,7 +550,7 @@
     </div>
 </div>
 <input type="hidden" id="page" value="edit"/>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=5"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=6"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

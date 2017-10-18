@@ -31,14 +31,7 @@ public class GetMessage implements ActionCommand {
         try {
             long id = Long.parseLong(req.getParameter("id"));
             Message message = service.findById(id);
-            Set<String> emails = new HashSet<>();
-            for (Contact contact : message.getAddressees()) {
-                if (contact.getEmail() != null) {
-                    emails.add(contact.getEmail());
-                }
-            }
             req.setAttribute("message", message);
-            req.setAttribute("emails", emails);
             return ACTIVE_PAGE;
         } catch (SQLException e) {
             req.setAttribute("warningMessage", MessageManager.getProperty("error"));

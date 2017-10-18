@@ -60,22 +60,20 @@
             </thead>
             <tbody>
             <c:forEach var="contact" items="${requestScope.contacts}">
-                <tr>
+                <tr class="contactRow">
                     <td class="th"><input type="checkbox" name="id" email="${contact.email}" value="${contact.id}"/>
                         <input type="hidden" name="email" id="useEmail_${contact.email}" value=""/>
                     </td>
-                    <td>
-                        <a href="controller?command=displayContact&id=${contact.id}">${contact.lastName} ${" "} ${contact.firstName}</a>
-                    </td>
-                    <td><fmt:formatDate value="${contact.birthday}" pattern="dd.MM.yyyy"/></td>
-                    <td>${contact.country}</td>
-                    <td>${contact.city}</td>
-                    <td>${contact.street}</td>
-                    <td>${contact.houseNumber}</td>
-                    <td><c:if test="${contact.flatNumber > 0}">${contact.flatNumber}</c:if></td>
-                    <td><c:if test="${contact.postcode > 0}">${contact.postcode}</c:if></td>
-                    <td>${contact.employmentPlace}</td>
-                    <td>${contact.contactGroup}</td>
+                    <td onclick="mainModule.findContact(${contact.id})">${contact.lastName} ${" "} ${contact.firstName}</a></td>
+                    <td onclick="mainModule.findContact(${contact.id})"><fmt:formatDate value="${contact.birthday}" pattern="dd.MM.yyyy"/></td>
+                    <td onclick="mainModule.findContact(${contact.id})">${contact.country}</td>
+                    <td onclick="mainModule.findContact(${contact.id})">${contact.city}</td>
+                    <td onclick="mainModule.findContact(${contact.id})">${contact.street}</td>
+                    <td onclick="mainModule.findContact(${contact.id})">${contact.houseNumber}</td>
+                    <td onclick="mainModule.findContact(${contact.id})"><c:if test="${contact.flatNumber > 0}">${contact.flatNumber}</c:if></td>
+                    <td onclick="mainModule.findContact(${contact.id})"><c:if test="${contact.postcode > 0}">${contact.postcode}</c:if></td>
+                    <td onclick="mainModule.findContact(${contact.id})">${contact.employmentPlace}</td>
+                    <td onclick="mainModule.findContact(${contact.id})">${contact.contactGroup}</td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -137,12 +135,27 @@
                     key="next"/></a></div>
         </c:if>
         <div class="rowNumber">
-            <fmt:message key="display"/>${" "}<a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=10">10</a>${" "}
-            <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=20">20</a>${" "}
+            <fmt:message key="display"/>${" "}
+            <c:choose>
+                <c:when test="${step == 10}">
+                    10${" "}
+                </c:when>
+                <c:otherwise>
+                    <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=10">10</a>${" "}
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${step == 20}">
+                    20${" "}
+                </c:when>
+                <c:otherwise>
+                    <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=20">20</a>${" "}
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/main_module.js?v=10"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/main_module.js?v=11"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">
