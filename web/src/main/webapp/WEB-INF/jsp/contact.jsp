@@ -63,13 +63,13 @@
             <c:choose>
                 <c:when test="${requestScope.validation.firstNameMessage == null}">
                     <input type="text" name="firstName" id="firstName"
-                           required value="${requestScope.contact.firstName}"
+                           value="${requestScope.contact.firstName}"
                            class="form-control" readonly/><br>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="firstName" id="firstName"
-                           required value="${requestScope.contact.firstName}"
-                           class="form-control" readonly style="border-color: #A94442;"/><br>
+                           value="${requestScope.contact.firstName}"
+                           class="form-control" style="border-color: #A94442;"/><br>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="firstNameMessage">${requestScope.validation.firstNameMessage}</div>
@@ -77,12 +77,12 @@
             <label for="lastName"><fmt:message key="last_name"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.secondNameMessage == null}">
-                    <input type="text" name="lastName" id="lastName" required readonly
+                    <input type="text" name="lastName" id="lastName" readonly
                            value="${requestScope.contact.lastName}"
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="lastName" id="lastName" required readonly
+                    <input type="text" name="lastName" id="lastName"
                            value="${requestScope.contact.lastName}"
                            class="form-control" style="border-color: #A94442;"/><br>
                 </c:otherwise>
@@ -97,7 +97,7 @@
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="middleName" id="middleName" readonly
+                    <input type="text" name="middleName" id="middleName"
                            value="${requestScope.contact.middleName}"
                            class="form-control" style="border-color: #A94442;"/><br>
                 </c:otherwise>
@@ -109,16 +109,14 @@
             <label for="birthday"><fmt:message key="birthday"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.birthdayMessage == null}">
-                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'" readonly
-                           value="${requestScope.contact.birthday}"
-                           onblur="if(this.value==''){this.type='text'}"
-                           class="form-control"/><br>
+                    <input type="date" name="birthday" id="birthday" onfocus="this.type = 'date'" readonly
+                           pattern="dd.MM.yyyy"
+                           value="${requestScope.contact.birthday}" class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'" readonly
-                           value="${requestScope.contact.birthday}"
-                           onblur="if(this.value==''){this.type='text'}"
-                           class="form-control" style="border-color: #A94442;"/><br>
+                    <input type="date" name="birthday" id="birthday" onfocus="this.type = 'date'" pattern="dd.MM.yyyy"
+                           value="${requestScope.contact.birthday}" class="form-control"
+                           style="border-color: #A94442;"/><br>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="birthdayMessage">${requestScope.validation.birthdayMessage}</div>
@@ -133,7 +131,7 @@
                     </select><br>
                 </c:when>
                 <c:otherwise>
-                    <select name="gender" id="gender" class="form-control" readonly style="border-color: #A94442;">
+                    <select name="gender" id="gender" class="form-control" style="border-color: #A94442;">
                         <option class="gender" selected hidden>${requestScope.contact.gender}</option>
                         <option value="Мужчина"><fmt:message key="male"/></option>
                         <option value="Женщина"><fmt:message key="female"/></option>
@@ -151,7 +149,6 @@
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="nationality" id="nationality" value="${requestScope.contact.nationality}"
-                           readonly
                            class="form-control" style="border-color: #A94442;"/><br>
                 </c:otherwise>
             </c:choose>
@@ -174,7 +171,7 @@
                     </select><br>
                 </c:when>
                 <c:otherwise>
-                    <select name="maritalStatus" id="maritalStatus" class="form-control" readonly
+                    <select name="maritalStatus" id="maritalStatus" class="form-control"
                             style="border-color: #A94442;">
                         <option selected hidden>${requestScope.contact.maritalStatus}</option>
                         <option value="Не женат"><fmt:message key="not_married_male"/></option>
@@ -199,7 +196,7 @@
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="employmentPlace" id="employmentPlace"
-                           value="${requestScope.contact.employmentPlace}" readonly
+                           value="${requestScope.contact.employmentPlace}"
                            class="form-control" style="border-color: #A94442;"/><br>
                 </c:otherwise>
             </c:choose>
@@ -218,8 +215,7 @@
                     </select><br>
                 </c:when>
                 <c:otherwise>
-                    <select name="contactGroup" id="contactGroup" class="form-control" readonly
-                            style="border-color: #A94442;">
+                    <select name="contactGroup" id="contactGroup" class="form-control" style="border-color: #A94442;">
                         <option selected hidden>${requestScope.contact.contactGroup}</option>
                         <option value="Семья"><fmt:message key="family"/></option>
                         <option value="Друзья"><fmt:message key="friends"/></option>
@@ -235,11 +231,11 @@
             <label for="webSite"><fmt:message key="website"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.websiteMessage == null}">
-                    <input type="url" name="webSite" id="webSite" value="${requestScope.contact.webSite}" readonly
+                    <input type="text" name="webSite" id="webSite" value="${requestScope.contact.webSite}" readonly
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="url" name="webSite" id="webSite" value="${requestScope.contact.webSite}" readonly
+                    <input type="url" name="webSite" id="webSite" value="${requestScope.contact.webSite}"
                            style="border-color: #A94442;"
                            class="form-control"/><br>
                 </c:otherwise>
@@ -250,13 +246,13 @@
             <label for="email"><fmt:message key="email"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.emailMessage == null}">
-                    <input type="email" name="email" id="email" value="${requestScope.contact.email}"
+                    <input type="text" name="email" id="email" value="${requestScope.contact.email}"
                            class="form-control"
                            readonly/><br>
                 </c:when>
                 <c:otherwise>
                     <input type="email" name="email" id="email" value="${requestScope.contact.email}"
-                           class="form-control" style="border-color: #A94442;" readonly/><br>
+                           class="form-control" style="border-color: #A94442;"/><br>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="emailMessage">${requestScope.validation.emailMessage}</div>
@@ -270,7 +266,7 @@
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="country" id="country" value="${requestScope.contact.country}" readonly
+                    <input type="text" name="country" id="country" value="${requestScope.contact.country}"
                            style="border-color: #A94442;"
                            class="form-control"/><br>
                 </c:otherwise>
@@ -286,7 +282,7 @@
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="city" id="city" class="form-control" value="${requestScope.contact.city}"
-                           style="border-color: #A94442;" readonly/><br>
+                           style="border-color: #A94442;"/><br>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="cityMessage">${requestScope.validation.cityMessage}</div>
@@ -299,7 +295,7 @@
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="street" id="street" value="${requestScope.contact.street}" readonly
+                    <input type="text" name="street" id="street" value="${requestScope.contact.street}"
                            style="border-color: #A94442;" class="form-control"/><br>
                 </c:otherwise>
             </c:choose>
@@ -314,8 +310,7 @@
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="houseNumber" id="houseNumber" class="form-control"
-                           style="border-color: #A94442;"
-                           value="${requestScope.contact.houseNumber}" readonly/><br>
+                           style="border-color: #A94442;" value="${requestScope.contact.houseNumber}"/><br>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="houseNumberMessage">${requestScope.validation.houseNumberMessage}</div>
@@ -324,14 +319,13 @@
             <label for="flatNumber"><fmt:message key="flat_number"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.flatNumberMessage == null}">
-                    <input type="number" min="1" name="flatNumber" id="flatNumber" pattern="[0-9]" title="Only digits"
-                           readonly
+                    <input type="text" name="flatNumber" id="flatNumber" readonly
                            <c:if test="${requestScope.contact.flatNumber > 0}">value="${requestScope.contact.flatNumber}"</c:if>
                            class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="number" min="1" name="flatNumber" id="flatNumber" pattern="[0-9]" title="Only digits"
-                           readonly style="border-color: #A94442;"
+                    <input type="text" name="flatNumber" id="flatNumber"
+                            style="border-color: #A94442;"
                            <c:if test="${requestScope.contact.flatNumber > 0}">value="${requestScope.contact.flatNumber}"</c:if>
                            class="form-control"/><br>
                 </c:otherwise>
@@ -342,15 +336,15 @@
             <label for="postalIndex"><fmt:message key="postcode"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.postalIndexMessage == null}">
-                    <input type="number" min="1" name="postalIndex" id="postalIndex" readonly
+                    <input type="text" name="postalIndex" id="postalIndex" readonly
                            <c:if test="${requestScope.contact.postcode > 0}">value="${requestScope.contact.postcode}" </c:if>
-                           pattern="[0-9]" title="Only digits" class="form-control"/><br>
+                           class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="number" min="1" name="postalIndex" id="postalIndex" readonly
+                    <input type="text" name="postalIndex" id="postalIndex"
                            style="border-color: #A94442;"
                            <c:if test="${requestScope.contact.postcode > 0}">value="${requestScope.contact.postcode}" </c:if>
-                           pattern="[0-9]" title="Only digits" class="form-control"/><br>
+                           class="form-control"/><br>
                 </c:otherwise>
             </c:choose>
             <div class="nameMessage" id="postalIndexMessage">${requestScope.validation.postalIndexMessage}</div>
@@ -425,9 +419,11 @@
             <div class="nameMessage">${requestScope.validation.attachTitleMessage}</div>
             <div class="nameMessage">${requestScope.validation.attachCommentMessage}</div>
             <div class="attachmentButtons" id="attachmentButtons">
-                <button type="button" name="attachmentPopup" onclick="contactModule.addAttachments()" class="createButton">
+                <button type="button" name="attachmentPopup" onclick="contactModule.addAttachments()"
+                        class="createButton">
                     <fmt:message key="create"/></button>
-                <button type="button" name="attachmentPopup" onclick="contactModule.editAttachment()" class="editButton">
+                <button type="button" name="attachmentPopup" onclick="contactModule.editAttachment()"
+                        class="editButton">
                     <fmt:message key="edit"/></button>
                 <button type="button" name="deleteAttachment" onclick="contactModule.deleteAttachmentFromTable()"
                         class="deleteButton"><fmt:message key="delete"/></button>
@@ -455,7 +451,8 @@
                                    value="${attachment.fileName}" class="attachmentTitle" readonly/>
                         </td>
                         <td class="attachmentTd" name="date">
-                            <input id="attachmentDateId_${attachment.id}" value="<fmt:formatDate value="${attachment.date}" pattern="dd.MM.yyyy HH:mm"/>"
+                            <input id="attachmentDateId_${attachment.id}"
+                                   value="<fmt:formatDate value="${attachment.date}" pattern="dd.MM.yyyy HH:mm"/>"
                                    class="attachmentDate" readonly>
                         </td>
                         <td class="attachmentTd">
@@ -469,7 +466,7 @@
         </div>
         <br>
         <div class="bigEditButtonDiv">
-            <input type="submit" onclick="contactModule.contactValidation()" value="<fmt:message key="edit"/>"
+            <input type="submit" value="<fmt:message key="edit"/>"
                    class="bigEditButton" id="bigEditButton"/>
         </div>
     </form>
@@ -481,15 +478,15 @@
     <div class="phoneForm" id="phoneForm">
         <div class="phoneMessage" id="countryCodeMessage"></div>
         <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
-               class="form-control" required/>
+               class="form-control"/>
         <div class="phoneMessage" id="operatorCodeMessage"></div>
-        <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
-               class="form-control" required/>
+        <input type="text" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
+               class="form-control"/>
         <div class="phoneMessage" id="numberMessage"></div>
-        <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
-               class="form-control" required/>
+        <input type="text" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
+               class="form-control"/>
         <div class="phoneMessage" id="typeMessage"></div>
-        <select id="type" name="type" class="form-control" required>
+        <select id="type" name="type" class="form-control">
             <option selected disabled hidden><fmt:message key="type"/></option>
             <option value="Рабочий"><fmt:message key="work_phone"/></option>
             <option value="Домашний"><fmt:message key="home_phone"/></option>
@@ -499,10 +496,12 @@
         <input type="text" id="comment" name="comment"
                placeholder="<fmt:message key="comment"/> " class="form-control"/><br>
         <div id="phone_buttons" class="phone_buttons">
-            <button type="button" id="savePhone" onclick="contactModule.addPhoneTable()" class="btn btn-success"><fmt:message
-                    key="save"/></button>
-            <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-primary"><fmt:message
-                    key="exit"/></button>
+            <button type="button" id="savePhone" onclick="contactModule.addPhoneTable()" class="btn btn-success">
+                <fmt:message
+                        key="save"/></button>
+            <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-primary">
+                <fmt:message
+                        key="cancel"/></button>
         </div>
 
     </div>
@@ -515,20 +514,23 @@
     <div class="attachmentForm" id="attachmentForm">
         <form>
             <div class="attachmentMessage" id="attachmentMessage"></div>
-            <input type="button" name="attachment" id="attachment" class="chooseButton" onclick="contactModule.uploadAttachment()"
-                   value="<fmt:message key="choose_file"/>"/>
+            <input type="button" name="attachment" id="attachment" class="chooseButton"
+                   onclick="contactModule.uploadAttachment()"
+                   value="<fmt:message key="find"/>"/>
             <div class="attachmentMessage" id="attachTitleMessage"></div>
             <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
-                   class="form-control"/>
+                   class="form-control">
             <div class="attachmentMessage" id="attachCommentMessage"></div>
             <input type="text" id="attachComment" name="attachComment" placeholder="<fmt:message key="comment"/> "
                    class="form-control"/>
             <div class="attachments_buttons">
-                <button type="button" id="saveAttachment" onclick="contactModule.addAttachmentTable()" class="btn btn-success">
+                <button type="button" id="saveAttachment" onclick="contactModule.addAttachmentTable()"
+                        class="btn btn-success">
                     <fmt:message key="save"/></button>
-                <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()" class="btn btn-primary">
+                <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()"
+                        class="btn btn-primary">
                     <fmt:message
-                            key="exit"/></button>
+                            key="cancel"/></button>
             </div>
         </form>
     </div>
@@ -537,12 +539,14 @@
     <div class="photoForm" id="photoForm">
         <div class="photoRestriction"><fmt:message key="restriction.photo"/></div>
         <div class="photoPathMessage" id="photoPathMessage"></div>
-        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton" onclick="contactModule.findPhoto()"
+        <input type="button" name="choosePhoto" id="choosePhoto" class="chooseButton"
+               onclick="contactModule.findPhoto()"
                value="<fmt:message key="find"/>"/>
         <div class="photoPath" id="photoPath"></div>
         <div class="photo_buttons">
-            <button type="button" id="savePhoto" onclick="contactModule.savePhotoFile()" class="btn btn-success"><fmt:message
-                    key="save"/></button>
+            <button type="button" id="savePhoto" onclick="contactModule.savePhotoFile()" class="btn btn-success">
+                <fmt:message
+                        key="save"/></button>
             <button type="button" id="cancelPhoto" onclick="contactModule.deletePhoto()" class="btn btn-primary">
                 <fmt:message
                         key="cancel"/></button>
@@ -550,7 +554,8 @@
     </div>
 </div>
 <input type="hidden" id="page" value="edit"/>
-<script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=6"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=7"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

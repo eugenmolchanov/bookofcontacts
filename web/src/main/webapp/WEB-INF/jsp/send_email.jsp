@@ -21,10 +21,6 @@
     <form class="emailForm" id="emailForm" name="emailForm" action="/controller" method="post"
           onsubmit="return sendEmailModule.sendEmail()">
         <input type="hidden" name="command" value="sendEmail"/>
-        <c:if test="${requestScope.message != null}">
-            <input type="button" value="<fmt:message key="send_email"/> "
-                   onclick="sendEmailModule.toEmailForm()" class="emailButton"/><br><br>
-        </c:if>
         <c:choose>
             <c:when test="${requestScope.successMessage != null}">
                 <div class="messageInfo">
@@ -89,12 +85,13 @@
         </c:choose>
         <div class="nameMessage" id="topicMessage">${requestScope.validation.topicMessage}</div>
         <br>
-        <c:if test="${requestScope.message == null}">
-            <select id="template" name="template" onchange="sendEmailModule.chooseTemplate()" class="form-control">
-                <option selected disabled hidden><fmt:message key="choose_template"/></option>
-                <option value="birthday"><fmt:message key="birthday_congratulations"/></option>
-                <option value="newYear"><fmt:message key="new_year_congratulations"/></option>
-            </select>
+        <select id="template" name="template" onchange="sendEmailModule.chooseTemplate()" class="form-control">
+            <option selected disabled hidden><fmt:message key="choose_template"/></option>
+            <option value="birthday"><fmt:message key="birthday_congratulations"/></option>
+            <option value="newYear"><fmt:message key="new_year_congratulations"/></option>
+        </select>
+        <c:if test="${requestScope.template != null}">
+            <input type="hidden" value="template" name="template">
         </c:if>
     </form>
     <label for="message"><fmt:message key="message"/> </label><br>
@@ -110,10 +107,8 @@
     </c:choose>
     <div class="nameMessage" id="textMessage">${requestScope.validation.textMessage}</div>
     <br>
-    <c:if test="${requestScope.message == null}">
-        <input type="submit" onclick="sendEmailModule.sendEmail() " value="<fmt:message key="send"/> " form="emailForm"
-               class="emailSubmit"/>
-    </c:if>
+    <input type="submit" value="<fmt:message key="send"/> " form="emailForm"
+           class="emailSubmit"/>
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/send_email_module.js?v=7"></script>
 <script>

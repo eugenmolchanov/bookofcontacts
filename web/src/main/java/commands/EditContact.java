@@ -49,6 +49,7 @@ public class EditContact implements ActionCommand {
                 logger.debug("Data for contact update are not valid.");
                 req.setAttribute("id", contact.getId());
                 req.setAttribute("validation", validationMessages);
+                req.setAttribute("edit", true);
                 return new DisplayContact().execute(req, resp);
             }
         } catch (SQLException e) {

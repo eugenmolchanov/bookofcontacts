@@ -14,7 +14,7 @@
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/bootstrap.css">
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=38">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css?v=53">
 </head>
 <body>
 <div class="header">
@@ -23,9 +23,6 @@
     </div>
     <div class="messages" onclick="headerModule.toMessagePage()">
         <fmt:message key="messages"/>
-    </div>
-    <div class="createContact" onclick="headerModule.toCreateContact()">
-        <fmt:message key="create_contact"/>
     </div>
     <div class="search" onclick="headerModule.toSearchPage()">
         <fmt:message key="search"/>

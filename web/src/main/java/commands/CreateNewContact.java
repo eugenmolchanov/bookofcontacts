@@ -40,7 +40,7 @@ public class CreateNewContact implements ActionCommand {
                 Contact contact = (Contact) result.get("contact");
                 service.create(contact);
                 req.setAttribute("successMessage", MessageManager.getProperty("successful_create"));
-                return ACTIVE_PAGE;
+                return new ShowListOfContacts().execute(req, resp);
             } else {
                 logger.debug("Data isn't valid.");
                 req.setAttribute("validation", validationMessages);

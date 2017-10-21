@@ -42,6 +42,9 @@
                         ${requestScope.warningMessage}</div>
             </c:when>
         </c:choose>
+        <div class="createContactButton" title="<fmt:message key="create_contact"/>">
+            <img src="${pageContext.request.contextPath}/assests/images/add.png" onclick="headerModule.toCreateContact()">
+        </div>
         <table class="table table-bordered">
             <thead>
             <tr>

@@ -34,7 +34,7 @@
         </c:when>
     </c:choose>
     <form action="/controller?command=createNewContact" method="post" name="createForm"
-          onsubmit="return contactModule.contactValidation()"
+    onsubmit="return contactModule.contactValidation()"
           enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
         <div class="createContactTitle"><fmt:message key="personal_data"/></div>
         <input type="button" value="<fmt:message key="choose_photo"/>" class="chooseButton"
@@ -51,24 +51,21 @@
             <c:choose>
                 <c:when test="${requestScope.validation.firstNameMessage == null}">
                     <input type="text" name="firstName" id="firstName"
-                           placeholder="<fmt:message key="first_name"/>${'*'} " required
-                           class="form-control"/>
+                           placeholder="<fmt:message key="first_name"/>${'*'} " class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="firstName" id="firstName"
-                           placeholder="<fmt:message key="first_name"/>${'*'} " required
-                           class="form-control" style="border-color: #A94442;"/>
+                           placeholder="<fmt:message key="first_name"/>${'*'} " class="form-control"
+                           style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.secondNameMessage == null}">
                     <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}"
-                           required
                            class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}"
-                           required
                            class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
@@ -104,16 +101,16 @@
                 <c:when test="${requestScope.validation.genderMessage == null}">
                     <select name="gender" id="gender" class="form-control" onchange="contactModule.changeGender()">
                         <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
-                        <option value="Мужчина"><fmt:message key="male"/></option>
-                        <option value="Женщина"><fmt:message key="female"/></option>
+                        <option value="M"><fmt:message key="male"/></option>
+                        <option value="F"><fmt:message key="female"/></option>
                     </select>
                 </c:when>
                 <c:otherwise>
                     <select name="gender" id="gender" class="form-control" style="border-color: #A94442;"
                             onchange="contactModule.changeGender()">
                         <option class="gender" selected disabled hidden><fmt:message key="gender"/></option>
-                        <option value="Мужчина"><fmt:message key="male"/></option>
-                        <option value="Женщина"><fmt:message key="female"/></option>
+                        <option value="M"><fmt:message key="male"/></option>
+                        <option value="F"><fmt:message key="female"/></option>
                     </select>
                 </c:otherwise>
             </c:choose>
@@ -201,11 +198,11 @@
             <br>
             <c:choose>
                 <c:when test="${requestScope.validation.websiteMessage == null}">
-                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
+                    <input type="text" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
                            class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="url" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
+                    <input type="text" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
                            class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
@@ -215,11 +212,11 @@
             <br>
             <c:choose>
                 <c:when test="${requestScope.validation.emailMessage == null}">
-                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
+                    <input type="text" name="email" id="email" placeholder="<fmt:message key="email"/> "
                            class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="email" name="email" id="email" placeholder="<fmt:message key="email"/> "
+                    <input type="text" name="email" id="email" placeholder="<fmt:message key="email"/> "
                            class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
@@ -277,26 +274,22 @@
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.flatNumberMessage == null}">
-                    <input type="number" min="1" name="flatNumber" id="flatNumber"
-                           placeholder="<fmt:message key="flat_number"/> "
-                           pattern="[0-9]" title="Only digits" class="form-control"/>
+                    <input type="text" name="flatNumber" id="flatNumber"
+                           placeholder="<fmt:message key="flat_number"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="number" min="1" name="flatNumber" id="flatNumber"
-                           placeholder="<fmt:message key="flat_number"/> "
-                           pattern="[0-9]" title="Only digits" class="form-control" style="border-color: #A94442;"/>
+                    <input type="text" name="flatNumber" id="flatNumber"
+                           placeholder="<fmt:message key="flat_number"/> " class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.postalIndexMessage == null}">
-                    <input type="number" min="1" name="postalIndex" id="postalIndex"
-                           placeholder="<fmt:message key="postcode"/> "
-                           pattern="[0-9]" title="Only digits" class="form-control"/>
+                    <input type="text" name="postalIndex" id="postalIndex"
+                           placeholder="<fmt:message key="postcode"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="number" min="1" name="postalIndex" id="postalIndex"
-                           placeholder="<fmt:message key="postcode"/> "
-                           pattern="[0-9]" title="Only digits" class="form-control" style="border-color: #A94442;"/>
+                    <input type="text" name="postalIndex" id="postalIndex"
+                           placeholder="<fmt:message key="postcode"/> " class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -359,7 +352,7 @@
         </div>
         <br>
         <div class="bigCreateButtonDiv">
-            <input type="submit" onclick="contactModule.contactValidation()" value="<fmt:message key="create"/>"
+            <input type="submit" value="<fmt:message key="create"/>"
                    class="bigCreateButton"/>
         </div>
     </form>
@@ -371,15 +364,15 @@
     <div class="phoneForm" id="phoneForm">
         <div class="phoneMessage" id="countryCodeMessage"></div>
         <input type="text" id="countryCode" name="countryCode" placeholder="<fmt:message key="country_code"/> "
-               class="form-control" required/>
+               class="form-control"/>
         <div class="phoneMessage" id="operatorCodeMessage"></div>
-        <input type="number" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
-               class="form-control" required/>
+        <input type="text" id="operatorCode" name="operatorCode" placeholder="<fmt:message key="operator_code"/> "
+               class="form-control"/>
         <div class="phoneMessage" id="numberMessage"></div>
-        <input type="number" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
-               class="form-control" required/>
+        <input type="text" id="number" name="number" placeholder="<fmt:message key="phone_number"/> "
+               class="form-control"/>
         <div class="phoneMessage" id="typeMessage"></div>
-        <select id="type" name="type" class="form-control" required>
+        <select id="type" name="type" class="form-control">
             <option selected disabled><fmt:message key="type"/></option>
             <option value="Рабочий"><fmt:message key="work_phone"/></option>
             <option value="Домашний"><fmt:message key="home_phone"/></option>
@@ -394,7 +387,7 @@
                         key="save"/></button>
             <button type="button" id="cancelPhone" onclick="contactModule.closePhonePopup()" class="btn btn-primary">
                 <fmt:message
-                        key="exit"/></button>
+                        key="cancel"/></button>
         </div>
 
     </div>
@@ -409,7 +402,7 @@
             <div class="addAttachmentMessage" id="attachmentMessage"></div>
             <input type="button" name="attachment" id="attachment" class="chooseButton"
                    onclick="contactModule.uploadAttachment()"
-                   value="<fmt:message key="choose_file"/>"/>
+                   value="<fmt:message key="find"/>"/>
             <div class="attachmentMessage" id="attachTitleMessage"></div>
             <input type="text" id="attachTitle" name="attachTitle" placeholder="<fmt:message key="title"/> "
                    class="form-control"/>
@@ -423,7 +416,7 @@
                 <button type="button" id="cancelAttachment" onclick="contactModule.closeAttachmentPopup()"
                         class="btn btn-primary">
                     <fmt:message
-                            key="exit"/></button>
+                            key="cancel"/></button>
             </div>
         </form>
     </div>
@@ -447,7 +440,7 @@
     </div>
 </div>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=6"></script>
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=9"></script>
 <script>
     var messages = {};
     <c:forEach var="message" items="${requestScope.validationMessages}">

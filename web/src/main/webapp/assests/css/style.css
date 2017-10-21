@@ -50,6 +50,14 @@ input, select {
     margin: 0 0 0 0;
     padding: 1% 1% 1% 1%;
 }
+.createContactButton {
+    display: inline-block;
+    cursor: pointer;
+    left: 94.5%;
+    position: absolute;
+    padding: 1px;
+}
+
 .alertMessage {
     position: fixed;
     top: 2.4%;
@@ -480,12 +488,14 @@ input, select {
 }
 .photoPath {
     display: inline-block;
-    border: solid 1px;
     width: 60%;
     height: 35px;
     vertical-align: top;
     text-align: left;
     padding-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding-left: 1%;
 }
 .phoneMessage, .attachmentMessage {
     color: #A94442;
@@ -525,7 +535,7 @@ input, select {
     font-family: sans-serif;
     width: 15%;
 }
-.messageRow, .contactRow {
+.contactRow {
     cursor: hand;
 }
 .contactRow:hover {
@@ -539,10 +549,12 @@ input, select {
     color: #ccc;
 }
 .messageInfo {
-    display: inline-block;
+    display: inline;
+    min-width: 75%;
+    max-width: 75%;
 }
 .warningImage, .successImage {
-    vertical-align: bottom;
+    vertical-align: middle;
     display: inline-block;
 }
 .messagesBody {

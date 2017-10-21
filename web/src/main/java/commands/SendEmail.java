@@ -57,12 +57,12 @@ public class SendEmail implements ActionCommand {
                     }
                 });
                 String parameter = req.getParameter("addressees");
-                MimeMessage message = new MimeMessage(session);
+                MimeMessage mimeMessage = new MimeMessage(session);
                 com.itechart.javalab.firstproject.entities.Message sendingMessage = new com.itechart.javalab.firstproject.entities.Message();
                 String subject = req.getParameter("topic");
                 sendingMessage.setTopic(subject);
-                message.setFrom(new InternetAddress(from));
-                message.setSubject(subject);
+                mimeMessage.setFrom(new InternetAddress(from));
+                mimeMessage.setSubject(subject);
                 String[] emails = parameter.split("\\s+");
                 Set<String> emailsForSend = new HashSet<>();
                 Collections.addAll(emailsForSend, emails);
@@ -77,9 +77,21 @@ public class SendEmail implements ActionCommand {
                                 contacts.add(contact);
                             } else {
                                 req.setAttribute("warningMessage", MessageManager.getProperty("invalid.email"));
+                                com.itechart.javalab.firstproject.entities.Message message = new com.itechart.javalab.firstproject.entities.Message();
+                                message.setText(req.getParameter("message"));
+                                message.setTopic(req.getParameter("topic"));
+                                req.setAttribute("emails", req.getParameter("addressees"));
+                                req.setAttribute("template", true);
+                                req.setAttribute("message", message);
                                 return ACTIVE_PAGE;
                             }
                         } catch (SQLException e) {
+                            com.itechart.javalab.firstproject.entities.Message message = new com.itechart.javalab.firstproject.entities.Message();
+                            message.setText(req.getParameter("message"));
+                            message.setTopic(req.getParameter("topic"));
+                            req.setAttribute("emails", req.getParameter("addressees"));
+                            req.setAttribute("message", message);
+                            req.setAttribute("template", true);
                             req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
                             return ACTIVE_PAGE;
                         }
@@ -89,9 +101,9 @@ public class SendEmail implements ActionCommand {
                             try {
                                 for (Contact contact : contacts) {
                                     stringTemplate.setAttribute("contact", contact);
-                                    message.setText(stringTemplate.toString());
-                                    message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
-                                    Transport.send(message);
+                                    mimeMessage.setText(stringTemplate.toString());
+                                    mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
+                                    Transport.send(mimeMessage);
                                     sendingMessage.setAddressee(contact);
                                     sendingMessage.setText(stringTemplate.toString());
                                     stringTemplate.removeAttribute("contact");
@@ -109,7 +121,7 @@ public class SendEmail implements ActionCommand {
                     }
                 } else {
                     String messageText = req.getParameter("message");
-                    message.setText(messageText);
+                    mimeMessage.setText(messageText);
                     Set<Contact> contacts = new HashSet<>();
                     for (String email : emailsForSend) {
                         try {
@@ -119,6 +131,11 @@ public class SendEmail implements ActionCommand {
                             }
                         } catch (SQLException e) {
                             req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
+                            com.itechart.javalab.firstproject.entities.Message message = new com.itechart.javalab.firstproject.entities.Message();
+                            message.setText(req.getParameter("message"));
+                            message.setTopic(req.getParameter("topic"));
+                            req.setAttribute("emails", req.getParameter("addressees"));
+                            req.setAttribute("message", message);
                             return ACTIVE_PAGE;
                         }
                     }
@@ -129,8 +146,8 @@ public class SendEmail implements ActionCommand {
                                 sendingMessage.setText(messageText);
                                 sendingMessage.setTopic(subject);
                                 sendingMessage.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
-                                message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
-                                Transport.send(message);
+                                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
+                                Transport.send(mimeMessage);
                                 logger.debug("Message was sent to ".concat(contact.getEmail()).concat(". "));
                                 messageService.save(sendingMessage);
                             }
@@ -154,6 +171,14 @@ public class SendEmail implements ActionCommand {
         } else {
             req.setAttribute("warningMessage", MessageManager.getProperty("send.message.error"));
             req.setAttribute("validation", validationMessages);
+            com.itechart.javalab.firstproject.entities.Message message = new com.itechart.javalab.firstproject.entities.Message();
+            message.setText(req.getParameter("message"));
+            message.setTopic(req.getParameter("topic"));
+            req.setAttribute("emails", req.getParameter("addressees"));
+            if (req.getParameter("template") != null && !Objects.equals(req.getParameter("template"), "")) {
+                req.setAttribute("template", true);
+            }
+            req.setAttribute("message", message);
             return ACTIVE_PAGE;
         }
     }

@@ -1,6 +1,7 @@
 package util;
 
 import com.itechart.javalab.firstproject.entities.*;
+import commands.enums.Gender;
 import dto.AttachmentDataDto;
 import dto.PhoneDataDto;
 import org.apache.log4j.Logger;
@@ -156,10 +157,12 @@ public class Validation {
         if (parameters.get("gender") != null) {
             String gender = String.valueOf(parameters.get("gender"));
             if (!gender.isEmpty()) {
-                if (!gender.equals("Мужчина") && !gender.equals("Женщина")) {
-                    validationMessages.put("genderMessage", MessageManager.getProperty("validation.select"));
-                } else {
+                try {
+                    Gender.valueOf(gender.toUpperCase());
                     contact.setGender(gender);
+                } catch (Exception e) {
+                    logger.debug("Gender isn't valid.");
+                    validationMessages.put("genderMessage", MessageManager.getProperty("validation.select"));
                 }
             }
         }

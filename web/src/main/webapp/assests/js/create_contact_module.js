@@ -83,6 +83,7 @@ var contactModule = (function () {
         fileInput.setAttribute("name", "attachmentFile");
         fileInput.setAttribute("id", "attachmentFile");
         fileInput.setAttribute("number", counter.toString());
+        fileInput.setAttribute("onchange", "contactModule.putPathForAttachment()");
         counter++;
         body.appendChild(fileInput)
     };
@@ -598,15 +599,23 @@ var contactModule = (function () {
                     var popup = document.getElementById("photoPopup");
                     popup.classList.toggle("show");
                     document.getElementById('fotoMessage').innerHTML = messages['photo.saved'];
+                    document.getElementById('photoPathMessage').innerHTML = '';
                 } else {
                     document.getElementById('photoPathMessage').innerHTML = messages['validation.photo'];
                     var file = document.getElementById('photoFile');
                     file.parentNode.removeChild(file);
+                    document.getElementById('photoPath').innerHTML = '';
                 }
+            } else {
+                document.getElementById('photoPathMessage').innerHTML = messages['validation.add.photo'];
             }
         },
         deletePhoto: function () {
             if (document.getElementById('photoPath').textContent == "") {
+                var photo = document.getElementById('photoFile');
+                if (photo && photo.value) {
+                    photo.parentNode.removeChild(photo);
+                }
                 var body = document.getElementById('contact_form');
                 body.classList.toggle("roll");
                 var popup = document.getElementById("photoPopup");
@@ -624,9 +633,14 @@ var contactModule = (function () {
                 var popup = document.getElementById("photoPopup");
                 popup.classList.toggle("show");
             }
+            document.getElementById('photoPathMessage').innerHTML = '';
         },
         putPath: function () {
             document.getElementById('photoPath').innerHTML = document.getElementById('photoFile').value;
+        },
+        putPathForAttachment: function () {
+            var array = document.getElementById('attachmentFile').value.split('\\');
+            document.getElementById('attachTitle').value = array[array.length - 1];
         },
         editAttachment: function () {
             var counter = 0;
