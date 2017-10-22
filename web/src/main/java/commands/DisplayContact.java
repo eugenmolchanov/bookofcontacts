@@ -21,6 +21,7 @@ public class DisplayContact implements ActionCommand {
     private ContactService service = ContactServiceImpl.getInstance();
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("contact");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
+    //fwfwvfw
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
