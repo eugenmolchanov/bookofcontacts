@@ -7,10 +7,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
+import util.EquivalentsForSelects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 
 /**
  * Created by Yauhen Malchanau on 28.09.2017.
@@ -38,6 +38,10 @@ public class DisplayContact implements ActionCommand {
         }
         try {
             Contact contact = service.findById(id);
+            req.setAttribute("currentGender", contact.getGender());
+            req.setAttribute("currentMaritalStatus", contact.getMaritalStatus());
+            req.setAttribute("currentContactGroup", contact.getContactGroup());
+            EquivalentsForSelects.fill(contact);
             req.setAttribute("contact", contact);
             return ACTIVE_PAGE;
         } catch (Exception  e) {

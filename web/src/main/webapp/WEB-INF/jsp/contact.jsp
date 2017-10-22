@@ -125,16 +125,16 @@
             <c:choose>
                 <c:when test="${requestScope.validation.genderMessage == null}">
                     <select name="gender" id="gender" class="form-control" readonly>
-                        <option class="gender" selected hidden>${requestScope.contact.gender}</option>
-                        <option value="Мужчина"><fmt:message key="male"/></option>
-                        <option value="Женщина"><fmt:message key="female"/></option>
+                        <option class="gender" disabled selected hidden>${requestScope.contact.gender}</option>
+                        <option value="M"><fmt:message key="male"/></option>
+                        <option value="F"><fmt:message key="female"/></option>
                     </select><br>
                 </c:when>
                 <c:otherwise>
                     <select name="gender" id="gender" class="form-control" style="border-color: #A94442;">
-                        <option class="gender" selected hidden>${requestScope.contact.gender}</option>
-                        <option value="Мужчина"><fmt:message key="male"/></option>
-                        <option value="Женщина"><fmt:message key="female"/></option>
+                        <option class="gender" disabled selected hidden>${requestScope.contact.gender}</option>
+                        <option value="M"><fmt:message key="male"/></option>
+                        <option value="F"><fmt:message key="female"/></option>
                     </select><br>
                 </c:otherwise>
             </c:choose>
@@ -160,27 +160,27 @@
             <c:choose>
                 <c:when test="${requestScope.validation.maritalStatusMessage == null}">
                     <select name="maritalStatus" id="maritalStatus" class="form-control" readonly>
-                        <option selected hidden>${requestScope.contact.maritalStatus}</option>
-                        <option value="Не женат"><fmt:message key="not_married_male"/></option>
-                        <option value="Не замужем"><fmt:message key="not_married_female"/></option>
-                        <option value="Женат"><fmt:message key="married_male"/></option>
-                        <option value="Замужем"><fmt:message key="married_female"/></option>
-                        <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/></option>
-                        <option value="Вдовец"><fmt:message key="widower"/></option>
-                        <option value="Вдова"><fmt:message key="widow"/></option>
+                        <option selected disabled hidden>${requestScope.contact.maritalStatus}</option>
+                        <option value="NMM"><fmt:message key="not_married_male"/></option>
+                        <option value="NMF"><fmt:message key="not_married_female"/></option>
+                        <option value="MM"><fmt:message key="married_male"/></option>
+                        <option value="MF"><fmt:message key="married_female"/></option>
+                        <option value="CM"><fmt:message key="civil_marriage"/></option>
+                        <option value="WM"><fmt:message key="widower"/></option>
+                        <option value="WF"><fmt:message key="widow"/></option>
                     </select><br>
                 </c:when>
                 <c:otherwise>
                     <select name="maritalStatus" id="maritalStatus" class="form-control"
                             style="border-color: #A94442;">
-                        <option selected hidden>${requestScope.contact.maritalStatus}</option>
-                        <option value="Не женат"><fmt:message key="not_married_male"/></option>
-                        <option value="Не замужем"><fmt:message key="not_married_female"/></option>
-                        <option value="Женат"><fmt:message key="married_male"/></option>
-                        <option value="Замужем"><fmt:message key="married_female"/></option>
-                        <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/></option>
-                        <option value="Вдовец"><fmt:message key="widower"/></option>
-                        <option value="Вдова"><fmt:message key="widow"/></option>
+                        <option selected disabled hidden>${requestScope.contact.maritalStatus}</option>
+                        <option value="NMM"><fmt:message key="not_married_male"/></option>
+                        <option value="NMF"><fmt:message key="not_married_female"/></option>
+                        <option value="MM"><fmt:message key="married_male"/></option>
+                        <option value="MF"><fmt:message key="married_female"/></option>
+                        <option value="CM"><fmt:message key="civil_marriage"/></option>
+                        <option value="WM"><fmt:message key="widower"/></option>
+                        <option value="WF"><fmt:message key="widow"/></option>
                     </select><br>
                 </c:otherwise>
             </c:choose>
@@ -207,20 +207,20 @@
             <c:choose>
                 <c:when test="${requestScope.validation.contactGroupMessage == null}">
                     <select name="contactGroup" id="contactGroup" class="form-control" readonly>
-                        <option selected hidden>${requestScope.contact.contactGroup}</option>
-                        <option value="Семья"><fmt:message key="family"/></option>
-                        <option value="Друзья"><fmt:message key="friends"/></option>
-                        <option value="Коллеги"><fmt:message key="colleagues"/></option>
-                        <option value="Соседи"><fmt:message key="neighbours"/></option>
+                        <option selected disabled hidden>${requestScope.contact.contactGroup}</option>
+                        <option value="FAM"><fmt:message key="family"/></option>
+                        <option value="FR"><fmt:message key="friends"/></option>
+                        <option value="COL"><fmt:message key="colleagues"/></option>
+                        <option value="NB"><fmt:message key="neighbours"/></option>
                     </select><br>
                 </c:when>
                 <c:otherwise>
                     <select name="contactGroup" id="contactGroup" class="form-control" style="border-color: #A94442;">
-                        <option selected hidden>${requestScope.contact.contactGroup}</option>
-                        <option value="Семья"><fmt:message key="family"/></option>
-                        <option value="Друзья"><fmt:message key="friends"/></option>
-                        <option value="Коллеги"><fmt:message key="colleagues"/></option>
-                        <option value="Соседи"><fmt:message key="neighbours"/></option>
+                        <option selected disabled hidden>${requestScope.contact.contactGroup}</option>
+                        <option value="FAM"><fmt:message key="family"/></option>
+                        <option value="FR"><fmt:message key="friends"/></option>
+                        <option value="COL"><fmt:message key="colleagues"/></option>
+                        <option value="NB"><fmt:message key="neighbours"/></option>
                     </select><br>
                 </c:otherwise>
             </c:choose>
@@ -469,6 +469,9 @@
             <input type="submit" value="<fmt:message key="edit"/>"
                    class="bigEditButton" id="bigEditButton"/>
         </div>
+        <input type="hidden" name="currentGender" value="${requestScope.currentGender}">
+        <input type="hidden" name="currentMaritalStatus" value="${requestScope.currentMaritalStatus}">
+        <input type="hidden" name="currentContactGroup" value="${requestScope.currentContactGroup}">
     </form>
 </div>
 <div class="phonePopupText" id="phonePopup">

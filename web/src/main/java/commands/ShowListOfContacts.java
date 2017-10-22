@@ -6,12 +6,12 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
+import util.EquivalentsForSelects;
 import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.Set;
 
 /**
@@ -48,6 +48,7 @@ public class ShowListOfContacts implements ActionCommand {
                 Set<Contact> contacts;
                 long numberOfContacts;
                 contacts = service.getSetOfContacts(startContactNumber, quantityOfContacts);
+                EquivalentsForSelects.fill(contacts);
                 numberOfContacts = service.getNumberOfContacts();
                 req.setAttribute("numberOfContacts", numberOfContacts);
                 req.setAttribute("startContactNumber", startContactNumber);

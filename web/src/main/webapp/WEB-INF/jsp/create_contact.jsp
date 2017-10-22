@@ -136,26 +136,26 @@
                     <select name="maritalStatus" id="maritalStatus" class="form-control"
                             onchange="contactModule.changeMaritalStatus()">
                         <option selected disabled hidden><fmt:message key="marital_status"/></option>
-                        <option value="Не женат"><fmt:message key="not_married_male"/></option>
-                        <option value="Не замужем"><fmt:message key="not_married_female"/></option>
-                        <option value="Женат"><fmt:message key="married_male"/></option>
-                        <option value="Замужем"><fmt:message key="married_female"/></option>
-                        <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/></option>
-                        <option value="Вдовец"><fmt:message key="widower"/></option>
-                        <option value="Вдова"><fmt:message key="widow"/></option>
+                        <option value="NMM"><fmt:message key="not_married_male"/></option>
+                        <option value="NMF"><fmt:message key="not_married_female"/></option>
+                        <option value="MM"><fmt:message key="married_male"/></option>
+                        <option value="MF"><fmt:message key="married_female"/></option>
+                        <option value="CM"><fmt:message key="civil_marriage"/></option>
+                        <option value="WM"><fmt:message key="widower"/></option>
+                        <option value="WF"><fmt:message key="widow"/></option>
                     </select>
                 </c:when>
                 <c:otherwise>
                     <select name="maritalStatus" id="maritalStatus" class="form-control" style="border-color: #A94442;"
                             onchange="contactModule.changeMaritalStatus()">
                         <option selected disabled hidden><fmt:message key="marital_status"/></option>
-                        <option value="Не женат"><fmt:message key="not_married_male"/></option>
-                        <option value="Не замужем"><fmt:message key="not_married_female"/></option>
-                        <option value="Женат"><fmt:message key="married_male"/></option>
-                        <option value="Замужем"><fmt:message key="married_female"/></option>
-                        <option value="Состою в гражданском браке"><fmt:message key="civil_marriage"/></option>
-                        <option value="Вдовец"><fmt:message key="widower"/></option>
-                        <option value="Вдова"><fmt:message key="widow"/></option>
+                        <option value="NMM"><fmt:message key="not_married_male"/></option>
+                        <option value="NMF"><fmt:message key="not_married_female"/></option>
+                        <option value="MM"><fmt:message key="married_male"/></option>
+                        <option value="MF"><fmt:message key="married_female"/></option>
+                        <option value="CM"><fmt:message key="civil_marriage"/></option>
+                        <option value="WM"><fmt:message key="widower"/></option>
+                        <option value="WF"><fmt:message key="widow"/></option>
                     </select>
                 </c:otherwise>
             </c:choose>
@@ -175,20 +175,20 @@
                     <select name="contactGroup" id="contactGroup" class="form-control"
                             onchange="contactModule.changeContactGroup()">
                         <option selected disabled hidden><fmt:message key="contact_group"/></option>
-                        <option value="Семья"><fmt:message key="family"/></option>
-                        <option value="Друзья"><fmt:message key="friends"/></option>
-                        <option value="Коллеги"><fmt:message key="colleagues"/></option>
-                        <option value="Соседи"><fmt:message key="neighbours"/></option>
+                        <option value="FAM"><fmt:message key="family"/></option>
+                        <option value="FR"><fmt:message key="friends"/></option>
+                        <option value="COL"><fmt:message key="colleagues"/></option>
+                        <option value="NB"><fmt:message key="neighbours"/></option>
                     </select>
                 </c:when>
                 <c:otherwise>
                     <select name="contactGroup" id="contactGroup" class="form-control" style="border-color: #A94442;"
                             onchange="contactModule.changeContactGroup()">
                         <option selected disabled hidden><fmt:message key="contact_group"/></option>
-                        <option value="Семья"><fmt:message key="family"/></option>
-                        <option value="Друзья"><fmt:message key="friends"/></option>
-                        <option value="Коллеги"><fmt:message key="colleagues"/></option>
-                        <option value="Соседи"><fmt:message key="neighbours"/></option>
+                        <option value="FAM"><fmt:message key="family"/></option>
+                        <option value="FR"><fmt:message key="friends"/></option>
+                        <option value="COL"><fmt:message key="colleagues"/></option>
+                        <option value="NB"><fmt:message key="neighbours"/></option>
                     </select>
                 </c:otherwise>
             </c:choose>

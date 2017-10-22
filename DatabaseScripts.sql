@@ -94,3 +94,6 @@ CREATE TABLE contact_message (
   alter table message add constraint fk_message foreign key (contact_id) references contact (id);
   SET foreign_key_checks = 1;
   alter table contact add constraint email unique(email);
+  alter table contact modify gender varchar(10);
+  alter table contact modify marital_status varchar(10);
+  alter table contact modify contact_group varchar(10);

@@ -1,7 +1,9 @@
 package util;
 
 import com.itechart.javalab.firstproject.entities.*;
+import commands.enums.ContactGroup;
 import commands.enums.Gender;
+import commands.enums.MaritalStatus;
 import dto.AttachmentDataDto;
 import dto.PhoneDataDto;
 import org.apache.log4j.Logger;
@@ -165,6 +167,17 @@ public class Validation {
                     validationMessages.put("genderMessage", MessageManager.getProperty("validation.select"));
                 }
             }
+        } else if (parameters.get("currentGender") != null) {
+            String currentGender = String.valueOf(parameters.get("currentGender"));
+            if (!currentGender.isEmpty()) {
+                try {
+                    Gender.valueOf(currentGender.toUpperCase());
+                    contact.setGender(currentGender);
+                } catch (Exception e) {
+                    logger.debug("Gender isn't valid.");
+                    validationMessages.put("genderMessage", MessageManager.getProperty("validation.select"));
+                }
+            }
         }
         if (parameters.get("nationality") != null) {
             String nationality = String.valueOf(parameters.get("nationality"));
@@ -181,11 +194,23 @@ public class Validation {
         if (parameters.get("maritalStatus") != null) {
             String maritalStatus = String.valueOf(parameters.get("maritalStatus"));
             if (!maritalStatus.isEmpty()) {
-                if (!maritalStatus.equals("Не женат") && !maritalStatus.equals("Не замужем") && !maritalStatus.equals("Женат") && !maritalStatus.equals("Замужем") &&
-                        !maritalStatus.equals("Состою в гражданском браке") && !maritalStatus.equals("Вдовец") && !maritalStatus.equals("Вдова")) {
-                    validationMessages.put("maritalStatusMessage", MessageManager.getProperty("validation.select"));
-                } else {
+                try {
+                    MaritalStatus.valueOf(maritalStatus.toUpperCase());
                     contact.setMaritalStatus(maritalStatus);
+                } catch (Exception e) {
+                    logger.debug("Marital status isn't valid.");
+                    validationMessages.put("maritalStatusMessage", MessageManager.getProperty("validation.select"));
+                }
+            }
+        } else if (parameters.get("currentMaritalStatus") != null) {
+            String currentMaritalStatus = String.valueOf(parameters.get("currentMaritalStatus"));
+            if (!currentMaritalStatus.isEmpty()) {
+                try {
+                    MaritalStatus.valueOf(currentMaritalStatus.toUpperCase());
+                    contact.setMaritalStatus(currentMaritalStatus);
+                } catch (Exception e) {
+                    logger.debug("Marital status isn't valid.");
+                    validationMessages.put("maritalStatusMessage", MessageManager.getProperty("validation.select"));
                 }
             }
         }
@@ -228,10 +253,23 @@ public class Validation {
         if (parameters.get("contactGroup") != null) {
             String contactGroup = String.valueOf(parameters.get("contactGroup"));
             if (!contactGroup.isEmpty()) {
-                if (!contactGroup.equals("Семья") && !contactGroup.equals("Друзья") && !contactGroup.equals("Коллеги") && !contactGroup.equals("Соседи")) {
-                    validationMessages.put("contactGroupMessage", MessageManager.getProperty("validation.select"));
-                } else {
+                try {
+                    ContactGroup.valueOf(contactGroup.toUpperCase());
                     contact.setContactGroup(contactGroup);
+                } catch (Exception e) {
+                    logger.debug("Contact group isn't valid.");
+                    validationMessages.put("contactGroupMessage", MessageManager.getProperty("validation.select"));
+                }
+            }
+        } else if (parameters.get("currentContactGroup") != null) {
+            String currentContactGroup = String.valueOf(parameters.get("currentContactGroup"));
+            if (!currentContactGroup.isEmpty()) {
+                try {
+                    ContactGroup.valueOf(currentContactGroup.toUpperCase());
+                    contact.setContactGroup(currentContactGroup);
+                } catch (Exception e) {
+                    logger.debug("Contact group isn't valid.");
+                    validationMessages.put("contactGroupMessage", MessageManager.getProperty("validation.select"));
                 }
             }
         }

@@ -6,6 +6,8 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
+import util.EquivalentsForSelects;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
@@ -110,6 +112,7 @@ public class Search implements ActionCommand {
             }
             contact.setPostcode(postalIndex);
             contacts = service.searchContacts(contact, birthdayFrom, birthdayTo, startContact, step);
+            EquivalentsForSelects.fill(contacts);
             numberOfContacts = service.getNumberOfSearchContacts(contact, birthdayFrom, birthdayTo);
             req.setAttribute("startContactNumber", startContact);
             req.setAttribute("quantityOfContacts", step);
