@@ -295,12 +295,12 @@
         </div>
         <div class="phonesInfo"><h3><fmt:message key="phones"/></h3></div>
         <div class="phoneInfo" id="phoneInfo">
-            <div class="nameMessage">${requestScope.validation.phoneInvalidMessage}</div>
-            <div class="nameMessage">${requestScope.validation.countryCodeMessage}</div>
-            <div class="nameMessage">${requestScope.validation.operatorCodeMessage}</div>
-            <div class="nameMessage">${requestScope.validation.phoneNumberMessage}</div>
-            <div class="nameMessage">${requestScope.validation.phoneTypeMessage}</div>
-            <div class="nameMessage">${requestScope.validation.phoneCommentMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneInvalidMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.countryCodeMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.operatorCodeMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneNumberMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneTypeMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneCommentMessage}</div>
             <div class="phonePopup">
                 <button type="button" name="phonePopup" onclick="contactModule.addPhone()" class="createButton">
                     <fmt:message key="create"/></button>
@@ -325,10 +325,10 @@
         </div>
         <div class="attachmentsInfo"><h3><fmt:message key="attachments"/></h3></div>
         <div class="attachmentInfo" id="attachmentInfo">
-            <div class="nameMessage">${requestScope.validation.attachmentInvalidMessage}</div>
-            <div class="nameMessage">${requestScope.validation.addAttachMessage}</div>
-            <div class="nameMessage">${requestScope.validation.attachTitleMessage}</div>
-            <div class="nameMessage">${requestScope.validation.attachCommentMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.attachmentInvalidMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.addAttachMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.attachTitleMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.attachCommentMessage}</div>
             <table class="attachmentTable">
                 <div class="attachmentPopup">
                     <button type="button" name="attachmentPopup" onclick="contactModule.addAttachments()"

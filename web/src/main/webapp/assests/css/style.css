@@ -210,6 +210,11 @@ input, select {
     font-style: italic;
     color: #A94442;
 }
+.phoneMessageValidation, .attachmentMessageValidation {
+    min-height: 15px;
+    font-style: italic;
+    color: #A94442;
+}
 .photoMessage {
     display: inline-block;
     font-style: italic;
