@@ -1,28 +1,11 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
 ### Preparation for proper and stable work of application ###
 In Dao,Services and Web modules in resources folders you should put credentials for database in credentials.properties files and 
-credentials for mail in mail_credentials.properties.
+credentials for mail in mail_credentials.properties:
+user_name = //user name in database
+password = //password in database
+
+from = //put here your email address which will send messages
+password = //password for this email
+You should create folder "contacts" like "D:\IndividualProject\contacts\" and file log.log like "D:\IndividualProject\log\log.log". 
