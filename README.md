@@ -11,3 +11,4 @@ password = //password for this email;
 You should create folder "contacts" like "D:\IndividualProject\contacts\" and file log.log like "D:\IndividualProject\log\log.log".
 If you haven't got D folder you should change directories like you want for user photos and attachments in web/src/main/java/util/Data in line 42
 and in web/src/main/resources/log4j.properties in line 3 for logger.
+Scripts for database in file DatabaseScripts.sql.
