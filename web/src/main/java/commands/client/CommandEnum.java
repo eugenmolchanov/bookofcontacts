@@ -8,87 +8,87 @@ import commands.*;
 public enum CommandEnum {
     LISTOFCONTACTS {
         {
-            this.command = new ShowListOfContacts();
+            this.command = new ShowListOfContactsCommand();
         }
     },
     DELETECONTACTS {
         {
-            this.command = new DeleteContacts();
+            this.command = new DeleteContactsCommand();
         }
     },
     REDIRECT {
         {
-            this.command = new Redirect();
+            this.command = new RedirectCommand();
         }
     },
     CREATENEWCONTACT {
         {
-            this.command = new CreateNewContact();
+            this.command = new CreateNewContactCommand();
         }
     },
     SEARCH {
         {
-            this.command = new Search();
+            this.command = new SearchCommand();
         }
     },
     SENDEMAIL {
         {
-            this.command = new SendEmail();
+            this.command = new SendEmailCommand();
         }
     },
     LANGUAGE {
         {
-            this.command = new ChangeLanguage();
+            this.command = new ChangeLanguageCommand();
         }
     },
     DISPLAYCONTACT {
         {
-            this.command = new DisplayContact();
+            this.command = new DisplayContactCommand();
         }
     },
     DISPLAYCONTACTPHOTO {
         {
-            this.command = new DisplayContactPhoto();
+            this.command = new DisplayContactPhotoCommand();
         }
     },
     DOWNLOADATTACHMENT {
         {
-            this.command = new DownloadAttachment();
+            this.command = new DownloadAttachmentCommand();
         }
     },
     EDITCONTACT {
         {
-            this.command = new EditContact();
+            this.command = new EditContactCommand();
         }
     },
     SHOWMESSAGES {
         {
-            this.command = new ShowMessages();
+            this.command = new ShowMessagesCommand();
         }
     },
     GETMESSAGE {
         {
-            this.command = new GetMessage();
+            this.command = new GetMessageCommand();
         }
     },
     DELETEMESSAGES {
         {
-            this.command = new SendMessagesToBucket();
+            this.command = new SendMessagesToBucketCommand();
         }
     },
     SHOWDELETEDMESSAGES {
         {
-            this.command = new ShowDeletedMessages();
+            this.command = new ShowDeletedMessagesCommand();
         }
     },
     DELETEMESSAGESFROMBUCKET {
         {
-            this.command = new DeleteMessages();
+            this.command = new DeleteMessagesCommand();
         }
     },
     RESTOREMESSAGES {
         {
-            this.command = new RestoreMessage();
+            this.command = new RestoreMessageCommand();
         }
     }
     ;

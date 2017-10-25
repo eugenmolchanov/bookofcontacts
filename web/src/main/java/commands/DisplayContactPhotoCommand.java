@@ -16,9 +16,9 @@ import java.sql.SQLException;
 /**
  * Created by Yauhen Malchanau on 28.09.2017.
  */
-public class DisplayContactPhoto implements ActionCommand {
+public class DisplayContactPhotoCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(DisplayContactPhoto.class);
+    private static Logger logger = Logger.getLogger(DisplayContactPhotoCommand.class);
     private PhotoService service = PhotoServiceImpl.getInstance();
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("contact");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");

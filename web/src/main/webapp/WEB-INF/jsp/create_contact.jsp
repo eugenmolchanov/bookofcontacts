@@ -50,11 +50,11 @@
             <div class="nameMessage" id="middleNameMessage">${requestScope.validation.middleNameMessage}</div>
             <c:choose>
                 <c:when test="${requestScope.validation.firstNameMessage == null}">
-                    <input type="text" name="firstName" id="firstName"
+                    <input type="text" name="firstName" id="firstName" value="${requestScope.contact.firstName}"
                            placeholder="<fmt:message key="first_name"/>${'*'} " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="firstName" id="firstName"
+                    <input type="text" name="firstName" id="firstName" value="${requestScope.contact.firstName}"
                            placeholder="<fmt:message key="first_name"/>${'*'} " class="form-control"
                            style="border-color: #A94442;"/>
                 </c:otherwise>
@@ -62,21 +62,21 @@
             <c:choose>
                 <c:when test="${requestScope.validation.secondNameMessage == null}">
                     <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}"
-                           class="form-control"/>
+                           value="${requestScope.contact.lastName}" class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="lastName" id="lastName" placeholder="<fmt:message key="last_name"/>${'*'}"
-                           class="form-control" style="border-color: #A94442;"/>
+                           value="${requestScope.contact.lastName}" class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.middleNameMessage == null}">
                     <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
-                           class="form-control"/>
+                           value="${requestScope.contact.middleName}" class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="middleName" id="middleName" placeholder="<fmt:message key="middle_name"/> "
-                           class="form-control" style="border-color: #A94442;"/>
+                           value="${requestScope.contact.middleName}" class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -86,13 +86,11 @@
             <div class="nameMessage" id="nationalityMessage">${requestScope.validation.nationalityMessage}</div>
             <c:choose>
                 <c:when test="${requestScope.validation.birthdayMessage == null}">
-                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'"
-                           onblur="if(this.value==''){this.type='text'}"
+                    <input type="date" name="birthday" id="birthday" value="${requestScope.contact.birthday}"
                            placeholder="<fmt:message key="birthday"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'"
-                           onblur="if(this.value==''){this.type='text'}"
+                    <input type="date" name="birthday" id="birthday" value="${requestScope.contact.birthday}"
                            placeholder="<fmt:message key="birthday"/> " class="form-control"
                            style="border-color: #A94442;"/>
                 </c:otherwise>
@@ -116,12 +114,12 @@
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.nationalityMessage == null}">
-                    <input type="text" name="nationality" id="nationality"
+                    <input type="text" name="nationality" id="nationality" value="${requestScope.contact.nationality}"
                            placeholder="<fmt:message key="nationality"/>"
                            class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="nationality" id="nationality"
+                    <input type="text" name="nationality" id="nationality" value="${requestScope.contact.nationality}"
                            placeholder="<fmt:message key="nationality"/>"
                            class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
@@ -161,11 +159,11 @@
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.employmentPlaceMessage == null}">
-                    <input type="text" name="employmentPlace" id="employmentPlace"
+                    <input type="text" name="employmentPlace" id="employmentPlace" value="${requestScope.contact.employmentPlace}"
                            placeholder="<fmt:message key="employment_place"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="employmentPlace" id="employmentPlace"
+                    <input type="text" name="employmentPlace" id="employmentPlace" value="${requestScope.contact.employmentPlace}"
                            placeholder="<fmt:message key="employment_place"/> " class="form-control"
                            style="border-color: #A94442;"/>
                 </c:otherwise>
@@ -199,11 +197,11 @@
             <c:choose>
                 <c:when test="${requestScope.validation.websiteMessage == null}">
                     <input type="text" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
-                           class="form-control"/>
+                           value="${requestScope.contact.webSite}" class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="webSite" id="webSite" placeholder="<fmt:message key="website"/> "
-                           class="form-control" style="border-color: #A94442;"/>
+                           value="${requestScope.contact.webSite}" class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -213,11 +211,11 @@
             <c:choose>
                 <c:when test="${requestScope.validation.emailMessage == null}">
                     <input type="text" name="email" id="email" placeholder="<fmt:message key="email"/> "
-                           class="form-control"/>
+                           value="${requestScope.contact.email}" class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="email" id="email" placeholder="<fmt:message key="email"/> "
-                           class="form-control" style="border-color: #A94442;"/>
+                           value="${requestScope.contact.email}" class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -229,31 +227,31 @@
             <c:choose>
                 <c:when test="${requestScope.validation.countryMessage == null}">
                     <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "
-                           class="form-control"/>
+                           value="${requestScope.contact.country}" class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="country" id="country" placeholder="<fmt:message key="country"/> "
-                           class="form-control" style="border-color: #A94442;"/>
+                           value="${requestScope.contact.country}" class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.cityMessage == null}">
                     <input type="text" name="city" id="city" placeholder="<fmt:message key="city"/> "
-                           class="form-control"/>
+                           value="${requestScope.contact.city}" class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="city" id="city" placeholder="<fmt:message key="city"/> "
-                           class="form-control" style="border-color: #A94442;"/>
+                           value="${requestScope.contact.city}" class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.streetMessage == null}">
                     <input type="text" name="street" id="street" placeholder="<fmt:message key="street"/> "
-                           class="form-control"/>
+                           value="${requestScope.contact.street}" class="form-control"/>
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="street" id="street" placeholder="<fmt:message key="street"/> "
-                           class="form-control" style="border-color: #A94442;"/>
+                           value="${requestScope.contact.street}" class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -264,10 +262,10 @@
             <c:choose>
                 <c:when test="${requestScope.validation.houseNumberMessage == null}">
                     <input type="text" name="houseNumber" id="houseNumber"
-                           placeholder="<fmt:message key="house_number"/> " class="form-control"/>
+                           value="${requestScope.contact.houseNumber}" placeholder="<fmt:message key="house_number"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="houseNumber" id="houseNumber"
+                    <input type="text" name="houseNumber" id="houseNumber" value="${requestScope.contact.houseNumber}"
                            placeholder="<fmt:message key="house_number"/> " class="form-control"
                            style="border-color: #A94442;"/>
                 </c:otherwise>
@@ -275,32 +273,32 @@
             <c:choose>
                 <c:when test="${requestScope.validation.flatNumberMessage == null}">
                     <input type="text" name="flatNumber" id="flatNumber"
-                           placeholder="<fmt:message key="flat_number"/> " class="form-control"/>
+                           value="${requestScope.contact.flatNumber}" placeholder="<fmt:message key="flat_number"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="flatNumber" id="flatNumber"
+                    <input type="text" name="flatNumber" id="flatNumber" value="${requestScope.contact.flatNumber}"
                            placeholder="<fmt:message key="flat_number"/> " class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
             <c:choose>
                 <c:when test="${requestScope.validation.postalIndexMessage == null}">
-                    <input type="text" name="postalIndex" id="postalIndex"
+                    <input type="text" name="postalIndex" id="postalIndex" value="${requestScope.contact.postcode}"
                            placeholder="<fmt:message key="postcode"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="text" name="postalIndex" id="postalIndex"
+                    <input type="text" name="postalIndex" id="postalIndex" value="${requestScope.contact.postcode}"
                            placeholder="<fmt:message key="postcode"/> " class="form-control" style="border-color: #A94442;"/>
                 </c:otherwise>
             </c:choose>
         </div>
         <div class="phonesInfo"><h3><fmt:message key="phones"/></h3></div>
         <div class="phoneInfo" id="phoneInfo">
-            <div class="nameMessage">${requestScope.validation.phoneInvalidMessage}</div>
-            <div class="nameMessage">${requestScope.validation.countryCodeMessage}</div>
-            <div class="nameMessage">${requestScope.validation.operatorCodeMessage}</div>
-            <div class="nameMessage">${requestScope.validation.phoneNumberMessage}</div>
-            <div class="nameMessage">${requestScope.validation.phoneTypeMessage}</div>
-            <div class="nameMessage">${requestScope.validation.phoneCommentMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneInvalidMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.countryCodeMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.operatorCodeMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneNumberMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneTypeMessage}</div>
+            <div class="phoneMessageValidation">${requestScope.validation.phoneCommentMessage}</div>
             <div class="phonePopup">
                 <button type="button" name="phonePopup" onclick="contactModule.addPhone()" class="createButton">
                     <fmt:message key="create"/></button>
@@ -325,10 +323,10 @@
         </div>
         <div class="attachmentsInfo"><h3><fmt:message key="attachments"/></h3></div>
         <div class="attachmentInfo" id="attachmentInfo">
-            <div class="nameMessage">${requestScope.validation.attachmentInvalidMessage}</div>
-            <div class="nameMessage">${requestScope.validation.addAttachMessage}</div>
-            <div class="nameMessage">${requestScope.validation.attachTitleMessage}</div>
-            <div class="nameMessage">${requestScope.validation.attachCommentMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.attachmentInvalidMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.addAttachMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.attachTitleMessage}</div>
+            <div class="attachmentMessageValidation">${requestScope.validation.attachCommentMessage}</div>
             <table class="attachmentTable">
                 <div class="attachmentPopup">
                     <button type="button" name="attachmentPopup" onclick="contactModule.addAttachments()"

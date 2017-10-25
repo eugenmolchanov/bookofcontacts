@@ -9,16 +9,15 @@ import util.Validation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
  * Created by Yauhen Malchanau on 18.09.2017.
  */
-public class ChangeLanguage implements ActionCommand {
+public class ChangeLanguageCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(ChangeLanguage.class);
+    private static Logger logger = Logger.getLogger(ChangeLanguageCommand.class);
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override

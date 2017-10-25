@@ -27,9 +27,9 @@ import org.antlr.stringtemplate.*;
 /**
  * Created by Yauhen Malchanau on 17.09.2017.
  */
-public class SendEmail implements ActionCommand {
+public class SendEmailCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(SendEmail.class);
+    private static Logger logger = Logger.getLogger(SendEmailCommand.class);
     private ContactService contactService = ContactServiceImpl.getInstance();
     private MessageService messageService = MessageServiceImpl.getInstance();
     private String from = ResourceBundle.getBundle("mail_credentials").getString("from");
