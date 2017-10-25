@@ -113,7 +113,7 @@
         <fmt:message key="page"/>${" "}
         <c:if test="${start != 0}">
             <div id="previous"><a
-                    href="/controller?command=${requestScope.command}&startContactNumber=${start - step}&quantityOfContacts=${step}">
+                    href="/controller?command=${requestScope.command}&startContactNumber=${start - step}&quantityOfContacts=${step}${requestScope.parameters}">
                 <fmt:message key="previous"/></a></div>
         </c:if>
         <div id="pageNumbers">
@@ -122,7 +122,7 @@
                     <c:choose>
                         <c:when test="${i != 2}">
                             <fmt:parseNumber var="page" type="number" value="${(start + step) / step + i - 2}"/>
-                            <a href="/controller?command=${requestScope.command}&startContactNumber=${start + step * (i - 2)}&quantityOfContacts=${step}">
+                            <a href="/controller?command=${requestScope.command}&startContactNumber=${start + step * (i - 2)}&quantityOfContacts=${step}${requestScope.parameters}">
                                     ${page}</a> </c:when>
                         <c:otherwise>
                             <fmt:parseNumber var="presentPage" type="number" value="${(start + step) / step}"/>
@@ -134,7 +134,7 @@
         </div>
         <c:if test="${(count - start) gt step}">
             <div id="next"><a
-                    href="/controller?command=${requestScope.command}&startContactNumber=${start + step}&quantityOfContacts=${step}"><fmt:message
+                    href="/controller?command=${requestScope.command}&startContactNumber=${start + step}&quantityOfContacts=${step}${requestScope.parameters}"><fmt:message
                     key="next"/></a></div>
         </c:if>
         <div class="rowNumber">
@@ -144,7 +144,7 @@
                     10${" "}
                 </c:when>
                 <c:otherwise>
-                    <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=10">10</a>${" "}
+                    <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=10${requestScope.parameters}">10</a>${" "}
                 </c:otherwise>
             </c:choose>
             <c:choose>
@@ -152,18 +152,12 @@
                     20${" "}
                 </c:when>
                 <c:otherwise>
-                    <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=20">20</a>${" "}
+                    <a href="/controller?command=${requestScope.command}&startContactNumber=0&quantityOfContacts=20${requestScope.parameters}">20</a>${" "}
                 </c:otherwise>
             </c:choose>
         </div>
     </div>
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/main_module.js?v=11"></script>
-<script>
-    var messages = {};
-    <c:forEach var="message" items="${requestScope.validationMessages}">
-    messages['${message.key}'] = '${message.value}';
-    </c:forEach>
-</script>
 </body>
 </html>
