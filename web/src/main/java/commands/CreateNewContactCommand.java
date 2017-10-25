@@ -3,6 +3,7 @@ package commands;
 import com.itechart.javalab.firstproject.entities.*;
 import com.itechart.javalab.firstproject.services.ContactService;
 import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
+import dto.ContactDataDto;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
@@ -18,9 +19,9 @@ import java.util.Map;
 /**
  * Created by Yauhen Malchanau on 15.09.2017.
  */
-public class CreateNewContact implements ActionCommand {
+public class CreateNewContactCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(CreateNewContact.class);
+    private static Logger logger = Logger.getLogger(CreateNewContactCommand.class);
     private ContactService service = ContactServiceImpl.getInstance();
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("create_contact");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
@@ -40,9 +41,10 @@ public class CreateNewContact implements ActionCommand {
                 Contact contact = (Contact) result.get("contact");
                 service.create(contact);
                 req.setAttribute("successMessage", MessageManager.getProperty("successful_create"));
-                return new ShowListOfContacts().execute(req, resp);
+                return new ShowListOfContactsCommand().execute(req, resp);
             } else {
                 logger.debug("Data isn't valid.");
+                req.setAttribute("contact", result.get("thisContact"));
                 req.setAttribute("validation", validationMessages);
                 return ACTIVE_PAGE;
             }

@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 22.10.2017.
  */
-public class EquivalentsForSelects {
+public class EquivalentForSelect {
     public static void fill(Set<Contact> contacts) {
         for (Contact contact : contacts) {
             if (contact.getGender() != null) {

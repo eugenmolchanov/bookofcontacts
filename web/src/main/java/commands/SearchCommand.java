@@ -6,7 +6,7 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
-import util.EquivalentsForSelects;
+import util.EquivalentForSelect;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +18,9 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 16.09.2017.
  */
-public class Search implements ActionCommand {
+public class SearchCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(Search.class);
+    private static Logger logger = Logger.getLogger(SearchCommand.class);
     private ContactService service = ContactServiceImpl.getInstance();
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("main");
     private final String SEARCH_PAGE = ConfigurationManager.getProperty("search");
@@ -112,7 +112,7 @@ public class Search implements ActionCommand {
             }
             contact.setPostcode(postalIndex);
             contacts = service.searchContacts(contact, birthdayFrom, birthdayTo, startContact, step);
-            EquivalentsForSelects.fill(contacts);
+            EquivalentForSelect.fill(contacts);
             numberOfContacts = service.getNumberOfSearchContacts(contact, birthdayFrom, birthdayTo);
             req.setAttribute("startContactNumber", startContact);
             req.setAttribute("quantityOfContacts", step);

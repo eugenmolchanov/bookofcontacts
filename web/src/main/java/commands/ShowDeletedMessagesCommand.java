@@ -14,10 +14,10 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 18.10.2017.
  */
-public class ShowDeletedMessages implements ActionCommand {
+public class ShowDeletedMessagesCommand implements ActionCommand {
 
     private MessageService service = MessageServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ShowMessages.class);
+    private static Logger logger = Logger.getLogger(ShowMessagesCommand.class);
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("message");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
