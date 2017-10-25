@@ -439,11 +439,5 @@
 </div>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=9"></script>
-<script>
-    var messages = {};
-    <c:forEach var="message" items="${requestScope.validationMessages}">
-    messages['${message.key}'] = '${message.value}';
-    </c:forEach>
-</script>
 </body>
 </html>

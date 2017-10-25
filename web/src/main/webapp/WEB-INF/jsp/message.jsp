@@ -161,11 +161,5 @@
     </div>
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/assests/js/message_module.js?v=5"></script>
-<script>
-    var messages = {};
-    <c:forEach var="message" items="${requestScope.validationMessages}">
-    messages['${message.key}'] = '${message.value}';
-    </c:forEach>
-</script>
 </body>
 </html>

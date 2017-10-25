@@ -559,11 +559,5 @@
 <input type="hidden" id="page" value="edit"/>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=7"></script>
-<script>
-    var messages = {};
-    <c:forEach var="message" items="${requestScope.validationMessages}">
-    messages['${message.key}'] = '${message.value}';
-    </c:forEach>
-</script>
 </body>
 </html>
