@@ -19,9 +19,9 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 04.10.2017.
  */
-public class EditContact implements ActionCommand {
+public class EditContactCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(EditContact.class);
+    private static Logger logger = Logger.getLogger(EditContactCommand.class);
     private ContactService service = ContactServiceImpl.getInstance();
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("contact");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
@@ -44,17 +44,17 @@ public class EditContact implements ActionCommand {
                 service.update(contact, phonesForDelete, attachmentsForDelete);
                 req.setAttribute("id", contact.getId());
                 req.setAttribute("successMessage", MessageManager.getProperty("successful.update"));
-                return new DisplayContact().execute(req, resp);
+                return new DisplayContactCommand().execute(req, resp);
             } else {
                 logger.debug("Data for contact update are not valid.");
                 req.setAttribute("id", contact.getId());
                 req.setAttribute("validation", validationMessages);
                 req.setAttribute("edit", true);
-                return new DisplayContact().execute(req, resp);
+                return new DisplayContactCommand().execute(req, resp);
             }
         } catch (SQLException e) {
             req.setAttribute("warningMessage", MessageManager.getProperty("unsuccessful.update"));
-            return new DisplayContact().execute(req, resp);
+            return new DisplayContactCommand().execute(req, resp);
         } catch (Exception e) {
             req.setAttribute("warningMessage", MessageManager.getProperty("error"));
             return ERROR_PAGE;

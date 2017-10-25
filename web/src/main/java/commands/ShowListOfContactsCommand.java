@@ -6,7 +6,7 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
-import util.EquivalentsForSelects;
+import util.EquivalentForSelect;
 import util.Validation;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +17,10 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 14.09.2017.
  */
-public class ShowListOfContacts implements ActionCommand {
+public class ShowListOfContactsCommand implements ActionCommand {
 
     private ContactService service = ContactServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ShowListOfContacts.class);
+    private static Logger logger = Logger.getLogger(ShowListOfContactsCommand.class);
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("main");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
@@ -48,7 +48,7 @@ public class ShowListOfContacts implements ActionCommand {
                 Set<Contact> contacts;
                 long numberOfContacts;
                 contacts = service.getSetOfContacts(startContactNumber, quantityOfContacts);
-                EquivalentsForSelects.fill(contacts);
+                EquivalentForSelect.fill(contacts);
                 numberOfContacts = service.getNumberOfContacts();
                 req.setAttribute("numberOfContacts", numberOfContacts);
                 req.setAttribute("startContactNumber", startContactNumber);

@@ -6,7 +6,7 @@ import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
-import util.EquivalentsForSelects;
+import util.EquivalentForSelect;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ public class EmptyCommand implements ActionCommand {
             Set<Contact> contacts;
             long numberOfContacts;
             contacts = service.getSetOfContacts(0, 10);
-            EquivalentsForSelects.fill(contacts);
+            EquivalentForSelect.fill(contacts);
             numberOfContacts = service.getNumberOfContacts();
             HttpSession session = req.getSession(true);
             session.setAttribute("startContactNumber", 0L);

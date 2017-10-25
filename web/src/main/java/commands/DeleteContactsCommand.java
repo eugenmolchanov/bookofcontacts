@@ -1,7 +1,7 @@
 package commands;
 
-import com.itechart.javalab.firstproject.services.MessageService;
-import com.itechart.javalab.firstproject.services.impl.MessageServiceImpl;
+import com.itechart.javalab.firstproject.services.ContactService;
+import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
@@ -15,37 +15,37 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Yauhen Malchanau on 09.10.2017.
+ * Created by Yauhen Malchanau on 14.09.2017.
  */
-public class SendMessagesToBucket implements ActionCommand{
+public class DeleteContactsCommand implements ActionCommand {
 
-    private MessageService service = MessageServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(SendMessagesToBucket.class);
+    private ContactService service = ContactServiceImpl.getInstance();
+    private static Logger logger = Logger.getLogger(DeleteContactsCommand.class);
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.setLevel(Level.DEBUG);
-        if (Validation.deleteMessagesDataIsValid(req, logger)) {
+        if (Validation.deleteContactsDataIsValid(req, logger)) {
             String[] parameters = req.getParameterMap().get("id");
             Set<Long> ids = new HashSet<>();
             for (String parameter : parameters) {
                 ids.add(Long.parseLong(parameter));
             }
             try {
-                service.sendMessagesToBucket(ids);
-                req.setAttribute("successMessage", MessageManager.getProperty("successful.message.bucket"));
-                return new ShowMessages().execute(req, resp);
+                service.deleteContacts(ids);
+                req.setAttribute("successMessage", MessageManager.getProperty("successful.contact.delete"));
+                return new ShowListOfContactsCommand().execute(req, resp);
             } catch (SQLException e) {
-                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.message.bucket"));
-                return new ShowMessages().execute(req, resp);
+                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.contact.delete"));
+                return new ShowListOfContactsCommand().execute(req, resp);
             } catch (Exception e) {
                 req.setAttribute("warningMessage", MessageManager.getProperty("error"));
                 return ERROR_PAGE;
             }
         } else {
             req.setAttribute("warningMessage", MessageManager.getProperty("invalid.data"));
-            return new ShowMessages().execute(req, resp);
+            return new ShowListOfContactsCommand().execute(req, resp);
         }
     }
 }

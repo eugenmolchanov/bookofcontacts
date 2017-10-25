@@ -17,35 +17,35 @@ import java.util.Set;
 /**
  * Created by Yauhen Malchanau on 18.10.2017.
  */
-public class DeleteMessages implements ActionCommand {
+public class RestoreMessageCommand implements ActionCommand {
 
     private MessageService service = MessageServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(SendMessagesToBucket.class);
+    private static Logger logger = Logger.getLogger(SendMessagesToBucketCommand.class);
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         logger.setLevel(Level.DEBUG);
-        if (Validation.deleteMessagesDataIsValid(req, logger)) {
+        if (Validation.restoreMessagesDataIsValid(req, logger)) {
             String[] parameters = req.getParameterMap().get("id");
             Set<Long> ids = new HashSet<>();
             for (String parameter : parameters) {
                 ids.add(Long.parseLong(parameter));
             }
             try {
-                service.fullDelete(ids);
-                req.setAttribute("successMessage", MessageManager.getProperty("successful.message.delete"));
-                return new ShowDeletedMessages().execute(req, resp);
+                service.restore(ids);
+                req.setAttribute("successMessage", MessageManager.getProperty("successful.message.restore"));
+                return new ShowDeletedMessagesCommand().execute(req, resp);
             } catch (SQLException e) {
-                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.message.delete"));
-                return new ShowDeletedMessages().execute(req, resp);
+                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.message.restore"));
+                return new ShowDeletedMessagesCommand().execute(req, resp);
             } catch (Exception e) {
                 req.setAttribute("warningMessage", MessageManager.getProperty("error"));
                 return ERROR_PAGE;
             }
         } else {
             req.setAttribute("warningMessage", MessageManager.getProperty("invalid.data"));
-            return new ShowDeletedMessages().execute(req, resp);
+            return new ShowDeletedMessagesCommand().execute(req, resp);
         }
     }
 }

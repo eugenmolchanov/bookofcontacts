@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by Yauhen Malchanau on 15.09.2017.
  */
-public class Redirect implements ActionCommand {
+public class RedirectCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(Redirect.class);
+    private static Logger logger = Logger.getLogger(RedirectCommand.class);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -37,9 +37,9 @@ public class Redirect implements ActionCommand {
                 case message:
                     return ConfigurationManager.getProperty("message");
                 default:
-                    return new ShowListOfContacts().execute(req, resp);
+                    return new ShowListOfContactsCommand().execute(req, resp);
             }
         }
-        return new ShowListOfContacts().execute(req, resp);
+        return new ShowListOfContactsCommand().execute(req, resp);
     }
 }

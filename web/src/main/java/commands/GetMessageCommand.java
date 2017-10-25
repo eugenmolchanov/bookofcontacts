@@ -1,6 +1,5 @@
 package commands;
 
-import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Message;
 import com.itechart.javalab.firstproject.services.MessageService;
 import com.itechart.javalab.firstproject.services.impl.MessageServiceImpl;
@@ -12,16 +11,14 @@ import resources.MessageManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Yauhen Malchanau on 08.10.2017.
  */
-public class GetMessage implements ActionCommand {
+public class GetMessageCommand implements ActionCommand {
 
     private MessageService service = MessageServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(GetMessage.class);
+    private static Logger logger = Logger.getLogger(GetMessageCommand.class);
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("send_email");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 
@@ -35,7 +32,7 @@ public class GetMessage implements ActionCommand {
             return ACTIVE_PAGE;
         } catch (SQLException e) {
             req.setAttribute("warningMessage", MessageManager.getProperty("error"));
-            return new ShowMessages().execute(req, resp);
+            return new ShowMessagesCommand().execute(req, resp);
         } catch (Exception e) {
             req.setAttribute("warningMessage", MessageManager.getProperty("error"));
             return ERROR_PAGE;

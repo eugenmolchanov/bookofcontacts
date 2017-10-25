@@ -2,7 +2,7 @@ package servlet;
 
 import commands.ActionCommand;
 import commands.factory.ActionFactory;
-import jobs.SendBirthdayEmail;
+import jobs.BirthdayEmail;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.quartz.*;
@@ -68,7 +68,7 @@ public class Controller extends HttpServlet {
                 Scheduler scheduler = ((Scheduler) getServletContext().getAttribute("scheduler"));
                 scheduler.start();
                 scheduler.getContext().put("servletContext", getServletContext());
-                JobDetail job = newJob(SendBirthdayEmail.class).withIdentity("sendEmailAutomatically", "group").build();
+                JobDetail job = newJob(BirthdayEmail.class).withIdentity("sendEmailAutomatically", "group").build();
                 Trigger trigger = newTrigger().withIdentity("emailTrigger", "group").startNow().withSchedule(simpleSchedule().withIntervalInSeconds(86400).repeatForever()).build();
                 scheduler.scheduleJob(job, trigger);
             }

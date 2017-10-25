@@ -9,16 +9,15 @@ import resources.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.Set;
 
 /**
  * Created by Yauhen Malchanau on 08.10.2017.
  */
-public class ShowMessages implements ActionCommand {
+public class ShowMessagesCommand implements ActionCommand {
 
     private MessageService service = MessageServiceImpl.getInstance();
-    private static Logger logger = Logger.getLogger(ShowMessages.class);
+    private static Logger logger = Logger.getLogger(ShowMessagesCommand.class);
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("message");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
 

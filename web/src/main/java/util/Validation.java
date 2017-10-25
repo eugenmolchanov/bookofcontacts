@@ -5,6 +5,7 @@ import commands.enums.ContactGroup;
 import commands.enums.Gender;
 import commands.enums.MaritalStatus;
 import dto.AttachmentDataDto;
+import dto.ContactDataDto;
 import dto.PhoneDataDto;
 import org.apache.log4j.Logger;
 import resources.MessageManager;
@@ -104,10 +105,12 @@ public class Validation {
         Map<String, String> validationMessages = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
         Contact contact = new Contact();
+        ContactDataDto thisContact = new ContactDataDto();
         if (parameters.get("firstName") == null) {
             validationMessages.put("firstNameMessage", MessageManager.getProperty("validation.fill"));
         } else {
             String firstName = String.valueOf(parameters.get("firstName"));
+            thisContact.setFirstName(firstName);
             if (firstName.isEmpty() || Pattern.compile("[\\d~@#$%^&*.()_+|>?/<\":}!№;,\\s]").matcher(firstName).find()) {
                 validationMessages.put("firstNameMessage", MessageManager.getProperty("validation.letter"));
             } else if (firstName.length() > 255) {
@@ -120,6 +123,7 @@ public class Validation {
             validationMessages.put("secondNameMessage", MessageManager.getProperty("validation.fill"));
         } else {
             String lastName = String.valueOf(parameters.get("lastName"));
+            thisContact.setLastName(lastName);
             if (lastName.isEmpty() || Pattern.compile("[\\d~@#$%^&*.()_+|>?/<\":}!№;,\\s]").matcher(lastName).find()) {
                 validationMessages.put("secondNameMessage", MessageManager.getProperty("validation.letter"));
             } else if (lastName.length() > 255) {
@@ -130,6 +134,7 @@ public class Validation {
         }
         if (parameters.get("middleName") != null) {
             String middleName = String.valueOf(parameters.get("middleName"));
+            thisContact.setMiddleName(middleName);
             if (!middleName.isEmpty()) {
                 if (Pattern.compile("[\\d~@#$%^&*.()_+|>?/<\":}!№;,\\s]").matcher(middleName).find()) {
                     validationMessages.put("middleNameMessage", MessageManager.getProperty("validation.letter"));
@@ -145,6 +150,7 @@ public class Validation {
             if (!birth.isEmpty()) {
                 try {
                     Date birthday = Date.valueOf(String.valueOf(parameters.get("birthday")));
+                    thisContact.setBirthday(birthday);
                     if (birthday.compareTo(Date.valueOf(LocalDate.now())) == 1) {
                         validationMessages.put("birthdayMessage", MessageManager.getProperty("validation.birthday"));
                     } else {
@@ -158,6 +164,7 @@ public class Validation {
         }
         if (parameters.get("gender") != null) {
             String gender = String.valueOf(parameters.get("gender"));
+            thisContact.setGender(gender);
             if (!gender.isEmpty()) {
                 try {
                     Gender.valueOf(gender.toUpperCase());
@@ -169,6 +176,7 @@ public class Validation {
             }
         } else if (parameters.get("currentGender") != null) {
             String currentGender = String.valueOf(parameters.get("currentGender"));
+            thisContact.setGender(currentGender);
             if (!currentGender.isEmpty()) {
                 try {
                     Gender.valueOf(currentGender.toUpperCase());
@@ -181,6 +189,7 @@ public class Validation {
         }
         if (parameters.get("nationality") != null) {
             String nationality = String.valueOf(parameters.get("nationality"));
+            thisContact.setNationality(nationality);
             if (!nationality.isEmpty()) {
                 if (Pattern.compile("[\\d~@#$%^&*.()_+|>?/<\":}!№;,]").matcher(nationality).find()) {
                     validationMessages.put("nationalityMessage", MessageManager.getProperty("validation.letter"));
@@ -193,6 +202,7 @@ public class Validation {
         }
         if (parameters.get("maritalStatus") != null) {
             String maritalStatus = String.valueOf(parameters.get("maritalStatus"));
+            thisContact.setMaritalStatus(maritalStatus);
             if (!maritalStatus.isEmpty()) {
                 try {
                     MaritalStatus.valueOf(maritalStatus.toUpperCase());
@@ -204,6 +214,7 @@ public class Validation {
             }
         } else if (parameters.get("currentMaritalStatus") != null) {
             String currentMaritalStatus = String.valueOf(parameters.get("currentMaritalStatus"));
+            thisContact.setMaritalStatus(currentMaritalStatus);
             if (!currentMaritalStatus.isEmpty()) {
                 try {
                     MaritalStatus.valueOf(currentMaritalStatus.toUpperCase());
@@ -216,6 +227,7 @@ public class Validation {
         }
         if (parameters.get("webSite") != null) {
             String webSite = String.valueOf(parameters.get("webSite"));
+            thisContact.setWebSite(webSite);
             if (!webSite.isEmpty()) {
                 if (!Pattern.compile("(http(s)?://.)?(www\\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\\.[a-z\u200C\u200B]{2,6}\\b([-a-zA-Z0-9\u200C\u200B@:%_+.~#?&=]*)").matcher(webSite).matches()) {
                     validationMessages.put("websiteMessage", MessageManager.getProperty("validation.url"));
@@ -228,6 +240,7 @@ public class Validation {
         }
         if (parameters.get("email") != null) {
             String email = String.valueOf(parameters.get("email"));
+            thisContact.setEmail(email);
             if (!email.isEmpty()) {
                 if (!Pattern.compile("(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$").matcher(email).matches()) {
                     validationMessages.put("emailMessage", MessageManager.getProperty("validation.email"));
@@ -240,6 +253,7 @@ public class Validation {
         }
         if (parameters.get("employmentPlace") != null) {
             String employmentPlace = String.valueOf(parameters.get("employmentPlace"));
+            thisContact.setEmploymentPlace(employmentPlace);
             if (!employmentPlace.isEmpty()) {
                 if (Pattern.compile("[~@#$%^&/.*()_+|?><:}!№;,]").matcher(employmentPlace).find()) {
                     validationMessages.put("employmentPlaceMessage", MessageManager.getProperty("validation.letter.digit"));
@@ -252,6 +266,7 @@ public class Validation {
         }
         if (parameters.get("contactGroup") != null) {
             String contactGroup = String.valueOf(parameters.get("contactGroup"));
+            thisContact.setContactGroup(contactGroup);
             if (!contactGroup.isEmpty()) {
                 try {
                     ContactGroup.valueOf(contactGroup.toUpperCase());
@@ -263,6 +278,7 @@ public class Validation {
             }
         } else if (parameters.get("currentContactGroup") != null) {
             String currentContactGroup = String.valueOf(parameters.get("currentContactGroup"));
+            thisContact.setContactGroup(currentContactGroup);
             if (!currentContactGroup.isEmpty()) {
                 try {
                     ContactGroup.valueOf(currentContactGroup.toUpperCase());
@@ -275,6 +291,7 @@ public class Validation {
         }
         if (parameters.get("country") != null) {
             String country = String.valueOf(parameters.get("country"));
+            thisContact.setCountry(country);
             if (!country.isEmpty()) {
                 if (Pattern.compile("[\\d~@#$%^&*.()_+|>?/<\":}!№;,]").matcher(country).find()) {
                     validationMessages.put("countryMessage", MessageManager.getProperty("validation.letter"));
@@ -287,6 +304,7 @@ public class Validation {
         }
         if (parameters.get("city") != null) {
             String city = String.valueOf(parameters.get("city"));
+            thisContact.setCity(city);
             if (!city.isEmpty()) {
                 if (Pattern.compile("[\\d~@#$%^&*.()_+|>?/<\":}!№;,]").matcher(city).find()) {
                     validationMessages.put("cityMessage", MessageManager.getProperty("validation.letter"));
@@ -299,6 +317,7 @@ public class Validation {
         }
         if (parameters.get("street") != null) {
             String street = String.valueOf(parameters.get("street"));
+            thisContact.setStreet(street);
             if (!street.isEmpty()) {
                 if (Pattern.compile("[~@#$%^&*.()_+|>?/<\":}!№;,]").matcher(street).find()) {
                     validationMessages.put("streetMessage", MessageManager.getProperty("validation.letter.digit"));
@@ -311,6 +330,7 @@ public class Validation {
         }
         if (parameters.get("houseNumber") != null) {
             String houseNumber = String.valueOf(parameters.get("houseNumber"));
+            thisContact.setHouseNumber(houseNumber);
             if (!houseNumber.isEmpty()) {
                 if (Pattern.compile("[~@#$%^&*.()_+|>?/<\":}!№;,\\s]").matcher(houseNumber).find()) {
                     validationMessages.put("houseNumberMessage", MessageManager.getProperty("validation.letter.digit"));
@@ -323,6 +343,7 @@ public class Validation {
         }
         if (parameters.get("flatNumber") != null) {
             String flatNum = String.valueOf(parameters.get("flatNumber"));
+            thisContact.setFlatNumber(flatNum);
             if (!flatNum.isEmpty()) {
                 if (Pattern.compile("[^\\d]").matcher(flatNum).find()) {
                     validationMessages.put("flatNumberMessage", MessageManager.getProperty("validation.digit"));
@@ -343,6 +364,7 @@ public class Validation {
         }
         if (parameters.get("postalIndex") != null) {
             String postcode = String.valueOf(parameters.get("postalIndex"));
+            thisContact.setPostcode(postcode);
             if (!postcode.isEmpty()) {
                 if (Pattern.compile("[^\\d]").matcher(postcode).find()) {
                     validationMessages.put("postalIndexMessage", MessageManager.getProperty("validation.digit"));
@@ -474,6 +496,7 @@ public class Validation {
         }
         result.put("contact", contact);
         result.put("validation", validationMessages);
+        result.put("thisContact", thisContact);
         return result;
     }
 
@@ -483,6 +506,7 @@ public class Validation {
         Set<Long> attachmentsForDelete = new HashSet<>();
         Set<Long> phonesForDelete = new HashSet<>();
         Map<String, String> validationMessages = (Map<String, String>) result.get("validation");
+        ContactDataDto thisContact = (ContactDataDto) result.get("thisContact");
         Contact contact = (Contact) result.get("contact");
         if (parameters.get("contactId") != null) {
             String contactId = String.valueOf(parameters.get("contactId"));
@@ -493,6 +517,7 @@ public class Validation {
                         validationMessages.put("contactMessage", invalid);
                     } else {
                         contact.setId(id);
+                        thisContact.setId(id);
                     }
                 } catch (Exception e) {
                     logger.debug(e.getMessage(), e);
@@ -549,6 +574,7 @@ public class Validation {
             result.put("phonesForDelete", phonesForDelete);
         }
         result.replace("validation", validationMessages);
+        result.replace("thisContact", thisContact);
         if (contact.getId() != 0) {
             result.replace("contact", contact);
         }

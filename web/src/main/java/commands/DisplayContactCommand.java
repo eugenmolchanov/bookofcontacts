@@ -7,7 +7,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import resources.ConfigurationManager;
 import resources.MessageManager;
-import util.EquivalentsForSelects;
+import util.EquivalentForSelect;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by Yauhen Malchanau on 28.09.2017.
  */
-public class DisplayContact implements ActionCommand {
+public class DisplayContactCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(DisplayContact.class);
+    private static Logger logger = Logger.getLogger(DisplayContactCommand.class);
     private ContactService service = ContactServiceImpl.getInstance();
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("contact");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
@@ -41,7 +41,7 @@ public class DisplayContact implements ActionCommand {
             req.setAttribute("currentGender", contact.getGender());
             req.setAttribute("currentMaritalStatus", contact.getMaritalStatus());
             req.setAttribute("currentContactGroup", contact.getContactGroup());
-            EquivalentsForSelects.fill(contact);
+            EquivalentForSelect.fill(contact);
             req.setAttribute("contact", contact);
             return ACTIVE_PAGE;
         } catch (Exception  e) {

@@ -10,7 +10,6 @@ import resources.MessageManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -20,9 +19,9 @@ import java.sql.SQLException;
 /**
  * Created by Yauhen Malchanau on 30.09.2017.
  */
-public class DownloadAttachment implements ActionCommand {
+public class DownloadAttachmentCommand implements ActionCommand {
 
-    private static Logger logger = Logger.getLogger(DownloadAttachment.class);
+    private static Logger logger = Logger.getLogger(DownloadAttachmentCommand.class);
     private AttachmentService service = AttachmentServiceImpl.getInstance();
     private final String ACTIVE_PAGE = ConfigurationManager.getProperty("contact");
     private final String ERROR_PAGE = ConfigurationManager.getProperty("error");
