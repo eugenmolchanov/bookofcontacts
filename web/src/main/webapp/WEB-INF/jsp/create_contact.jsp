@@ -440,6 +440,6 @@
     </div>
 </div>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=9"></script>
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=10"></script>
 </body>
 </html>

@@ -559,6 +559,6 @@
 </div>
 <input type="hidden" id="page" value="edit"/>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=7"></script>
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=8"></script>
 </body>
 </html>
