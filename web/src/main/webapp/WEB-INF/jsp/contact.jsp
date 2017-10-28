@@ -109,12 +109,13 @@
             <label for="birthday"><fmt:message key="birthday"/> </label><br>
             <c:choose>
                 <c:when test="${requestScope.validation.birthdayMessage == null}">
-                    <input type="date" name="birthday" id="birthday" onfocus="this.type = 'date'" readonly
-                           pattern="dd.MM.yyyy"
-                           value="${requestScope.contact.birthday}" class="form-control"/><br>
+                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'" readonly
+                           onblur="if(this.value==''){this.type='text'}" value="${requestScope.contact.birthday}"
+                           class="form-control"/><br>
                 </c:when>
                 <c:otherwise>
-                    <input type="date" name="birthday" id="birthday" onfocus="this.type = 'date'" pattern="dd.MM.yyyy"
+                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'"
+                           onblur="if(this.value==''){this.type='text'}"
                            value="${requestScope.contact.birthday}" class="form-control"
                            style="border-color: #A94442;"/><br>
                 </c:otherwise>
@@ -325,7 +326,7 @@
                 </c:when>
                 <c:otherwise>
                     <input type="text" name="flatNumber" id="flatNumber"
-                            style="border-color: #A94442;"
+                           style="border-color: #A94442;"
                            <c:if test="${requestScope.contact.flatNumber > 0}">value="${requestScope.contact.flatNumber}"</c:if>
                            class="form-control"/><br>
                 </c:otherwise>

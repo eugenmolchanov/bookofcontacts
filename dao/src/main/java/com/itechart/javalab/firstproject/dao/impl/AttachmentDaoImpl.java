@@ -58,7 +58,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
 
     @Override
     public void update(Attachment entity, Connection connection) throws SQLException {
-        final String UPDATE_ATTACHMENT = "update attachment set file_name = ?, commentary = ? where id = ?;";
+        final String UPDATE_ATTACHMENT = "update attachment set file_name = ?, commentary = ?, record_date = record_date where id = ?;";
         PreparedStatement statement = connection.prepareStatement(UPDATE_ATTACHMENT);
         statement.setString(1, entity.getFileName());
         statement.setString(2, entity.getCommentary());

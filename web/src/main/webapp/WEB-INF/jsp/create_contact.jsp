@@ -86,11 +86,13 @@
             <div class="nameMessage" id="nationalityMessage">${requestScope.validation.nationalityMessage}</div>
             <c:choose>
                 <c:when test="${requestScope.validation.birthdayMessage == null}">
-                    <input type="date" name="birthday" id="birthday" value="${requestScope.contact.birthday}"
+                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'"
+                           onblur="if(this.value==''){this.type='text'}"
                            placeholder="<fmt:message key="birthday"/> " class="form-control"/>
                 </c:when>
                 <c:otherwise>
-                    <input type="date" name="birthday" id="birthday" value="${requestScope.contact.birthday}"
+                    <input type="text" name="birthday" id="birthday" onfocus="this.type = 'date'"
+                           onblur="if(this.value==''){this.type='text'}"
                            placeholder="<fmt:message key="birthday"/> " class="form-control"
                            style="border-color: #A94442;"/>
                 </c:otherwise>

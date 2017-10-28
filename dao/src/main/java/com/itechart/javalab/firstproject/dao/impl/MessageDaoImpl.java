@@ -73,7 +73,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public void delete(long id, Connection connection) throws SQLException {
-        final String DELETE_MESSAGE = "update message set is_deleted = 1 where id = ?";
+        final String DELETE_MESSAGE = "update message set sending_date = sending_date, is_deleted = 1 where id = ?";
         PreparedStatement statement = connection.prepareStatement(DELETE_MESSAGE);
         statement.setLong(1, id);
         statement.executeUpdate();
@@ -171,7 +171,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public void restore(long id, Connection connection) throws SQLException {
-        final String RESTORE_MESSAGE = "update message set is_deleted = 0 where id = ?";
+        final String RESTORE_MESSAGE = "update message set sending_date = sending_date, is_deleted = 0 where id = ?";
         PreparedStatement statement = connection.prepareStatement(RESTORE_MESSAGE);
         statement.setLong(1, id);
         statement.executeUpdate();
