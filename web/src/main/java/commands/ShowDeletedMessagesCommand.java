@@ -39,6 +39,10 @@ public class ShowDeletedMessagesCommand implements ActionCommand {
             Set<Message> messages;
             long numberOfDeletedMessages;
             messages = service.getDeletedMessages(startMessageNumber, quantityOfMessages);
+            for (Message message : messages) {
+                message.setTopic(message.getTopic().replace("<", "&lt").replace(">", "&gt"));
+                message.setText(message.getText().replace("<", "&lt").replace(">", "&gt"));
+            }
             numberOfDeletedMessages = service.getNumberOfAllDeletedMessages();
             req.setAttribute("numberOfMessages", numberOfDeletedMessages);
             req.setAttribute("numberOfDeletedMessages", numberOfDeletedMessages);

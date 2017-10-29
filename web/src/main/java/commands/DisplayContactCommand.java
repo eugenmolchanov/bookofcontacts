@@ -1,5 +1,6 @@
 package commands;
 
+import com.itechart.javalab.firstproject.entities.Attachment;
 import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.services.ContactService;
 import com.itechart.javalab.firstproject.services.impl.ContactServiceImpl;
@@ -38,6 +39,13 @@ public class DisplayContactCommand implements ActionCommand {
         }
         try {
             Contact contact = service.findById(id);
+            if (contact.getId() == 0) {
+                req.setAttribute("warningMessage", MessageManager.getProperty("invalid.data"));
+                return ERROR_PAGE;
+            }
+            for (Attachment attachment : contact.getAttachments()) {
+                attachment.setFileName(attachment.getFileName().replace("<", "&lt").replace(">", "&gt"));
+            }
             req.setAttribute("currentGender", contact.getGender());
             req.setAttribute("currentMaritalStatus", contact.getMaritalStatus());
             req.setAttribute("currentContactGroup", contact.getContactGroup());

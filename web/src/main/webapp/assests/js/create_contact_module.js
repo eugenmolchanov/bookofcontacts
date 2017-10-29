@@ -453,7 +453,7 @@ var contactModule = (function () {
             tr.appendChild(checkTd);
 
             var countryCodeTd = document.createElement("td");
-            countryCodeTd.setAttribute("style", "width: 11%; border-bottom: 1px solid #ddd; padding-top: 1%");
+            countryCodeTd.setAttribute("style", "width: 11%; border-bottom: 1px solid #ddd; padding-top: 1%; padding-right: 5px");
             var countryCodeInput = document.createElement("input");
             countryCodeInput.setAttribute("readonly", "readonly");
             countryCodeInput.setAttribute("type", "text");
@@ -464,7 +464,7 @@ var contactModule = (function () {
             tr.appendChild(countryCodeTd);
 
             var operatorCodeTd = document.createElement("td");
-            operatorCodeTd.setAttribute("style", "width: 12%; border-bottom: 1px solid #ddd; padding-top: 1%");
+            operatorCodeTd.setAttribute("style", "width: 12%; border-bottom: 1px solid #ddd; padding-top: 1%; padding-right: 5px");
             var operatorCodeInput = document.createElement("input");
             operatorCodeInput.setAttribute("readonly", "readonly");
             operatorCodeInput.setAttribute("type", "text");
@@ -475,7 +475,7 @@ var contactModule = (function () {
             tr.appendChild(operatorCodeTd);
 
             var phoneNumberTd = document.createElement("td");
-            phoneNumberTd.setAttribute("style", "width: 25%; border-bottom: 1px solid #ddd; padding-top: 1%");
+            phoneNumberTd.setAttribute("style", "width: 25%; border-bottom: 1px solid #ddd; padding-top: 1%; padding-right: 5px");
             var phoneNumberInput = document.createElement("input");
             phoneNumberInput.setAttribute("readonly", "readonly");
             phoneNumberInput.setAttribute("type", "text");
@@ -549,7 +549,7 @@ var contactModule = (function () {
             tr.appendChild(checkTd);
 
             var attachmentTd = document.createElement("td");
-            attachmentTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding-top: 1%");
+            attachmentTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding-top: 1%; padding-right: 5px");
             var attachmentInput = document.createElement("input");
             attachmentInput.setAttribute("readonly", "readonly");
             attachmentInput.setAttribute("type", "text");
@@ -560,7 +560,7 @@ var contactModule = (function () {
             tr.appendChild(attachmentTd);
             if (document.getElementById('page') != null && document.getElementById('page').value == 'edit') {
                 var dataTd = document.createElement("td");
-                dataTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding-top: 1%");
+                dataTd.setAttribute("style", "border-bottom: 1px solid #ddd; padding-top: 1%; padding-right: 5px");
                 tr.appendChild(dataTd);
             }
             var titleTd = document.createElement("td");

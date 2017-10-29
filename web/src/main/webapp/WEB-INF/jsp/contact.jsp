@@ -445,7 +445,7 @@
                             <input type="checkbox" name="attachmentId" value="${attachment.id}"/>
                             <input type="hidden" name="attachId" value="${attachment.id}"/>
                         </td>
-                        <td class="attachmentTd">
+                        <td class="attachmentTitleTd">
                             <a href="/controller?command=downloadAttachment&id=${attachment.id}"
                                id="hrefId_${attachment.id}">${attachment.fileName}</a>
                             <input type="hidden" name="attachTitle" id="attachmentFileId_${attachment.id}"

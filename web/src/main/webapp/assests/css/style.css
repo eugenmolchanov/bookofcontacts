@@ -291,6 +291,9 @@ input, select {
     border-bottom: 1px solid #ddd;
     padding-bottom: 1%;
 }
+.attachmentCommentary {
+    color: #808080;
+}
 #phoneRows>td {
     border-bottom: 1px solid #ddd;
 }
@@ -476,6 +479,9 @@ input, select {
 }
 .phoneTd, .attachmentTd {
     padding-top: 1%;
+    border-bottom: 1px solid #ddd;
+}
+.attachmentTitleTd {
     border-bottom: 1px solid #ddd;
 }
 .phoneTd input, .attachmentTd input {
