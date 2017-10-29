@@ -1,6 +1,7 @@
 package util;
 
 import com.itechart.javalab.firstproject.entities.Contact;
+import com.itechart.javalab.firstproject.entities.Phone;
 import resources.MessageManager;
 
 import java.util.Set;
@@ -32,6 +33,11 @@ public class EquivalentForSelect {
         }
         if (contact.getContactGroup() != null) {
             contact.setContactGroup(MessageManager.getProperty(contact.getContactGroup()));
+        }
+        if (contact.getPhones() != null) {
+            for (Phone phone : contact.getPhones()) {
+                phone.setType(MessageManager.getProperty(phone.getType()));
+            }
         }
     }
 }

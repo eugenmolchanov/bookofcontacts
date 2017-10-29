@@ -40,7 +40,7 @@
         <input type="hidden" name="contactId" value="${requestScope.contact.id}">
         <input type="hidden" name="photoId" value="${requestScope.contact.photo.id}">
         <div class="contactTitle"><fmt:message key="personal_data"/></div>
-        <div class="edit" onclick="contactModule.edit()">
+        <div class="edit" onclick="contactModule.edit()" title="<fmt:message key="edit"/>">
             <img src="${pageContext.request.contextPath}/assests/images/edit.png"/>
         </div>
         <br>
@@ -353,6 +353,7 @@
 
         <div class="phonesInfo"><h3><fmt:message key="phones"/></h3></div>
         <div class="phoneInfo" id="phoneInfo">
+            <div class="phoneMessageValidation">${requestScope.validation.phoneMessage}</div>
             <div class="phoneMessageValidation">${requestScope.validation.phoneInvalidMessage}</div>
             <div class="phoneMessageValidation">${requestScope.validation.countryCodeMessage}</div>
             <div class="phoneMessageValidation">${requestScope.validation.operatorCodeMessage}</div>
@@ -415,6 +416,7 @@
         <br>
         <div class="attachmentsInfo"><h3><fmt:message key="attachments"/></h3></div>
         <div class="attachmentInfo" id="attachmentInfo">
+            <div class="attachmentMessageValidation">${requestScope.validation.attachmentMessage}</div>
             <div class="attachmentMessageValidation">${requestScope.validation.attachmentInvalidMessage}</div>
             <div class="attachmentMessageValidation">${requestScope.validation.addAttachMessage}</div>
             <div class="attachmentMessageValidation">${requestScope.validation.attachTitleMessage}</div>
@@ -492,9 +494,9 @@
         <div class="phoneMessage" id="typeMessage"></div>
         <select id="type" name="type" class="form-control">
             <option selected disabled hidden><fmt:message key="type"/></option>
-            <option value="Рабочий"><fmt:message key="work_phone"/></option>
-            <option value="Домашний"><fmt:message key="home_phone"/></option>
-            <option value="Сотовый"><fmt:message key="mobile_phone"/></option>
+            <option value="<fmt:message key="work_phone"/>"><fmt:message key="work_phone"/></option>
+            <option value="<fmt:message key="home_phone"/>"><fmt:message key="home_phone"/></option>
+            <option value="<fmt:message key="mobile_phone"/>"><fmt:message key="mobile_phone"/></option>
         </select>
         <div class="phoneMessage" id="commentMessage"></div>
         <input type="text" id="comment" name="comment"
@@ -559,6 +561,6 @@
 </div>
 <input type="hidden" id="page" value="edit"/>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=8"></script>
+        src="${pageContext.request.contextPath}/assests/js/create_contact_module.js?v=9"></script>
 </body>
 </html>

@@ -480,9 +480,11 @@ input, select {
 .phoneTd, .attachmentTd {
     padding-top: 1%;
     border-bottom: 1px solid #ddd;
+    padding-right: 5px;
 }
 .attachmentTitleTd {
     border-bottom: 1px solid #ddd;
+    padding-right: 5px;
 }
 .phoneTd input, .attachmentTd input {
     border: none;

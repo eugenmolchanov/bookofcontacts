@@ -464,9 +464,10 @@ public class Validation {
                         if (phone.getNumber().isEmpty() || Pattern.compile("[^\\d]").matcher(phone.getNumber()).find()) {
                             validationMessages.put("phoneNumberMessage", MessageManager.getProperty("invalid_phone_number"));
                         } else {
-                            contactPhone.setNumber(Integer.parseInt(phone.getNumber()));
+                            contactPhone.setNumber(Long.parseLong(phone.getNumber()));
                         }
-                        if (phone.getType().isEmpty() || (!phone.getType().equals("Рабочий") && !phone.getType().equals("Домашний") && !phone.getType().equals("Сотовый"))) {
+                        if (phone.getType().isEmpty() || (!phone.getType().equals(MessageManager.getProperty("Working")) && !phone.getType().equals(MessageManager.getProperty("Domestic"))
+                                && !phone.getType().equals(MessageManager.getProperty("Mobile")))) {
                             validationMessages.put("phoneTypeMessage", MessageManager.getProperty("invalid_phone_type"));
                         } else {
                             contactPhone.setType(phone.getType());
@@ -482,7 +483,7 @@ public class Validation {
                 }
             } catch (Exception e) {
                 logger.debug(e.getMessage(), e);
-                validationMessages.put("attachmentMessage", MessageManager.getProperty("invalid_phone_data"));
+                validationMessages.put("phoneMessage", MessageManager.getProperty("invalid_phone_data"));
             }
         }
 
