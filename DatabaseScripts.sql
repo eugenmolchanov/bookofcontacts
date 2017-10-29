@@ -97,3 +97,4 @@ CREATE TABLE contact_message (
   alter table contact modify gender varchar(10);
   alter table contact modify marital_status varchar(10);
   alter table contact modify contact_group varchar(10);
+  alter table phone modify phone_type varchar(20);
