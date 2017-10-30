@@ -177,7 +177,7 @@ var contactModule = (function () {
             document.getElementById('number').style.borderColor = "#A94442";
             dataIsValid = false;
         }
-        if (!type) {
+        if (!type || !(type == messages['Domestic'] || type == messages['Mobile'] || type == messages['Working'])) {
             document.getElementById('typeMessage').innerHTML = messages['validation.select'];
             document.getElementById('type').style.borderColor = "#A94442";
             dataIsValid = false;
