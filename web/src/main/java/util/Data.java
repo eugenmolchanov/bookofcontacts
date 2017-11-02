@@ -39,7 +39,7 @@ public class Data {
         AttachmentDataDto attachment = new AttachmentDataDto();
         Photo photo = new Photo();
         PhoneDataDto phone = new PhoneDataDto();
-        String pathToFolder = "D:\\IndividualProject\\contacts\\";
+        String pathToFolder = ResourceBundle.getBundle("data").getString("file.path");
         String folder = pathToFolder.concat(LocalDate.now().toString()).concat(UUID.randomUUID().toString()).concat("\\");
         for (FileItem item : items) {
             if (item.isFormField()) {
