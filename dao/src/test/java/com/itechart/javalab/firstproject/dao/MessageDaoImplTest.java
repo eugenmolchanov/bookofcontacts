@@ -15,13 +15,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by Yauhen Malchanau on 23.09.2017.
  */
-@Ignore
 public class MessageDaoImplTest {
 
     private ContactDao dao = ContactDaoImpl.getInstance();
@@ -39,15 +37,15 @@ public class MessageDaoImplTest {
         Photo photo = new Photo();
         long photoId = photoDao.save(photo, connection);
         photo.setId(photoId);
-        firstContact = new Contact(0, "name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), null, null, null, null, null, null, null, null, null, null, null,
-                0, 0, new HashSet<>(), new HashSet<>(), photo);
-        secondContact = new Contact(0, "an_name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
-                photo);
+        firstContact = createContact("name", "email@gmail.com");
+        firstContact.setPhoto(photo);
+        secondContact = createContact("another_name", "anotheremail@gmail.com");
+        secondContact.setPhoto(photo);
         long firstContactId = contactDao.save(firstContact, connection);
         long secondContactId = contactDao.save(secondContact, connection);
         firstContact.setId(firstContactId);
         secondContact.setId(secondContactId);
-        message = new Message(0, "topic", firstContact, "text of message", Timestamp.valueOf(LocalDateTime.now()), 0);
+        message = createMessage(firstContact, "some text");
     }
 
     @After
@@ -73,7 +71,7 @@ public class MessageDaoImplTest {
     @Test
     public void shouldGetNumberOfAllMessages() throws SQLException {
         messageDao.save(message, connection);
-        long number = messageDao.getNumberOfAllMessages(connection);
+        long number = messageDao.getNotDeletedMessagesNumber(connection);
         Assert.assertEquals(1, number);
     }
 
@@ -88,9 +86,9 @@ public class MessageDaoImplTest {
     @Test
     public void shouldGetMessages() throws SQLException {
         messageDao.save(message, connection);
-        Message secondMessage = new Message(0, "anotherTopic", secondContact, "text of message1", Timestamp.valueOf(LocalDateTime.now()), 0);
+        Message secondMessage = createMessage(secondContact, "text of the message");
         messageDao.save(secondMessage, connection);
-        Set<Message> messages = messageDao.getMessages(0, 10, connection);
+        Set<Message> messages = messageDao.getNotDeletedMessages(0, 10, connection);
         Assert.assertEquals(2, messages.size());
     }
 
@@ -98,10 +96,32 @@ public class MessageDaoImplTest {
     public void shouldGetDeletedMessages() throws SQLException {
         long id = messageDao.save(message, connection);
         messageDao.delete(id, connection);
-        Message secondMessage = new Message(0, "anotherTopic", firstContact, "text of message1", Timestamp.valueOf(LocalDateTime.now()), 0);
+        Message secondMessage = createMessage(firstContact, "another message");
         long anId = messageDao.save(secondMessage, connection);
         messageDao.delete(anId, connection);
         Set<Message> messages = messageDao.getDeletedMessages(0, 10, connection);
         Assert.assertEquals(2, messages.size());
+    }
+
+    private Contact createContact(String firstName, String email) {
+        Contact contact = new Contact();
+        contact.setId(0);
+        contact.setFirstName(firstName);
+        contact.setLastName("surname");
+        contact.setBirthday(Date.valueOf(LocalDate.of(1990, 10, 10)));
+        contact.setGender("male");
+        contact.setEmail(email);
+        return contact;
+    }
+
+    private Message createMessage(Contact addressee, String text) {
+        message = new Message();
+        message.setId(0);
+        message.setTopic("topic");
+        message.setAddressee(addressee);
+        message.setText(text);
+        message.setSendingDate(Timestamp.valueOf(LocalDateTime.now()));
+        message.setIsDeleted(0);
+        return message;
     }
 }

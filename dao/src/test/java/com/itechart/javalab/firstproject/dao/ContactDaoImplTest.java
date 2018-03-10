@@ -10,13 +10,11 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by Yauhen Malchanau on 06.09.2017.
  */
-@Ignore
 public class ContactDaoImplTest {
 
     private ContactDao dao = ContactDaoImpl.getInstance();
@@ -30,8 +28,8 @@ public class ContactDaoImplTest {
         Photo photo = new Photo();
         long photoId = photoDao.save(photo, connection);
         photo.setId(photoId);
-        contact = new Contact(0, "name", "surname", null, Date.valueOf(LocalDate.of(1990, 10, 10)), "Мужчина", null, null, null, "email@gmail.com", null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
-                photo);
+        contact = createContact();
+        contact.setPhoto(photo);
     }
 
     @After
@@ -88,7 +86,7 @@ public class ContactDaoImplTest {
         dao.save(contact, connection);
         long startContactNumber = 0;
         long quantityOfContacts = 10;
-        Set<Contact> contacts = dao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
+        Set<Contact> contacts = dao.getContactsList(startContactNumber, quantityOfContacts, connection);
         Assert.assertEquals(1, contacts.size());
     }
 
@@ -120,5 +118,16 @@ public class ContactDaoImplTest {
         dao.save(contact, connection);
         Set<Contact> contacts = dao.findContactsByBirthday(Date.valueOf("1990-10-10"), connection);
         Assert.assertEquals(1, contacts.size());
+    }
+
+    private Contact createContact() {
+        contact = new Contact();
+        contact.setId(0);
+        contact.setFirstName("name");
+        contact.setLastName("surname");
+        contact.setBirthday(Date.valueOf(LocalDate.of(1990, 10, 10)));
+        contact.setGender("male");
+        contact.setEmail("email@gmail.com");
+        return contact;
     }
 }

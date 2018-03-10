@@ -1,6 +1,5 @@
 package com.itechart.javalab.firstproject.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(exclude = "id")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Phone {
     private long id;
     private String countryCode;

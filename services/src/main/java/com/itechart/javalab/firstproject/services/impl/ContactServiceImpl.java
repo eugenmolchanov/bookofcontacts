@@ -232,7 +232,7 @@ public class ContactServiceImpl implements ContactService {
         Connection connection = null;
         try {
             connection = Database.getConnection();
-            return contactDao.getSetOfContacts(startContactNumber, quantityOfContacts, connection);
+            return contactDao.getContactsList(startContactNumber, quantityOfContacts, connection);
         } catch (SQLException e) {
             logger.error("Can't get set of contacts. SqlException.");
             logger.error(e.getMessage(), e);

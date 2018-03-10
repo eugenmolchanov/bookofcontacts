@@ -9,14 +9,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 /**
  * Created by Yauhen Malchanau on 10.09.2017.
  */
-@Ignore
 public class AttachmentDaoImplTest {
     private AttachmentDao attachmentDao = AttachmentDaoImpl.getInstance();
     private PhotoDao photoDao = PhotoDaoImpl.getInstance();
@@ -31,10 +29,12 @@ public class AttachmentDaoImplTest {
         Photo photo = new Photo();
         long photoId = photoDao.save(photo, connection);
         photo.setId(photoId);
-        Contact contact = new Contact(0, "name", "surname", null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
-                photo);
+        Contact contact = new Contact();
+        contact.setFirstName("name");
+        contact.setLastName("surname");
+        contact.setPhoto(photo);
         contactId = contactDao.save(contact, connection);
-        attachment = new Attachment(0, "first", "comment", Timestamp.valueOf(LocalDateTime.now()), "path", UUID.randomUUID().toString(), contactId);
+        attachment = createAttachment();
     }
 
     @After
@@ -78,8 +78,20 @@ public class AttachmentDaoImplTest {
     @Test
     public void shouldGetAllAttachmentsOfContact() throws SQLException {
         attachmentDao.save(attachment, connection);
-        attachment = new Attachment(0, "first", "comment", Timestamp.valueOf(LocalDateTime.now()), "path", UUID.randomUUID().toString(), contactId);
+        attachment = createAttachment();
         Set<Attachment> attachments = attachmentDao.getAllAttachmentsOfContact(contactId, connection);
         Assert.assertEquals(1, attachments.size());
+    }
+
+    private Attachment createAttachment() {
+        attachment = new Attachment();
+        attachment.setId(0);
+        attachment.setFileName("first");
+        attachment.setCommentary("comment");
+        attachment.setDate(Timestamp.valueOf(LocalDateTime.now()));
+        attachment.setPathToFile("path");
+        attachment.setUuid(UUID.randomUUID().toString());
+        attachment.setContactId(contactId);
+        return attachment;
     }
 }

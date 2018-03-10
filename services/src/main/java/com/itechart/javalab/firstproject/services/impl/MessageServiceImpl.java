@@ -2,7 +2,6 @@ package com.itechart.javalab.firstproject.services.impl;
 
 import com.itechart.javalab.firstproject.dao.MessageDao;
 import com.itechart.javalab.firstproject.dao.impl.MessageDaoImpl;
-import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Message;
 import com.itechart.javalab.firstproject.services.MessageService;
 import com.itechart.javalab.firstproject.services.database.Database;
@@ -99,7 +98,7 @@ public class MessageServiceImpl implements MessageService {
         Connection connection = null;
         try {
             connection = Database.getConnection();
-            return messageDao.getMessages(startContactNumber, quantityOfContacts, connection);
+            return messageDao.getNotDeletedMessages(startContactNumber, quantityOfContacts, connection);
         } catch (SQLException e) {
             logger.error("Can't get messages. SqlException.");
             logger.error(e.getMessage(), e);
@@ -120,7 +119,7 @@ public class MessageServiceImpl implements MessageService {
         Connection connection = null;
         try {
             connection = Database.getConnection();
-            return messageDao.getNumberOfAllMessages(connection);
+            return messageDao.getNotDeletedMessagesNumber(connection);
         } catch (SQLException e) {
             logger.error("Can't get number of all messages. SqlException.");
             logger.error(e.getMessage(), e);
@@ -219,7 +218,7 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             connection.setAutoCommit(false);
             for (Long id : messageIds) {
-                messageDao.fullDelete(id, connection);
+                messageDao.remove(id, connection);
             }
             connection.commit();
             connection.setAutoCommit(true);

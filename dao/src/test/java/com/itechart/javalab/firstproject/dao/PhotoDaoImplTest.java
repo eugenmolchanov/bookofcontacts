@@ -13,7 +13,6 @@ import java.util.UUID;
 /**
  * Created by Yauhen Malchanau on 10.09.2017.
  */
-@Ignore
 public class PhotoDaoImplTest {
     private GenericDao<Photo> photoDao = PhotoDaoImpl.getInstance();
     private ContactDao contactDao = ContactDaoImpl.getInstance();
@@ -23,7 +22,7 @@ public class PhotoDaoImplTest {
     @Before
     public void beforeTesting() throws SQLException {
         connection = Database.getConnection();
-        photo = new Photo(0, "path", UUID.randomUUID().toString());
+        photo = createPhoto();
     }
 
     @After
@@ -33,7 +32,7 @@ public class PhotoDaoImplTest {
 
 
     @Test
-    public void shouldSaveAndFindPhone() throws SQLException {
+    public void shouldSaveAndFindPhoto() throws SQLException {
         photoDao.save(photo, connection);
         Photo actualPhoto = photoDao.findById(1, connection);
         Assert.assertEquals(photo.getUuid(), actualPhoto.getUuid());
@@ -41,7 +40,7 @@ public class PhotoDaoImplTest {
 
 
     @Test
-    public void shouldDeletePhone() throws SQLException {
+    public void shouldDeletePhoto() throws SQLException {
         photoDao.save(photo, connection);
         Photo beforeDeletePhoto = photoDao.findById(1, connection);
         Photo afterDeletePhoto = null;
@@ -55,7 +54,7 @@ public class PhotoDaoImplTest {
     }
 
     @Test
-    public void shouldUpdatePhone() throws SQLException {
+    public void shouldUpdatePhoto() throws SQLException {
         photoDao.save(photo, connection);
         Photo beforeUpdatePhoto = photoDao.findById(1, connection);
         beforeUpdatePhoto.setPathToFile("some path");
@@ -63,5 +62,13 @@ public class PhotoDaoImplTest {
         Photo afterUpdatePhoto = photoDao.findById(1, connection);
         Assert.assertEquals(photo.getUuid(), afterUpdatePhoto.getUuid());
         Assert.assertNotEquals(photo.getPathToFile(), afterUpdatePhoto.getPathToFile());
+    }
+
+    private Photo createPhoto() {
+        photo = new Photo();
+        photo.setId(0);
+        photo.setPathToFile("path");
+        photo.setUuid(UUID.randomUUID().toString());
+        return photo;
     }
 }

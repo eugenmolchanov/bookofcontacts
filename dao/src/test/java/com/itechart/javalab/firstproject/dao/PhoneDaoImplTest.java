@@ -9,13 +9,11 @@ import org.junit.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by Yauhen Malchanau on 08.09.2017.
  */
-@Ignore
 public class PhoneDaoImplTest {
 
     private PhoneDao phoneDao = PhoneDaoImpl.getInstance();
@@ -31,10 +29,12 @@ public class PhoneDaoImplTest {
         Photo photo = new Photo();
         long photoId = photoDao.save(photo, connection);
         photo.setId(photoId);
-        Contact contact = new Contact(0, "name", "surname", null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0, new HashSet<>(), new HashSet<>(),
-                photo);
+        Contact contact = new Contact();
+        contact.setFirstName("name");
+        contact.setLastName("surname");
+        contact.setPhoto(photo);
         contactId = contactDao.save(contact, connection);
-        phone = new Phone(0, "1-1", 375, 222222222, "домашний", "actual number", contactId);
+        phone = createPhone();
     }
 
     @After
@@ -81,5 +81,17 @@ public class PhoneDaoImplTest {
         phoneDao.save(phone, connection);
         Set<Phone> phones = phoneDao.getAllPhonesOfContact(4, connection);
         Assert.assertEquals(0, phones.size());
+    }
+
+    private Phone createPhone() {
+        phone = new Phone();
+        phone.setId(0);
+        phone.setCountryCode("1-1");
+        phone.setOperatorCode(375);
+        phone.setNumber(222222222);
+        phone.setType("home");
+        phone.setComment("actual number");
+        phone.setContactId(contactId);
+        return phone;
     }
 }

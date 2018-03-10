@@ -1,6 +1,5 @@
 package com.itechart.javalab.firstproject.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +12,6 @@ import java.util.Set;
  */
 @Data
 @EqualsAndHashCode(exclude = "id")
-@AllArgsConstructor
 public class Contact {
     private long id;
     private String firstName;
