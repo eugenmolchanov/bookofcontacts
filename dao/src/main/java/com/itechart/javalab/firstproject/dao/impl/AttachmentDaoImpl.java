@@ -1,6 +1,7 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.AttachmentDao;
+import com.itechart.javalab.firstproject.dao.util.EntityBuilder;
 import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.Attachment;
 
@@ -8,6 +9,7 @@ import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.itechart.javalab.firstproject.dao.util.EntityBuilder.createAndInitializeAttachment;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 /**
@@ -21,12 +23,11 @@ public class AttachmentDaoImpl implements AttachmentDao {
 
     private static final String SAVE_ATTACHMENT = "insert into attachment (file_name, commentary, record_date, path, " +
             "uuid, contact_id) values (?, ?, ?, ?, ?, ?);";
-    private static final String GET_ATTACHMENT_BY_ID = "select * from attachment where id = ?;";
+    private static final String GET_ATTACHMENT_BY_ID = "select * from attachment as att where att.id = ?;";
     private static final String UPDATE_ATTACHMENT = "update attachment set file_name = ?, commentary = ?, " +
             "record_date = record_date where id = ?;";
     private static final String DELETE_ATTACHMENT = "delete from attachment where id = ?;";
-    private static final String GET_ATTACHMENTS = "select id, file_name, commentary, record_date, path, uuid from " +
-            "attachment where contact_id = ?";
+    private static final String GET_ATTACHMENTS = "select * from attachment as att where att.contact_id = ?";
 
     public static AttachmentDaoImpl getInstance() {
         if (instance == null) {
@@ -56,14 +57,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
             Attachment attachment = null;
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    attachment = new Attachment();
-                    attachment.setId(resultSet.getLong("id"));
-                    attachment.setFileName(resultSet.getString("file_name"));
-                    attachment.setCommentary(resultSet.getString("commentary"));
-                    attachment.setDate(resultSet.getTimestamp("record_date"));
-                    attachment.setPathToFile(resultSet.getString("path"));
-                    attachment.setUuid(resultSet.getString("uuid"));
-                    attachment.setContactId(resultSet.getLong("contact_id"));
+                    attachment = createAndInitializeAttachment(resultSet);
                 }
             }
             return attachment;
@@ -96,14 +90,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
                 Attachment attachment;
                 Set<Attachment> attachments = new HashSet<>();
                 while (resultSet.next()) {
-                    attachment = new Attachment();
-                    attachment.setId(resultSet.getLong("id"));
-                    attachment.setFileName(resultSet.getString("file_name"));
-                    attachment.setCommentary(resultSet.getString("commentary"));
-                    attachment.setDate(resultSet.getTimestamp("record_date"));
-                    attachment.setPathToFile(resultSet.getString("path"));
-                    attachment.setUuid(resultSet.getString("uuid"));
-                    attachment.setContactId(contactId);
+                    attachment = createAndInitializeAttachment(resultSet);
                     attachments.add(attachment);
                 }
                 return attachments;

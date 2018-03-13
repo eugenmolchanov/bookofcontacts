@@ -35,7 +35,7 @@ public class EntityBuilder {
         attachment.setDate(resultSet.getTimestamp("att.record_date"));
         attachment.setPathToFile(resultSet.getString("att.path"));
         attachment.setUuid(resultSet.getString("att.uuid"));
-        attachment.setContactId(resultSet.getLong("c.id"));
+        attachment.setContactId(resultSet.getLong("att.contact_id"));
         return attachment;
     }
 

@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.util.*;
 
 import static com.itechart.javalab.firstproject.dao.util.EntityBuilder.*;
+import static com.itechart.javalab.firstproject.dao.util.FieldNameConstant.*;
 import static com.itechart.javalab.firstproject.dao.util.Util.getRecordsNumber;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
@@ -29,7 +30,7 @@ public class ContactDaoImpl implements ContactDao {
     private static final String FIND_CONTACT_BY_ID = "select c.id, c.first_name, c.last_name, c.middle_name, c.birth_date, " +
             "c.gender, c.nationality, c.marital_status, c.website, c.email, c.employment_place, c.contact_group, c.country, " +
             "c.city, c.street, c.house_number, c.flat_number, c.postcode, att.id, att.file_name, att.commentary, " +
-            "att.record_date, att.path, att.uuid, pe.id, pe.country_code, pe.operator_code, pe.phone_number, pe.phone_type, " +
+            "att.record_date, att.path, att.uuid, att.contact_id, pe.id, pe.country_code, pe.operator_code, pe.phone_number, pe.phone_type, " +
             "pe.commentary, pe.contact_id, po.id, po.path, po.uuid from contact as c left join attachment as att on c.id=att.contact_id left " +
             "join phone as pe on c.id=pe.contact_id inner join photo as po on c.photo_id=po.id where c.id=?;";
     private static final String UPDATE_CONTACT = "update contact set first_name = ?, last_name = ?, middle_name = ?, " +
@@ -40,7 +41,7 @@ public class ContactDaoImpl implements ContactDao {
     private static final String DELETE_CONTACT = "delete from contact where id = ?;";
     private static final String DELETE_CONTACT_ATTACHMENTS = "delete from attachment where contact_id=?;";
     private static final String DELETE_CONTACT_PHONES = "delete from phone where contact_id=?;";
-    private static final String DELETE_MESSAGE = "delete from message where contact_id = ?;";
+    private static final String DELETE_MESSAGES = "delete from message where contact_id = ?;";
 
     private static final String DELETE_ALL_ATTACHMENTS = "delete from attachment;";
     private static final String DELETE_ALL_PHONES = "delete from phone;";
@@ -61,9 +62,9 @@ public class ContactDaoImpl implements ContactDao {
             "employment_place, contact_group, country, city, street, house_number, flat_number, postcode from contact ");
     private static StringBuilder getSearchedContacts = new StringBuilder("select count(id) from contact ");
     private static final String COUNT_CONTACTS = "select count(id) from contact;";
-    private static final String FIND_CONTACT_BY_EMAIL = "select id, first_name, last_name, middle_name, birth_date, gender, " +
-            "nationality, marital_status, website, email, employment_place, contact_group, country, city, street, " +
-            "house_number, flat_number, postcode from contact where email=?;";
+    private static final String FIND_CONTACT_BY_EMAIL = "select c.id, c.first_name, c.last_name, c.middle_name, c.birth_date, c.gender, " +
+            "c.nationality, c.marital_status, c.website, c.email, c.employment_place, c.contact_group, c.country, c.city, c.street, " +
+            "c.house_number, c.flat_number, c.postcode from contact as c where c.email=?;";
     private static final String GET_CONTACTS_BY_BIRTHDAY = "select id, first_name, last_name, email from contact where " +
             "dayofmonth(birth_date) = dayofmonth(?) and month(birth_date) = month(?);";
 
@@ -114,24 +115,7 @@ public class ContactDaoImpl implements ContactDao {
 
                     Photo photo = createAndInitializePhoto(resultSet);
 
-                    contact.setId(resultSet.getLong("c.id"));
-                    contact.setFirstName(resultSet.getString("c.first_name"));
-                    contact.setLastName(resultSet.getString("c.last_name"));
-                    contact.setMiddleName(resultSet.getString("c.middle_name"));
-                    contact.setBirthday(resultSet.getDate("c.birth_date"));
-                    contact.setGender(resultSet.getString("c.gender"));
-                    contact.setNationality(resultSet.getString("c.nationality"));
-                    contact.setMaritalStatus(resultSet.getString("c.marital_status"));
-                    contact.setWebSite(resultSet.getString("c.website"));
-                    contact.setEmail(resultSet.getString("c.email"));
-                    contact.setEmploymentPlace(resultSet.getString("c.employment_place"));
-                    contact.setContactGroup(resultSet.getString("c.contact_group"));
-                    contact.setCountry(resultSet.getString("c.country"));
-                    contact.setCity(resultSet.getString("c.city"));
-                    contact.setStreet(resultSet.getString("c.street"));
-                    contact.setHouseNumber(resultSet.getString("c.house_number"));
-                    contact.setFlatNumber(resultSet.getInt("c.flat_number"));
-                    contact.setPostcode(resultSet.getInt("c.postcode"));
+                    contact = initializeContact(contact, resultSet);
                     if (phone.getId() != 0) {
                         contact.getPhones().add(phone);
                     }
@@ -173,25 +157,13 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void delete(long id, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_MESSAGE)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        deleteByContactId(id, DELETE_MESSAGES, connection);
 
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT_ATTACHMENTS)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        deleteByContactId(id, DELETE_CONTACT_ATTACHMENTS, connection);
 
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT_PHONES)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        deleteByContactId(id, DELETE_CONTACT_PHONES, connection);
 
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_CONTACT)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        deleteByContactId(id, DELETE_CONTACT, connection);
     }
 
 
@@ -236,7 +208,7 @@ public class ContactDaoImpl implements ContactDao {
                                        long quantityOfContacts, Connection connection) throws SQLException {
         Builder query = new Builder();
         String whereClause = "" + query.getWhereClause(entity, lowerLimit, upperLimit);
-        if (!whereClause.equals("")) {
+        if (!whereClause.isEmpty()) {
             query.where(getContacts);
             whereClause = whereClause.substring(0, whereClause.length() - 4);
             getContacts.append(whereClause);
@@ -289,7 +261,7 @@ public class ContactDaoImpl implements ContactDao {
             if (upperLimit != null) {
                 statement.setDate(++counter, upperLimit);
             }
-            statement.setString(++counter, "first_name");
+            statement.setString(++counter, FIRST_NAME);
             statement.setLong(++counter, startContactNumber);
             statement.setLong(++counter, quantityOfContacts);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -382,27 +354,10 @@ public class ContactDaoImpl implements ContactDao {
     public Contact findByEmail(String email, Connection connection) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(FIND_CONTACT_BY_EMAIL)) {
             statement.setString(1, email);
+            Contact contact = new Contact();
             try (ResultSet resultSet = statement.executeQuery()) {
-                Contact contact = new Contact();
                 while (resultSet.next()) {
-                    contact.setId(resultSet.getLong("id"));
-                    contact.setFirstName(resultSet.getString("first_name"));
-                    contact.setLastName(resultSet.getString("last_name"));
-                    contact.setMiddleName(resultSet.getString("middle_name"));
-                    contact.setBirthday(resultSet.getDate("birth_date"));
-                    contact.setGender(resultSet.getString("gender"));
-                    contact.setNationality(resultSet.getString("nationality"));
-                    contact.setMaritalStatus(resultSet.getString("marital_status"));
-                    contact.setWebSite(resultSet.getString("website"));
-                    contact.setEmail(resultSet.getString("email"));
-                    contact.setEmploymentPlace(resultSet.getString("employment_place"));
-                    contact.setContactGroup(resultSet.getString("contact_group"));
-                    contact.setCountry(resultSet.getString("country"));
-                    contact.setCity(resultSet.getString("city"));
-                    contact.setStreet(resultSet.getString("street"));
-                    contact.setHouseNumber(resultSet.getString("house_number"));
-                    contact.setFlatNumber(resultSet.getInt("flat_number"));
-                    contact.setPostcode(resultSet.getInt("postcode"));
+                    contact = initializeContact(contact, resultSet);
                 }
                 return contact;
             }
@@ -418,15 +373,44 @@ public class ContactDaoImpl implements ContactDao {
                 Set<Contact> contacts = new HashSet<>();
                 while (resultSet.next()) {
                     Contact contact = new Contact();
-                    contact.setId(resultSet.getLong("id"));
-                    contact.setFirstName(resultSet.getString("first_name"));
-                    contact.setLastName(resultSet.getString("last_name"));
+                    contact.setId(resultSet.getLong(ID));
+                    contact.setFirstName(resultSet.getString(FIRST_NAME));
+                    contact.setLastName(resultSet.getString(LAST_NAME));
                     contact.setBirthday(date);
-                    contact.setEmail(resultSet.getString("email"));
+                    contact.setEmail(resultSet.getString(EMAIL));
                     contacts.add(contact);
                 }
                 return contacts;
             }
+        }
+    }
+
+    private Contact initializeContact(Contact contact, ResultSet resultSet) throws SQLException {
+        contact.setId(resultSet.getLong(ID));
+        contact.setFirstName(resultSet.getString(FIRST_NAME));
+        contact.setLastName(resultSet.getString(LAST_NAME));
+        contact.setMiddleName(resultSet.getString(MIDDLE_NAME));
+        contact.setBirthday(resultSet.getDate(BIRTH_DATE));
+        contact.setGender(resultSet.getString(GENDER));
+        contact.setNationality(resultSet.getString(NATIONALITY));
+        contact.setMaritalStatus(resultSet.getString(MARITAL_STATUS));
+        contact.setWebSite(resultSet.getString(WEBSITE));
+        contact.setEmail(resultSet.getString(EMAIL));
+        contact.setEmploymentPlace(resultSet.getString(EMPLOYMENT_PLACE));
+        contact.setContactGroup(resultSet.getString(CONTACT_GROUP));
+        contact.setCountry(resultSet.getString(COUNTRY));
+        contact.setCity(resultSet.getString(CITY));
+        contact.setStreet(resultSet.getString(STREET));
+        contact.setHouseNumber(resultSet.getString(HOUSE_NUMBER));
+        contact.setFlatNumber(resultSet.getInt(FLAT_NUMBER));
+        contact.setPostcode(resultSet.getInt(POSTCODE));
+        return contact;
+    }
+
+    private void deleteByContactId(long id, String deleteSqlQuery, Connection connection) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(deleteSqlQuery)) {
+            statement.setLong(1, id);
+            statement.executeUpdate();
         }
     }
 }
