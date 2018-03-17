@@ -1,17 +1,18 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.ContactDao;
-import com.itechart.javalab.firstproject.dao.util.Builder;
-import com.itechart.javalab.firstproject.dao.util.Util;
+import com.itechart.javalab.firstproject.dao.util.QueryBuilder;
 import com.itechart.javalab.firstproject.entities.*;
 
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-import static com.itechart.javalab.firstproject.dao.util.EntityBuilder.*;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.executeUpdateById;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.getGeneratedId;
+import static com.itechart.javalab.firstproject.dao.util.EntityCreator.*;
 import static com.itechart.javalab.firstproject.dao.util.FieldNameConstant.*;
-import static com.itechart.javalab.firstproject.dao.util.Util.getRecordsNumber;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.getRecordsNumber;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 /**
@@ -55,18 +56,18 @@ public class ContactDaoImpl implements ContactDao {
     private static final String RESET_CONTACT_COUNTER = "alter table contact auto_increment=1;";
     private static final String RESET_MESSAGE_COUNTER = "alter table message auto_increment=1;";
 
-    private static final String GET_CONTACTS = "select id, first_name, last_name, birth_date, email, employment_place, " +
-            "contact_group, country, city, street, house_number, flat_number, postcode from contact order by first_name " +
+    private static final String GET_CONTACTS = "select c.id, c.first_name, c.last_name, c.birth_date, c.email, c.employment_place, " +
+            "c.contact_group, c.country, c.city, c.street, c.house_number, c.flat_number, c.postcode from contact as c order by c.first_name " +
             "limit ?, ?;";
-    private static StringBuilder getContacts = new StringBuilder("select id, first_name, last_name, birth_date, email, " +
-            "employment_place, contact_group, country, city, street, house_number, flat_number, postcode from contact ");
-    private static StringBuilder getSearchedContacts = new StringBuilder("select count(id) from contact ");
+    private static StringBuilder getContacts = new StringBuilder("select c.id, c.first_name, c.last_name, c.birth_date, c.email, " +
+            "c.employment_place, c.contact_group, c.country, c.city, c.street, c.house_number, c.flat_number, c.postcode from contact as c ");
+    private static StringBuilder getSearchedContacts = new StringBuilder("select count(c.id) from contact as c ");
     private static final String COUNT_CONTACTS = "select count(id) from contact;";
     private static final String FIND_CONTACT_BY_EMAIL = "select c.id, c.first_name, c.last_name, c.middle_name, c.birth_date, c.gender, " +
             "c.nationality, c.marital_status, c.website, c.email, c.employment_place, c.contact_group, c.country, c.city, c.street, " +
             "c.house_number, c.flat_number, c.postcode from contact as c where c.email=?;";
-    private static final String GET_CONTACTS_BY_BIRTHDAY = "select id, first_name, last_name, email from contact where " +
-            "dayofmonth(birth_date) = dayofmonth(?) and month(birth_date) = month(?);";
+    private static final String GET_CONTACTS_BY_BIRTHDAY = "select c.id, c.first_name, c.last_name, c.email from contact as c where " +
+            "dayofmonth(c.birth_date) = dayofmonth(?) and month(c.birth_date) = month(?);";
 
     public static ContactDao getInstance() {
         if (instance == null) {
@@ -78,26 +79,10 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public long save(Contact entity, Connection connection) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(SAVE_CONTACT, RETURN_GENERATED_KEYS)) {
-            statement.setString(1, entity.getFirstName());
-            statement.setString(2, entity.getLastName());
-            statement.setString(3, entity.getMiddleName());
-            statement.setDate(4, entity.getBirthday());
-            statement.setString(5, entity.getGender());
-            statement.setString(6, entity.getNationality());
-            statement.setString(7, entity.getMaritalStatus());
-            statement.setString(8, entity.getWebSite());
-            statement.setString(9, entity.getEmail());
-            statement.setString(10, entity.getEmploymentPlace());
-            statement.setString(11, entity.getContactGroup());
-            statement.setString(12, entity.getCountry());
-            statement.setString(13, entity.getCity());
-            statement.setString(14, entity.getStreet());
-            statement.setString(15, entity.getHouseNumber());
-            statement.setInt(16, entity.getFlatNumber());
-            statement.setInt(17, entity.getPostcode());
+            initializeStatementForSaveOrUpdateContact(statement, entity);
             statement.setLong(18, entity.getPhoto().getId());
             statement.executeUpdate();
-            return Util.getGeneratedIdAfterCreate(statement);
+            return getGeneratedId(statement);
         }
     }
 
@@ -116,12 +101,15 @@ public class ContactDaoImpl implements ContactDao {
                     Photo photo = createAndInitializePhoto(resultSet);
 
                     contact = initializeContact(contact, resultSet);
+
                     if (phone.getId() != 0) {
                         contact.getPhones().add(phone);
                     }
+
                     if (attachment.getId() != 0) {
                         contact.getAttachments().add(attachment);
                     }
+
                     contact.setPhoto(photo);
                 }
                 return contact;
@@ -132,23 +120,7 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void update(Contact entity, Connection connection) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_CONTACT)) {
-            statement.setString(1, entity.getFirstName());
-            statement.setString(2, entity.getLastName());
-            statement.setString(3, entity.getMiddleName());
-            statement.setDate(4, entity.getBirthday());
-            statement.setString(5, entity.getGender());
-            statement.setString(6, entity.getNationality());
-            statement.setString(7, entity.getMaritalStatus());
-            statement.setString(8, entity.getWebSite());
-            statement.setString(9, entity.getEmail());
-            statement.setString(10, entity.getEmploymentPlace());
-            statement.setString(11, entity.getContactGroup());
-            statement.setString(12, entity.getCountry());
-            statement.setString(13, entity.getCity());
-            statement.setString(14, entity.getStreet());
-            statement.setString(15, entity.getHouseNumber());
-            statement.setInt(16, entity.getFlatNumber());
-            statement.setInt(17, entity.getPostcode());
+            initializeStatementForSaveOrUpdateContact(statement, entity);
             statement.setLong(18, entity.getId());
             statement.executeUpdate();
         }
@@ -157,13 +129,13 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void delete(long id, Connection connection) throws SQLException {
-        deleteByContactId(id, DELETE_MESSAGES, connection);
+        executeUpdateById(id, DELETE_MESSAGES, connection);
 
-        deleteByContactId(id, DELETE_CONTACT_ATTACHMENTS, connection);
+        executeUpdateById(id, DELETE_CONTACT_ATTACHMENTS, connection);
 
-        deleteByContactId(id, DELETE_CONTACT_PHONES, connection);
+        executeUpdateById(id, DELETE_CONTACT_PHONES, connection);
 
-        deleteByContactId(id, DELETE_CONTACT, connection);
+        executeUpdateById(id, DELETE_CONTACT, connection);
     }
 
 
@@ -206,55 +178,10 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber,
                                        long quantityOfContacts, Connection connection) throws SQLException {
-        Builder query = new Builder();
-        String whereClause = "" + query.getWhereClause(entity, lowerLimit, upperLimit);
-        if (!whereClause.isEmpty()) {
-            query.where(getContacts);
-            whereClause = whereClause.substring(0, whereClause.length() - 4);
-            getContacts.append(whereClause);
-        }
+        QueryBuilder query = modifySearchQuery(getContacts, entity, lowerLimit, upperLimit);
         query.orderBy(getContacts).limit(getContacts).build(getContacts);
         try (PreparedStatement statement = connection.prepareStatement(getContacts.toString())) {
-            int counter = 0;
-            if (entity.getFirstName() != null) {
-                statement.setString(++counter, entity.getFirstName());
-            }
-            if (entity.getLastName() != null) {
-                statement.setString(++counter, entity.getLastName());
-            }
-            if (entity.getMiddleName() != null) {
-                statement.setString(++counter, entity.getMiddleName());
-            }
-            if (entity.getGender() != null) {
-                statement.setString(++counter, entity.getGender());
-            }
-            if (entity.getMaritalStatus() != null) {
-                statement.setString(++counter, entity.getMaritalStatus());
-            }
-            if (entity.getNationality() != null) {
-                statement.setString(++counter, entity.getNationality());
-            }
-            if (entity.getContactGroup() != null) {
-                statement.setString(++counter, entity.getContactGroup());
-            }
-            if (entity.getCountry() != null) {
-                statement.setString(++counter, entity.getCountry());
-            }
-            if (entity.getCity() != null) {
-                statement.setString(++counter, entity.getCity());
-            }
-            if (entity.getStreet() != null) {
-                statement.setString(++counter, entity.getStreet());
-            }
-            if (entity.getHouseNumber() != null) {
-                statement.setString(++counter, entity.getHouseNumber());
-            }
-            if (entity.getFlatNumber() != 0) {
-                statement.setInt(++counter, entity.getFlatNumber());
-            }
-            if (entity.getPostcode() != 0) {
-                statement.setInt(++counter, entity.getPostcode());
-            }
+            int counter = addSearchCriteriaIfExist(statement, entity);
             if (lowerLimit != null) {
                 statement.setDate(++counter, lowerLimit);
             }
@@ -279,55 +206,10 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public long getNumberOfSearchContacts(Contact entity, Date lowerLimit, Date upperLimit,
                                           Connection connection) throws SQLException {
-        Builder query = new Builder();
-        String whereClause = "" + query.getWhereClause(entity, lowerLimit, upperLimit);
-        if (!whereClause.equals("")) {
-            query.where(getSearchedContacts);
-            whereClause = whereClause.substring(0, whereClause.length() - 4);
-            getSearchedContacts.append(whereClause);
-        }
+        QueryBuilder query = modifySearchQuery(getSearchedContacts, entity, lowerLimit, upperLimit);
         query.build(getSearchedContacts);
         try (PreparedStatement statement = connection.prepareStatement(getSearchedContacts.toString())) {
-            int counter = 0;
-            if (entity.getFirstName() != null) {
-                statement.setString(++counter, entity.getFirstName());
-            }
-            if (entity.getLastName() != null) {
-                statement.setString(++counter, entity.getLastName());
-            }
-            if (entity.getMiddleName() != null) {
-                statement.setString(++counter, entity.getMiddleName());
-            }
-            if (entity.getGender() != null) {
-                statement.setString(++counter, entity.getGender());
-            }
-            if (entity.getMaritalStatus() != null) {
-                statement.setString(++counter, entity.getMaritalStatus());
-            }
-            if (entity.getNationality() != null) {
-                statement.setString(++counter, entity.getNationality());
-            }
-            if (entity.getContactGroup() != null) {
-                statement.setString(++counter, entity.getContactGroup());
-            }
-            if (entity.getCountry() != null) {
-                statement.setString(++counter, entity.getCountry());
-            }
-            if (entity.getCity() != null) {
-                statement.setString(++counter, entity.getCity());
-            }
-            if (entity.getStreet() != null) {
-                statement.setString(++counter, entity.getStreet());
-            }
-            if (entity.getHouseNumber() != null) {
-                statement.setString(++counter, entity.getHouseNumber());
-            }
-            if (entity.getFlatNumber() != 0) {
-                statement.setInt(++counter, entity.getFlatNumber());
-            }
-            if (entity.getPostcode() != 0) {
-                statement.setInt(++counter, entity.getPostcode());
-            }
+            int counter = addSearchCriteriaIfExist(statement, entity);
             if (lowerLimit != null) {
                 statement.setDate(++counter, lowerLimit);
             }
@@ -337,7 +219,7 @@ public class ContactDaoImpl implements ContactDao {
             try (ResultSet resultSet = statement.executeQuery()) {
                 long totalQuantity = 0;
                 while (resultSet.next()) {
-                    totalQuantity = resultSet.getLong("count(id)");
+                    totalQuantity = resultSet.getLong("count(c.id)");
                 }
 
                 return totalQuantity;
@@ -373,7 +255,7 @@ public class ContactDaoImpl implements ContactDao {
                 Set<Contact> contacts = new HashSet<>();
                 while (resultSet.next()) {
                     Contact contact = new Contact();
-                    contact.setId(resultSet.getLong(ID));
+                    contact.setId(resultSet.getLong(CONTACT_ID));
                     contact.setFirstName(resultSet.getString(FIRST_NAME));
                     contact.setLastName(resultSet.getString(LAST_NAME));
                     contact.setBirthday(date);
@@ -385,16 +267,48 @@ public class ContactDaoImpl implements ContactDao {
         }
     }
 
+    private void initializeStatementForSaveOrUpdateContact(PreparedStatement statement,
+                                                                  Contact entity) throws SQLException {
+        statement.setString(1, entity.getFirstName());
+        statement.setString(2, entity.getLastName());
+        statement.setString(3, entity.getMiddleName());
+        statement.setDate(4, entity.getBirthday());
+        statement.setString(5, entity.getGender());
+        statement.setString(6, entity.getNationality());
+        statement.setString(7, entity.getMaritalStatus());
+        statement.setString(8, entity.getWebSite());
+        statement.setString(9, entity.getEmail());
+        statement.setString(10, entity.getEmploymentPlace());
+        statement.setString(11, entity.getContactGroup());
+        statement.setString(12, entity.getCountry());
+        statement.setString(13, entity.getCity());
+        statement.setString(14, entity.getStreet());
+        statement.setString(15, entity.getHouseNumber());
+        statement.setInt(16, entity.getFlatNumber());
+        statement.setInt(17, entity.getPostcode());
+    }
+
     private Contact initializeContact(Contact contact, ResultSet resultSet) throws SQLException {
-        contact.setId(resultSet.getLong(ID));
-        contact.setFirstName(resultSet.getString(FIRST_NAME));
-        contact.setLastName(resultSet.getString(LAST_NAME));
+        initializeContactFieldsForMainPage(contact, resultSet);
         contact.setMiddleName(resultSet.getString(MIDDLE_NAME));
-        contact.setBirthday(resultSet.getDate(BIRTH_DATE));
         contact.setGender(resultSet.getString(GENDER));
         contact.setNationality(resultSet.getString(NATIONALITY));
         contact.setMaritalStatus(resultSet.getString(MARITAL_STATUS));
         contact.setWebSite(resultSet.getString(WEBSITE));
+        return contact;
+    }
+
+    private Contact createAndInitializeContactForMainPage(ResultSet resultSet) throws SQLException {
+        Contact contact = new Contact();
+        initializeContactFieldsForMainPage(contact, resultSet);
+        return contact;
+    }
+
+    private void initializeContactFieldsForMainPage(Contact contact, ResultSet resultSet) throws SQLException {
+        contact.setId(resultSet.getLong(CONTACT_ID));
+        contact.setFirstName(resultSet.getString(FIRST_NAME));
+        contact.setLastName(resultSet.getString(LAST_NAME));
+        contact.setBirthday(resultSet.getDate(BIRTH_DATE));
         contact.setEmail(resultSet.getString(EMAIL));
         contact.setEmploymentPlace(resultSet.getString(EMPLOYMENT_PLACE));
         contact.setContactGroup(resultSet.getString(CONTACT_GROUP));
@@ -404,13 +318,61 @@ public class ContactDaoImpl implements ContactDao {
         contact.setHouseNumber(resultSet.getString(HOUSE_NUMBER));
         contact.setFlatNumber(resultSet.getInt(FLAT_NUMBER));
         contact.setPostcode(resultSet.getInt(POSTCODE));
-        return contact;
     }
 
-    private void deleteByContactId(long id, String deleteSqlQuery, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(deleteSqlQuery)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
+    private QueryBuilder modifySearchQuery(StringBuilder searchQuery, Contact entity,
+                                          Date lowerLimit, Date upperLimit) {
+        QueryBuilder query = new QueryBuilder();
+        String whereClause = "" + query.getWhereClause(entity, lowerLimit, upperLimit);
+        if (!whereClause.isEmpty()) {
+            query.where(searchQuery);
+            whereClause = whereClause.substring(0, whereClause.length() - 4);
+            searchQuery.append(whereClause);
         }
+        return query;
+    }
+
+    private int addSearchCriteriaIfExist(PreparedStatement statement, Contact entity) throws SQLException {
+        int counter = 0;
+        if (entity.getFirstName() != null) {
+            statement.setString(++counter, entity.getFirstName());
+        }
+        if (entity.getLastName() != null) {
+            statement.setString(++counter, entity.getLastName());
+        }
+        if (entity.getMiddleName() != null) {
+            statement.setString(++counter, entity.getMiddleName());
+        }
+        if (entity.getGender() != null) {
+            statement.setString(++counter, entity.getGender());
+        }
+        if (entity.getMaritalStatus() != null) {
+            statement.setString(++counter, entity.getMaritalStatus());
+        }
+        if (entity.getNationality() != null) {
+            statement.setString(++counter, entity.getNationality());
+        }
+        if (entity.getContactGroup() != null) {
+            statement.setString(++counter, entity.getContactGroup());
+        }
+        if (entity.getCountry() != null) {
+            statement.setString(++counter, entity.getCountry());
+        }
+        if (entity.getCity() != null) {
+            statement.setString(++counter, entity.getCity());
+        }
+        if (entity.getStreet() != null) {
+            statement.setString(++counter, entity.getStreet());
+        }
+        if (entity.getHouseNumber() != null) {
+            statement.setString(++counter, entity.getHouseNumber());
+        }
+        if (entity.getFlatNumber() != 0) {
+            statement.setInt(++counter, entity.getFlatNumber());
+        }
+        if (entity.getPostcode() != 0) {
+            statement.setInt(++counter, entity.getPostcode());
+        }
+        return counter;
     }
 }

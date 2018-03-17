@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.itechart.javalab.firstproject</groupId>
-    <artifactId>BookOfContacts</artifactId>
+    <artifactId>book-of-contacts</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
@@ -10,8 +10,37 @@
         <module>services</module>
         <module>web</module>
     </modules>
-    <name>BookOfContacts Maven Webapp</name>
+    <name>BookOfContacts Maven WebApp</name>
     <url>http://maven.apache.org</url>
+
+    <profiles>
+        <profile>
+            <id>clover</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <artifactId>clover-maven-plugin</artifactId>
+                        <version>4.1.2</version>
+                        <configuration>
+                            <targetPercentage>80%</targetPercentage>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>clover</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>instrument</goal>
+                                    <goal>check</goal>
+                                    <goal>clover</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -24,27 +53,8 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
         <finalName>book-of-contacts</finalName>
     </build>
+
 </project>

@@ -1,12 +1,13 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.PhotoDao;
-import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.Photo;
 
 import java.sql.*;
 
-import static com.itechart.javalab.firstproject.dao.util.EntityBuilder.createAndInitializePhoto;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.executeUpdateById;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.getGeneratedId;
+import static com.itechart.javalab.firstproject.dao.util.EntityCreator.createAndInitializePhoto;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 /**
@@ -34,10 +35,9 @@ public class PhotoDaoImpl implements PhotoDao {
     @Override
     public long save(Photo entity, Connection connection) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(SAVE_PHOTO, RETURN_GENERATED_KEYS)) {
-            statement.setString(1, entity.getPathToFile());
-            statement.setString(2, entity.getUuid());
+            initializeStatementForSaveOrUpdatePhoto(statement, entity);
             statement.executeUpdate();
-            return Util.getGeneratedIdAfterCreate(statement);
+            return getGeneratedId(statement);
         }
     }
 
@@ -58,8 +58,7 @@ public class PhotoDaoImpl implements PhotoDao {
     @Override
     public void update(Photo entity, Connection connection) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_PHOTO)) {
-            statement.setString(1, entity.getPathToFile());
-            statement.setString(2, entity.getUuid());
+            initializeStatementForSaveOrUpdatePhoto(statement, entity);
             statement.setLong(3, entity.getId());
             statement.executeUpdate();
         }
@@ -73,9 +72,12 @@ public class PhotoDaoImpl implements PhotoDao {
             statement.executeUpdate();
         }
 
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_PHOTO)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        executeUpdateById(id, DELETE_PHOTO, connection);
+    }
+
+    private void initializeStatementForSaveOrUpdatePhoto(PreparedStatement statement,
+                                                         Photo entity) throws SQLException {
+        statement.setString(1, entity.getPathToFile());
+        statement.setString(2, entity.getUuid());
     }
 }

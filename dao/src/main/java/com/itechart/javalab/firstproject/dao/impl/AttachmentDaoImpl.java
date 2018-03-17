@@ -1,15 +1,14 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.AttachmentDao;
-import com.itechart.javalab.firstproject.dao.util.EntityBuilder;
-import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.Attachment;
 
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.itechart.javalab.firstproject.dao.util.EntityBuilder.createAndInitializeAttachment;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.getGeneratedId;
+import static com.itechart.javalab.firstproject.dao.util.EntityCreator.createAndInitializeAttachment;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 /**
@@ -46,7 +45,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
             statement.setString(5, entity.getUuid());
             statement.setLong(6, entity.getContactId());
             statement.executeUpdate();
-            return Util.getGeneratedIdAfterCreate(statement);
+            return getGeneratedId(statement);
         }
     }
 

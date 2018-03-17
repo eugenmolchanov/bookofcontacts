@@ -1,15 +1,15 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.PhoneDao;
-import com.itechart.javalab.firstproject.dao.util.EntityBuilder;
-import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.Phone;
 
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.itechart.javalab.firstproject.dao.util.EntityBuilder.createAndInitializePhone;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.getGeneratedId;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.executeUpdateById;
+import static com.itechart.javalab.firstproject.dao.util.EntityCreator.createAndInitializePhone;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 /**
@@ -41,14 +41,10 @@ public class PhoneDaoImpl implements PhoneDao {
     @Override
     public long save(Phone entity, Connection connection) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(SAVE_PHONE, RETURN_GENERATED_KEYS)) {
-            statement.setString(1, entity.getCountryCode());
-            statement.setInt(2, entity.getOperatorCode());
-            statement.setLong(3, entity.getNumber());
-            statement.setString(4, entity.getType());
-            statement.setString(5, entity.getComment());
+            initializeStatementForSaveOrUpdatePhone(statement, entity);
             statement.setLong(6, entity.getContactId());
             statement.executeUpdate();
-            return Util.getGeneratedIdAfterCreate(statement);
+            return getGeneratedId(statement);
         }
     }
 
@@ -69,11 +65,7 @@ public class PhoneDaoImpl implements PhoneDao {
     @Override
     public void update(Phone entity, Connection connection) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_PHONE)) {
-            statement.setString(1, entity.getCountryCode());
-            statement.setInt(2, entity.getOperatorCode());
-            statement.setLong(3, entity.getNumber());
-            statement.setString(4, entity.getType());
-            statement.setString(5, entity.getComment());
+            initializeStatementForSaveOrUpdatePhone(statement, entity);
             statement.setLong(6, entity.getId());
             statement.executeUpdate();
         }
@@ -81,10 +73,7 @@ public class PhoneDaoImpl implements PhoneDao {
 
     @Override
     public void delete(long id, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_PHONE)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        executeUpdateById(id, DELETE_PHONE, connection);
     }
 
     @Override
@@ -101,5 +90,14 @@ public class PhoneDaoImpl implements PhoneDao {
                 return phones;
             }
         }
+    }
+
+    private void initializeStatementForSaveOrUpdatePhone(PreparedStatement statement,
+                                                         Phone entity) throws SQLException {
+        statement.setString(1, entity.getCountryCode());
+        statement.setInt(2, entity.getOperatorCode());
+        statement.setLong(3, entity.getNumber());
+        statement.setString(4, entity.getType());
+        statement.setString(5, entity.getComment());
     }
 }

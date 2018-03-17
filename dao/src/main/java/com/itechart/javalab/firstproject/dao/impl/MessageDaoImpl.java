@@ -1,17 +1,18 @@
 package com.itechart.javalab.firstproject.dao.impl;
 
 import com.itechart.javalab.firstproject.dao.MessageDao;
-import com.itechart.javalab.firstproject.dao.util.Util;
 import com.itechart.javalab.firstproject.entities.Contact;
 import com.itechart.javalab.firstproject.entities.Message;
 
 import java.sql.*;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.itechart.javalab.firstproject.dao.util.Util.getRecordsNumber;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.executeUpdateById;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.getGeneratedId;
+import static com.itechart.javalab.firstproject.dao.util.DatabaseOperation.getRecordsNumber;
+import static com.itechart.javalab.firstproject.dao.util.FieldNameConstant.*;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 /**
@@ -55,7 +56,7 @@ public class MessageDaoImpl implements MessageDao {
             statement.setTimestamp(3, entity.getSendingDate());
             statement.setLong(4, entity.getAddressee().getId());
             statement.executeUpdate();
-            return Util.getGeneratedIdAfterCreate(statement);
+            return getGeneratedId(statement);
         }
     }
 
@@ -80,10 +81,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public void delete(long id, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(REMOVE_MESSAGE)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        executeUpdateById(id, REMOVE_MESSAGE, connection);
     }
 
     @Override
@@ -109,31 +107,25 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public void remove(long id, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_MESSAGE)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        executeUpdateById(id, DELETE_MESSAGE, connection);
     }
 
     @Override
     public void restore(long id, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(RESTORE_MESSAGE)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        }
+        executeUpdateById(id, RESTORE_MESSAGE, connection);
     }
 
     private void initializeMessage(Message message, ResultSet resultSet) throws SQLException {
         Contact contact = new Contact();
-        contact.setId(resultSet.getLong("c.id"));
-        contact.setFirstName(resultSet.getString("c.first_name"));
-        contact.setLastName(resultSet.getString("c.last_name"));
-        contact.setEmail(resultSet.getString("c.email"));
+        contact.setId(resultSet.getLong(CONTACT_ID));
+        contact.setFirstName(resultSet.getString(FIRST_NAME));
+        contact.setLastName(resultSet.getString(LAST_NAME));
+        contact.setEmail(resultSet.getString(EMAIL));
 
-        message.setId(resultSet.getLong("m.id"));
-        message.setTopic(resultSet.getString("m.topic"));
-        message.setText(resultSet.getString("m.message"));
-        message.setSendingDate(resultSet.getTimestamp("m.sending_date"));
+        message.setId(resultSet.getLong(MESSAGE_ID));
+        message.setTopic(resultSet.getString(TOPIC));
+        message.setText(resultSet.getString(MESSAGE));
+        message.setSendingDate(resultSet.getTimestamp(SENDING_DATE));
         message.setAddressee(contact);
     }
 
