@@ -9,21 +9,8 @@ import java.util.Set;
  * Created by Yauhen Malchanau on 24.09.2017.
  */
 public interface MessageService extends GenericService<Message> {
-    /**
-     * Method saves message.
-     *
-     * @param message message object which should be saved
-     * @throws SQLException
-     */
     void save(Message message) throws SQLException;
 
-    /**
-     * Method finds message by id.
-     *
-     * @param id id of message
-     * @return message object
-     * @throws SQLException
-     */
     Message findById(long id) throws SQLException;
 
     /**
@@ -34,7 +21,7 @@ public interface MessageService extends GenericService<Message> {
      * @return collection of messages
      * @throws SQLException
      */
-    Set<Message> getMessages(long startContactNumber, long quantityOfContacts) throws SQLException;
+    Set<Message> getNotDeletedMessages(long startContactNumber, long quantityOfContacts) throws SQLException;
 
     /**
      * Method returns number of all not deleted messages in database. Used for pagination.
@@ -42,7 +29,7 @@ public interface MessageService extends GenericService<Message> {
      * @return number of all message objects
      * @throws SQLException
      */
-    long getNumberOfAllMessages() throws SQLException;
+    long getNotDeletedMessagesNumber() throws SQLException;
 
     /**
      * Method returns deleted messages stored in data base.
@@ -60,7 +47,7 @@ public interface MessageService extends GenericService<Message> {
      * @return number of all deleted message objects
      * @throws SQLException
      */
-    long getNumberOfAllDeletedMessages() throws SQLException;
+    long getDeletedMessagesNumber() throws SQLException;
 
     /**
      * Method sends messages to bucket by their ids. Soft delete.

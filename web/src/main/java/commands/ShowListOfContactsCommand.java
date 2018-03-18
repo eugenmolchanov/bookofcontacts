@@ -47,9 +47,9 @@ public class ShowListOfContactsCommand implements ActionCommand {
                 session.setAttribute("quantityOfContacts", quantityOfContacts);
                 Set<Contact> contacts;
                 long numberOfContacts;
-                contacts = service.getSetOfContacts(startContactNumber, quantityOfContacts);
+                contacts = service.getContacts(startContactNumber, quantityOfContacts);
                 EquivalentForSelect.fill(contacts);
-                numberOfContacts = service.getNumberOfContacts();
+                numberOfContacts = service.getContactsNumber();
                 req.setAttribute("numberOfContacts", numberOfContacts);
                 req.setAttribute("startContactNumber", startContactNumber);
                 req.setAttribute("quantityOfContacts", quantityOfContacts);

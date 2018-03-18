@@ -94,7 +94,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Set<Message> getMessages(long startContactNumber, long quantityOfContacts) throws SQLException {
+    public Set<Message> getNotDeletedMessages(long startContactNumber, long quantityOfContacts) throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();
@@ -115,7 +115,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public long getNumberOfAllMessages() throws SQLException {
+    public long getNotDeletedMessagesNumber() throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();
@@ -157,7 +157,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public long getNumberOfAllDeletedMessages() throws SQLException {
+    public long getDeletedMessagesNumber() throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();

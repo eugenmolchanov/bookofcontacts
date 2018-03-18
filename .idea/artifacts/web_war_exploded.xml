@@ -26,8 +26,6 @@
             <element id="module-output" name="dao" />
           </element>
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.41" />
-          <element id="library" level="project" name="Maven: junit:junit:4.12" />
-          <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.3" />
           <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jdbc:8.5.14" />
           <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:8.5.14" />
           <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.16.16" />

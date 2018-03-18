@@ -10,31 +10,10 @@ import java.util.Set;
  * Created by Yauhen Malchanau on 11.09.2017.
  */
 public interface ContactService extends GenericService<Contact> {
-    /**
-     * Method saves contact in data base. Method also saves all phones, attachments and photo of this contact.
-     *
-     * @param contact contact which should be created
-     * @throws SQLException
-     */
     void create(Contact contact) throws SQLException;
 
-    /**
-     * Method finds contact object by id with all of it's phones, attachments and photo.
-     *
-     * @param id id of contact
-     * @return contact object
-     * @throws SQLException
-     */
     Contact findById(long id) throws SQLException;
 
-    /**
-     * Method updates contact and all phones, attachments and photo which belong to it.
-     *
-     * @param contact              contact which should be updated
-     * @param phonesForDelete      ids of contact phones which should be deleted
-     * @param attachmentsForDelete ids of contact attachments which should be deleted
-     * @throws SQLException
-     */
     void update(Contact contact, Set<Long> phonesForDelete, Set<Long> attachmentsForDelete) throws SQLException;
 
     /**
@@ -45,7 +24,7 @@ public interface ContactService extends GenericService<Contact> {
      * @return collection of contacts
      * @throws SQLException
      */
-    Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
+    Set<Contact> getContacts(long startContactNumber, long quantityOfContacts) throws SQLException;
 
     /**
      * Method searches contacts which are required for user and are corresponded to search filter.
@@ -69,7 +48,7 @@ public interface ContactService extends GenericService<Contact> {
      * @return number of searched contact objects
      * @throws SQLException
      */
-    long getNumberOfSearchContacts(Contact contact, Date lowerLimit, Date upperLimit) throws SQLException;
+    long getSearchedContactsNumber(Contact contact, Date lowerLimit, Date upperLimit) throws SQLException;
 
     /**
      * Method deletes contacts by their ids.
@@ -85,23 +64,9 @@ public interface ContactService extends GenericService<Contact> {
      * @return number of contact objects
      * @throws SQLException
      */
-    long getNumberOfContacts() throws SQLException;
+    long getContactsNumber() throws SQLException;
 
-    /**
-     * Method finds entity by email.
-     *
-     * @param email email of entity
-     * @return entity object
-     * @throws SQLException
-     */
     Contact findByEmail(String email) throws SQLException;
 
-    /**
-     * Method get collection of contacts which have the required birth date.
-     *
-     * @param date birthday
-     * @return collection of contact objects
-     * @throws SQLException
-     */
     Set<Contact> findContactsByBirthday(Date date) throws SQLException;
 }

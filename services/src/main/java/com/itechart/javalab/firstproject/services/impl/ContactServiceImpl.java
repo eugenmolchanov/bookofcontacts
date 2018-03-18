@@ -228,7 +228,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Set<Contact> getSetOfContacts(long startContactNumber, long quantityOfContacts) throws SQLException {
+    public Set<Contact> getContacts(long startContactNumber, long quantityOfContacts) throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();
@@ -270,7 +270,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public long getNumberOfSearchContacts(Contact contact, Date lowerLimit, Date upperLimit) throws SQLException {
+    public long getSearchedContactsNumber(Contact contact, Date lowerLimit, Date upperLimit) throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();
@@ -325,7 +325,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public long getNumberOfContacts() throws SQLException {
+    public long getContactsNumber() throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();

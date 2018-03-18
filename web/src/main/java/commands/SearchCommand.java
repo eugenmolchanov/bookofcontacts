@@ -131,7 +131,7 @@ public class SearchCommand implements ActionCommand {
             parameters.deleteCharAt(parameters.length() - 1);
             contacts = service.searchContacts(contact, birthdayFrom, birthdayTo, startContact, step);
             EquivalentForSelect.fill(contacts);
-            numberOfContacts = service.getNumberOfSearchContacts(contact, birthdayFrom, birthdayTo);
+            numberOfContacts = service.getSearchedContactsNumber(contact, birthdayFrom, birthdayTo);
             req.setAttribute("startContactNumber", startContact);
             req.setAttribute("quantityOfContacts", step);
             req.setAttribute("command", "search");

@@ -28,9 +28,9 @@ public class EmptyCommand implements ActionCommand {
         try {
             Set<Contact> contacts;
             long numberOfContacts;
-            contacts = service.getSetOfContacts(0, 10);
+            contacts = service.getContacts(0, 10);
             EquivalentForSelect.fill(contacts);
-            numberOfContacts = service.getNumberOfContacts();
+            numberOfContacts = service.getContactsNumber();
             HttpSession session = req.getSession(true);
             session.setAttribute("startContactNumber", 0L);
             session.setAttribute("startMessageNumber", 0L);
