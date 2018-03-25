@@ -21,6 +21,7 @@ public class PhotoDaoImpl implements PhotoDao {
     private PhotoDaoImpl() {}
 
     private static PhotoDaoImpl instance;
+    private static final Object lock = new Object();
 
     private static final String SAVE_PHOTO = "insert into photo (path, uuid) values (?, ?);";
     private static final String GET_PHOTO_BY_ID = "select * from photo as po where po.id = ?;";
@@ -29,8 +30,10 @@ public class PhotoDaoImpl implements PhotoDao {
     private static final String DELETE_PHOTO = "delete from photo where id = ?;";
 
     public static PhotoDao getInstance() {
-        if (instance == null) {
-            instance = new PhotoDaoImpl();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new PhotoDaoImpl();
+            }
         }
         return instance;
     }

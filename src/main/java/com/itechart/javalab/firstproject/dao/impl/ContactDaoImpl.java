@@ -27,6 +27,7 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     private static ContactDaoImpl instance;
+    private static final Object lock = new Object();
 
     private static final String SAVE_CONTACT = "insert into contact (first_name, last_name, middle_name, birth_date, " +
             "gender, nationality, marital_status, website, email, employment_place, contact_group, country, city, street, " +
@@ -73,8 +74,10 @@ public class ContactDaoImpl implements ContactDao {
             "dayofmonth(c.birth_date) = dayofmonth(?) and month(c.birth_date) = month(?);";
 
     public static ContactDao getInstance() {
-        if (instance == null) {
-            instance = new ContactDaoImpl();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new ContactDaoImpl();
+            }
         }
         return instance;
     }

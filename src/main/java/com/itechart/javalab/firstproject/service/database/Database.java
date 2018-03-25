@@ -35,4 +35,28 @@ public class Database {
     public static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
+
+    public static Connection getDisabledAutoCommitConnection() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        connection.setAutoCommit(false);
+        return connection;
+    }
+
+    public static void commitConnection(Connection connection) throws SQLException {
+        connection.commit();
+        connection.setAutoCommit(true);
+    }
+
+    public static void rollbackConnection(Connection connection) throws SQLException {
+        if (connection != null) {
+            connection.rollback();
+            connection.setAutoCommit(true);
+        }
+    }
+
+    public static void closeConnection(Connection connection) throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
+    }
 }

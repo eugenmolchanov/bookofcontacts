@@ -25,6 +25,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     private static MessageDaoImpl instance;
+    private static final Object lock = new Object();
 
     private static final String SAVE_MESSAGE = "insert into message (topic, message, sending_date, contact_id) " +
             "values (?, ?, ?, ?);";
@@ -43,8 +44,10 @@ public class MessageDaoImpl implements MessageDao {
     private static final String RESTORE_MESSAGE = "update message set sending_date = sending_date, is_deleted = 0 where id = ?";
 
     public static MessageDao getInstance() {
-        if (instance == null) {
-            instance = new MessageDaoImpl();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new MessageDaoImpl();
+            }
         }
         return instance;
     }

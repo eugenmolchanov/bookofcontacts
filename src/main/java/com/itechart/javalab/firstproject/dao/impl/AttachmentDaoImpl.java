@@ -19,9 +19,11 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
  */
 public class AttachmentDaoImpl implements AttachmentDao {
 
-    private AttachmentDaoImpl() {}
+    private AttachmentDaoImpl() {
+    }
 
     private static AttachmentDaoImpl instance;
+    private static final Object lock = new Object();
 
     private static final String SAVE_ATTACHMENT = "insert into attachment (file_name, commentary, record_date, path, " +
             "uuid, contact_id) values (?, ?, ?, ?, ?, ?);";
@@ -32,8 +34,10 @@ public class AttachmentDaoImpl implements AttachmentDao {
     private static final String GET_ATTACHMENTS = "select * from attachment as att where att.contact_id = ?";
 
     public static AttachmentDaoImpl getInstance() {
-        if (instance == null) {
-            instance = new AttachmentDaoImpl();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new AttachmentDaoImpl();
+            }
         }
         return instance;
     }

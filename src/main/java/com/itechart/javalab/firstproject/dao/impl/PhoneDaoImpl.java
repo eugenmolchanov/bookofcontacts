@@ -24,6 +24,7 @@ public class PhoneDaoImpl implements PhoneDao {
     }
 
     private static PhoneDaoImpl instance;
+    private static final Object lock = new Object();
 
     private static final String SAVE_PHONE = "insert into phone (country_code, operator_code, phone_number, phone_type, " +
             "commentary, contact_id) values (?, ?, ?, ?, ?, ?);";
@@ -35,8 +36,10 @@ public class PhoneDaoImpl implements PhoneDao {
             "pe.commentary from phone as pe where pe.contact_id = ?;";
 
     public static PhoneDao getInstance() {
-        if (instance == null) {
-            instance = new PhoneDaoImpl();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new PhoneDaoImpl();
+            }
         }
         return instance;
     }
