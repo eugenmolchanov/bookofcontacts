@@ -51,7 +51,7 @@ public class PhoneServiceImpl implements PhoneService {
         }
     }
 
-    protected long create(Phone entity, Connection connection) throws SQLException {
+    long create(Phone entity, Connection connection) throws SQLException {
         return phoneDao.save(entity, connection);
     }
 

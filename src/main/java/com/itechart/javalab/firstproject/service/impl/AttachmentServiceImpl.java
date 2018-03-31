@@ -56,7 +56,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         }
     }
 
-    protected long create(Attachment entity, Connection connection) throws SQLException {
+    long create(Attachment entity, Connection connection) throws SQLException {
         return attachmentDao.save(entity, connection);
     }
 

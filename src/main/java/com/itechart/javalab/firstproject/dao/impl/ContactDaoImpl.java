@@ -132,7 +132,6 @@ public class ContactDaoImpl implements ContactDao {
         }
     }
 
-
     @Override
     public void delete(long id, Connection connection) throws SQLException {
         executeUpdateById(id, DELETE_MESSAGES, connection);
@@ -143,7 +142,6 @@ public class ContactDaoImpl implements ContactDao {
 
         executeUpdateById(id, DELETE_CONTACT, connection);
     }
-
 
     @Override
     public void deleteAll(Connection connection) throws SQLException {
@@ -227,7 +225,6 @@ public class ContactDaoImpl implements ContactDao {
                 while (resultSet.next()) {
                     totalQuantity = resultSet.getLong("count(c.id)");
                 }
-
                 return totalQuantity;
             }
         }
@@ -274,7 +271,7 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     private void initializeStatementForSaveOrUpdateContact(PreparedStatement statement,
-                                                                  Contact entity) throws SQLException {
+                                                           Contact entity) throws SQLException {
         statement.setString(1, entity.getFirstName());
         statement.setString(2, entity.getLastName());
         statement.setString(3, entity.getMiddleName());

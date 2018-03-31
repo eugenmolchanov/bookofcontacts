@@ -76,7 +76,7 @@ public class PhotoServiceImpl implements PhotoService {
         photoDao.update(entity, connection);
     }
 
-    protected long create(Photo entity, Connection connection) throws SQLException {
+    long create(Photo entity, Connection connection) throws SQLException {
         return photoDao.save(entity, connection);
     }
 }
