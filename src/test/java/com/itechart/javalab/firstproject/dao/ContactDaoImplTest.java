@@ -30,6 +30,7 @@ public class ContactDaoImplTest {
         photo.setId(photoId);
         contact = createContact();
         contact.setPhoto(photo);
+        dao.save(contact, connection);
     }
 
     @After
@@ -39,27 +40,23 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldSaveAndFindContact() throws SQLException {
-        dao.save(contact, connection);
         Contact actualContact = dao.findById(1, connection);
         Assert.assertEquals(contact.getFirstName(), actualContact.getFirstName());
     }
 
     @Test
     public void shouldFindContactByEmail() throws SQLException {
-        dao.save(contact, connection);
         Contact actualContact = dao.findByEmail("email@gmail.com", connection);
         Assert.assertEquals("name", actualContact.getFirstName());
     }
 
     @Test
     public void shouldCountContacts() throws SQLException {
-        dao.save(contact, connection);
         Assert.assertEquals(1, dao.getNumberOfContacts(connection));
     }
 
     @Test
     public void shouldUpdateContact() throws SQLException {
-        dao.save(contact, connection);
         contact = dao.findById(1, connection);
         contact.setFirstName("changedName");
         dao.update(contact, connection);
@@ -70,7 +67,6 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldDeleteContact() throws SQLException {
-        dao.save(contact, connection);
         dao.delete(1, connection);
         Contact afterDeleteContact = null;
         try {
@@ -83,7 +79,6 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldGetContacts() throws SQLException {
-        dao.save(contact, connection);
         long startContactNumber = 0;
         long quantityOfContacts = 10;
         Set<Contact> contacts = dao.getContactsList(startContactNumber, quantityOfContacts, connection);
@@ -94,7 +89,6 @@ public class ContactDaoImplTest {
     public void shouldGetSearchedContacts() throws SQLException {
         long startContactNumber = 0;
         long quantityOfContacts = 10;
-        dao.save(contact, connection);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
@@ -105,7 +99,6 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldGetTotalQuantityOfSearchedContacts() throws SQLException {
-        dao.save(contact, connection);
         Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
         Date upperLimit = Date.valueOf(LocalDate.now());
         Contact conditionContact = new Contact();
@@ -115,9 +108,23 @@ public class ContactDaoImplTest {
 
     @Test
     public void shouldFindContactsByBirthday() throws SQLException {
-        dao.save(contact, connection);
         Set<Contact> contacts = dao.findContactsByBirthday(Date.valueOf("1990-10-10"), connection);
         Assert.assertEquals(1, contacts.size());
+    }
+
+    @Test
+    public void shouldSearchContact() throws SQLException {
+        long startContactNumber = 0;
+        long quantityOfContacts = 10;
+        Date lowerLimit = Date.valueOf(LocalDate.of(1970, 10, 10));
+        Date upperLimit = Date.valueOf(LocalDate.now());
+        Contact searchedContact = new Contact();
+        searchedContact.setFirstName("name");
+        Set<Contact> searchedContacts = dao.searchContacts(searchedContact, lowerLimit, upperLimit,
+                startContactNumber, quantityOfContacts, connection);
+        Set<Contact> nextSearchedContacts = dao.searchContacts(searchedContact, lowerLimit, upperLimit,
+                startContactNumber, 20, connection);
+        Assert.assertEquals(searchedContacts.size(), nextSearchedContacts.size());
     }
 
     private Contact createContact() {

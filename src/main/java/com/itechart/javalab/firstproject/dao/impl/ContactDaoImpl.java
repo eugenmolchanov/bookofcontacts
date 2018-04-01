@@ -63,9 +63,6 @@ public class ContactDaoImpl implements ContactDao {
     private static final String GET_CONTACTS = "select c.id, c.first_name, c.last_name, c.birth_date, c.email, c.employment_place, " +
             "c.contact_group, c.country, c.city, c.street, c.house_number, c.flat_number, c.postcode from contact as c order by c.first_name " +
             "limit ?, ?;";
-    private static StringBuilder getContacts = new StringBuilder("select c.id, c.first_name, c.last_name, c.birth_date, c.email, " +
-            "c.employment_place, c.contact_group, c.country, c.city, c.street, c.house_number, c.flat_number, c.postcode from contact as c ");
-    private static StringBuilder getSearchedContacts = new StringBuilder("select count(c.id) from contact as c ");
     private static final String COUNT_CONTACTS = "select count(id) from contact;";
     private static final String FIND_CONTACT_BY_EMAIL = "select c.id, c.first_name, c.last_name, c.middle_name, c.birth_date, c.gender, " +
             "c.nationality, c.marital_status, c.website, c.email, c.employment_place, c.contact_group, c.country, c.city, c.street, " +
@@ -182,6 +179,8 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public Set<Contact> searchContacts(Contact entity, Date lowerLimit, Date upperLimit, long startContactNumber,
                                        long quantityOfContacts, Connection connection) throws SQLException {
+        StringBuilder getContacts = new StringBuilder("select c.id, c.first_name, c.last_name, c.birth_date, c.email, " +
+                "c.employment_place, c.contact_group, c.country, c.city, c.street, c.house_number, c.flat_number, c.postcode from contact as c ");
         QueryBuilder query = modifySearchQuery(getContacts, entity, lowerLimit, upperLimit);
         query.orderBy(getContacts).limit(getContacts).build(getContacts);
         try (PreparedStatement statement = connection.prepareStatement(getContacts.toString())) {
@@ -210,6 +209,7 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public long getNumberOfSearchContacts(Contact entity, Date lowerLimit, Date upperLimit,
                                           Connection connection) throws SQLException {
+        StringBuilder getSearchedContacts = new StringBuilder("select count(c.id) from contact as c ");
         QueryBuilder query = modifySearchQuery(getSearchedContacts, entity, lowerLimit, upperLimit);
         query.build(getSearchedContacts);
         try (PreparedStatement statement = connection.prepareStatement(getSearchedContacts.toString())) {
