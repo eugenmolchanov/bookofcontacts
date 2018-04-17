@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Set;
 
-import static com.itechart.javalab.firstproject.service.database.Database.closeConnection;
+import static com.itechart.javalab.firstproject.service.database.Database.*;
 
 /**
  * Created by Yauhen Malchanau on 24.09.2017.
@@ -102,17 +102,11 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             return messageDao.getNotDeletedMessagesNumber(connection);
         } catch (SQLException e) {
-            logger.error("Can't get number of all messages. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't get number of all messages. Exception.");
+            logger.error("Can't get number of all messages.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -123,17 +117,11 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             return messageDao.getDeletedMessages(startContactNumber, quantityOfContacts, connection);
         } catch (SQLException e) {
-            logger.error("Can't get deleted messages. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't get deleted messages. Exception.");
+            logger.error("Can't get deleted messages.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -144,17 +132,11 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             return messageDao.getNumberOfAllDeletedMessages(connection);
         } catch (SQLException e) {
-            logger.error("Can't get number of all deleted messages. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't get number of all deleted messages. Exception.");
+            logger.error("Can't get number of all deleted messages.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -162,33 +144,18 @@ public class MessageServiceImpl implements MessageService {
     public void sendMessagesToBucket(Set<Long> messageIds) throws SQLException {
         Connection connection = null;
         try {
-            connection = Database.getConnection();
-            connection.setAutoCommit(false);
+            connection = getDisabledAutoCommitConnection();
             for (Long id : messageIds) {
                 messageDao.delete(id, connection);
             }
-            connection.commit();
-            connection.setAutoCommit(true);
+            commitConnection(connection);
         } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't delete group of messages. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't delete group of messages. Exception.");
+            rollbackConnection(connection);
+            logger.error("Can't delete group of messages.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -196,33 +163,18 @@ public class MessageServiceImpl implements MessageService {
     public void remove(Set<Long> messageIds) throws SQLException {
         Connection connection = null;
         try {
-            connection = Database.getConnection();
-            connection.setAutoCommit(false);
+            connection = getDisabledAutoCommitConnection();
             for (Long id : messageIds) {
                 messageDao.remove(id, connection);
             }
-            connection.commit();
-            connection.setAutoCommit(true);
+            commitConnection(connection);
         } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't delete group of messages from bucket. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't delete group of messages from bucket. Exception.");
+            rollbackConnection(connection);
+            logger.error("Can't delete group of messages from bucket.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -230,33 +182,18 @@ public class MessageServiceImpl implements MessageService {
     public void restore(Set<Long> messageIds) throws SQLException {
         Connection connection = null;
         try {
-            connection = Database.getConnection();
-            connection.setAutoCommit(false);
+            connection = getDisabledAutoCommitConnection();
             for (Long id : messageIds) {
                 messageDao.restore(id, connection);
             }
-            connection.commit();
-            connection.setAutoCommit(true);
+            commitConnection(connection);
         } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't restore group of messages. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't restore group of messages. Exception.");
+            rollbackConnection(connection);
+            logger.error("Can't restore group of messages.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 }

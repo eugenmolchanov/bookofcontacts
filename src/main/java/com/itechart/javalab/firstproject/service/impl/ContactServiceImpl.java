@@ -64,20 +64,18 @@ public class ContactServiceImpl implements ContactService {
         try {
             connection = getDisabledAutoCommitConnection();
             long photoId = photoService.create(contact.getPhoto(), connection);
+
             contact.getPhoto().setId(photoId);
             long contactId = contactDao.save(contact, connection);
-            if (contact.getAttachments() != null) {
-                for (Attachment attachment : contact.getAttachments()) {
-                    attachment.setContactId(contactId);
-                    attachmentService.create(attachment, connection);
-                }
+
+            contact.setId(contactId);
+            if (contact.getAttachments() != null && !contact.getAttachments().isEmpty()) {
+                saveAttachments(contact, connection);
             }
-            if (contact.getPhones() != null) {
-                for (Phone phone : contact.getPhones()) {
-                    phone.setContactId(contactId);
-                    phoneService.create(phone, connection);
-                }
+            if (contact.getPhones() != null && !contact.getPhones().isEmpty()) {
+                savePhones(contact, connection);
             }
+
             commitConnection(connection);
         } catch (SQLException e) {
             rollbackConnection(connection);
@@ -106,55 +104,39 @@ public class ContactServiceImpl implements ContactService {
         try {
             connection = getDisabledAutoCommitConnection();
             contactDao.update(contact, connection);
+
             Set<Attachment> attachments = attachmentService.getAllAttachmentsOfContact(contact.getId(), connection);
             if (!attachments.isEmpty()) {
-                Iterator<Attachment> entityIterator = contact.getAttachments().iterator();
-                while (entityIterator.hasNext()) {
-                    Attachment potentialNewcomer = entityIterator.next();
-                    Iterator<Attachment> databaseContactIterator = attachments.iterator();
-                    while (databaseContactIterator.hasNext()) {
-                        Attachment databaseAttachment = databaseContactIterator.next();
-                        if (databaseAttachment.getId() == potentialNewcomer.getId()) {
-                            attachmentService.update(potentialNewcomer, connection);
-                            entityIterator.remove();
-                        }
-                    }
-                }
+                updateExistedAttachments(contact, attachments, connection);
                 saveAttachments(contact, connection);
             } else if (!contact.getAttachments().isEmpty()) {
                 saveAttachments(contact, connection);
             }
+
             if (attachmentsForDelete != null && !attachmentsForDelete.isEmpty()) {
                 for (long id : attachmentsForDelete) {
                     attachmentService.delete(id);
                 }
             }
+
             Set<Phone> phones = phoneService.getAllPhonesOfContact(contact.getId(), connection);
             if (!phones.isEmpty()) {
-                Iterator<Phone> entityIterator = contact.getPhones().iterator();
-                while (entityIterator.hasNext()) {
-                    Phone potentialNewcomer = entityIterator.next();
-                    Iterator<Phone> databaseContactIterator = phones.iterator();
-                    while (databaseContactIterator.hasNext()) {
-                        Phone databasePhone = databaseContactIterator.next();
-                        if (databasePhone.getId() == potentialNewcomer.getId()) {
-                            phoneService.update(potentialNewcomer, connection);
-                            entityIterator.remove();
-                        }
-                    }
-                }
+                updateExistedPhones(contact, phones, connection);
                 savePhones(contact, connection);
             } else if (!contact.getPhones().isEmpty()) {
                 savePhones(contact, connection);
             }
+
             if (phonesForDelete != null && !phonesForDelete.isEmpty()) {
                 for (long id : phonesForDelete) {
                     phoneService.delete(id);
                 }
             }
+
             if (contact.getPhoto().getId() != 0 && contact.getPhoto().getPathToFile() != null) {
                 photoService.update(contact.getPhoto(), connection);
             }
+
             commitConnection(connection);
         } catch (SQLException e) {
             rollbackConnection(connection);
@@ -163,20 +145,6 @@ public class ContactServiceImpl implements ContactService {
             throw e;
         } finally {
             closeConnection(connection);
-        }
-    }
-
-    private void saveAttachments(Contact contact, Connection connection) throws SQLException {
-        for (Attachment attachment : contact.getAttachments()) {
-            attachment.setContactId(contact.getId());
-            attachmentService.create(attachment, connection);
-        }
-    }
-
-    private void savePhones(Contact contact, Connection connection) throws SQLException {
-        for (Phone phone : contact.getPhones()) {
-            phone.setContactId(contact.getId());
-            phoneService.create(phone, connection);
         }
     }
 
@@ -286,6 +254,48 @@ public class ContactServiceImpl implements ContactService {
             throw e;
         } finally {
             closeConnection(connection);
+        }
+    }
+
+    private void saveAttachments(Contact contact, Connection connection) throws SQLException {
+        for (Attachment attachment : contact.getAttachments()) {
+            attachment.setContactId(contact.getId());
+            attachmentService.create(attachment, connection);
+        }
+    }
+
+    private void savePhones(Contact contact, Connection connection) throws SQLException {
+        for (Phone phone : contact.getPhones()) {
+            phone.setContactId(contact.getId());
+            phoneService.create(phone, connection);
+        }
+    }
+
+    private void updateExistedAttachments(Contact contact, Set<Attachment> attachments, Connection connection)
+            throws SQLException {
+        Iterator<Attachment> entityIterator = contact.getAttachments().iterator();
+        while (entityIterator.hasNext()) {
+            Attachment potentialNewcomer = entityIterator.next();
+            for (Attachment databaseAttachment : attachments) {
+                if (databaseAttachment.getId() == potentialNewcomer.getId()) {
+                    attachmentService.update(potentialNewcomer, connection);
+                    entityIterator.remove();
+                }
+            }
+        }
+    }
+
+    private void updateExistedPhones(Contact contact, Set<Phone> phones, Connection connection)
+            throws SQLException {
+        Iterator<Phone> entityIterator = contact.getPhones().iterator();
+        while (entityIterator.hasNext()) {
+            Phone potentialNewcomer = entityIterator.next();
+            for (Phone databasePhone : phones) {
+                if (databasePhone.getId() == potentialNewcomer.getId()) {
+                    phoneService.update(potentialNewcomer, connection);
+                    entityIterator.remove();
+                }
+            }
         }
     }
 }
