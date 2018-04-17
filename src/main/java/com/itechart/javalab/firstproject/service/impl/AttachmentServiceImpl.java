@@ -60,11 +60,11 @@ public class AttachmentServiceImpl implements AttachmentService {
         return attachmentDao.save(entity, connection);
     }
 
-    protected Set<Attachment> getAllAttachmentsOfContact(long contactId, Connection connection) throws SQLException {
+    Set<Attachment> getAllAttachmentsOfContact(long contactId, Connection connection) throws SQLException {
         return attachmentDao.getAllAttachmentsOfContact(contactId, connection);
     }
 
-    protected void update(Attachment entity, Connection connection) throws SQLException {
+    void update(Attachment entity, Connection connection) throws SQLException {
         attachmentDao.update(entity, connection);
     }
 }

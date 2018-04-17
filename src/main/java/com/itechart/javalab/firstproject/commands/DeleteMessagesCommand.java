@@ -33,7 +33,7 @@ public class DeleteMessagesCommand implements ActionCommand {
                 ids.add(Long.parseLong(parameter));
             }
             try {
-                service.fullDelete(ids);
+                service.remove(ids);
                 req.setAttribute("successMessage", MessageManager.getProperty("successful.message.delete"));
                 return new ShowDeletedMessagesCommand().execute(req, resp);
             } catch (SQLException e) {

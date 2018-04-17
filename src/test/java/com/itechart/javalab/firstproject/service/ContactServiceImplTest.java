@@ -20,10 +20,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.util.Collections.emptySet;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -85,9 +88,9 @@ public class ContactServiceImplTest {
         when(contact.getPhoto())
                 .thenReturn(photo);
         when(contact.getAttachments())
-                .thenReturn(getAttachments());
+                .thenReturn(getAttachmentsForSave());
         when(contact.getPhones())
-                .thenReturn(getPhones());
+                .thenReturn(getPhonesForSave());
         when(contactDao.save(any(Contact.class), any(Connection.class)))
                 .thenReturn(1L);
         when(attachmentDao.save(any(Attachment.class), any(Connection.class)))
@@ -99,9 +102,9 @@ public class ContactServiceImplTest {
 
         contactService.create(contact);
         verify(contactDao).save(eq(contact), any(Connection.class));
-        verify(attachmentDao).save(any(Attachment.class), any(Connection.class));
+        verify(attachmentDao, times(2)).save(any(Attachment.class), any(Connection.class));
         verify(photoDao).save(any(Photo.class), any(Connection.class));
-        verify(phoneDao).save(any(Phone.class), any(Connection.class));
+        verify(phoneDao, times(2)).save(any(Phone.class), any(Connection.class));
         verifyNoMoreInteractions(contactDao, attachmentDao, photoDao, phoneDao);
     }
 
@@ -139,15 +142,298 @@ public class ContactServiceImplTest {
         verifyNoMoreInteractions(contactDao);
     }
 
+    @Test
+    public void shouldUpdate() throws SQLException {
+        doNothing()
+                .when(contactDao).update(any(Contact.class), any(Connection.class));
+        when(attachmentDao.getAllAttachmentsOfContact(anyLong(), any(Connection.class)))
+                .thenReturn(getAttachments());
+        doNothing()
+                .when(attachmentDao).update(any(Attachment.class), any(Connection.class));
+        when(attachmentDao.save(any(Attachment.class), any(Connection.class)))
+                .thenReturn(1L);
+        doNothing()
+                .when(attachmentDao).delete(anyLong(), any(Connection.class));
+        when(phoneDao.getAllPhonesOfContact(anyLong(), any(Connection.class)))
+                .thenReturn(getPhones());
+        doNothing()
+                .when(phoneDao).update(any(Phone.class), any(Connection.class));
+        when(phoneDao.save(any(Phone.class), any(Connection.class)))
+                .thenReturn(1L);
+        doNothing()
+                .when(phoneDao).delete(anyLong(), any(Connection.class));
+        doNothing()
+                .when(photoDao).update(any(Photo.class), any(Connection.class));
+        when(contact.getPhoto())
+                .thenReturn(photo);
+        when(contact.getPhoto().getId())
+                .thenReturn(1L);
+        when(contact.getPhoto().getPathToFile())
+                .thenReturn("path");
+        when(contact.getAttachments())
+                .thenReturn(getAttachmentsForSave());
+        when(contact.getPhones())
+                .thenReturn(getPhonesForSave());
+
+        Set<Long> phonesForDelete = new HashSet<>();
+        phonesForDelete.add(1L);
+        Set<Long> attachmentsForDelete = new HashSet<>();
+        attachmentsForDelete.add(1L);
+        contactService.update(contact, phonesForDelete, attachmentsForDelete);
+        verify(contactDao).update(any(Contact.class), any(Connection.class));
+        verify(attachmentDao).getAllAttachmentsOfContact(anyLong(), any(Connection.class));
+        verify(attachmentDao).update(any(Attachment.class), any(Connection.class));
+        verify(attachmentDao, times(1)).save(any(Attachment.class), any(Connection.class));
+        verify(attachmentDao).delete(anyLong(), any(Connection.class));
+        verify(phoneDao).getAllPhonesOfContact(anyLong(), any(Connection.class));
+        verify(phoneDao).update(any(Phone.class), any(Connection.class));
+        verify(phoneDao, times(1)).save(any(Phone.class), any(Connection.class));
+        verify(phoneDao).delete(anyLong(), any(Connection.class));
+        verify(photoDao).update(any(Photo.class), any(Connection.class));
+    }
+
+    @Test
+    public void shouldUpdateEmptyContact() throws SQLException {
+        doNothing()
+                .when(contactDao).update(any(Contact.class), any(Connection.class));
+        when(attachmentDao.getAllAttachmentsOfContact(anyLong(), any(Connection.class)))
+                .thenReturn(emptySet());
+        when(attachmentDao.save(any(Attachment.class), any(Connection.class)))
+                .thenReturn(1L);
+        when(phoneDao.getAllPhonesOfContact(anyLong(), any(Connection.class)))
+                .thenReturn(emptySet());
+        when(phoneDao.save(any(Phone.class), any(Connection.class)))
+                .thenReturn(1L);
+        when(contact.getPhoto())
+                .thenReturn(photo);
+        when(contact.getPhoto().getId())
+                .thenReturn(0L);
+        when(contact.getAttachments())
+                .thenReturn(getAttachmentsForSave());
+        when(contact.getPhones())
+                .thenReturn(getPhonesForSave());
+
+        contactService.update(contact, emptySet(), emptySet());
+        verify(contactDao).update(any(Contact.class), any(Connection.class));
+        verify(attachmentDao).getAllAttachmentsOfContact(anyLong(), any(Connection.class));
+        verify(attachmentDao, times(2)).save(any(Attachment.class), any(Connection.class));
+        verify(phoneDao).getAllPhonesOfContact(anyLong(), any(Connection.class));
+        verify(phoneDao, times(2)).save(any(Phone.class), any(Connection.class));
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowAnExceptionWhenUpdateContact() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).update(any(Contact.class), any(Connection.class));
+
+        contactService.update(contact, emptySet(), emptySet());
+        verify(contactDao).update(any(Contact.class), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test
+    public void shouldGetContacts() throws SQLException {
+        when(contactDao.getContactsList(anyLong(), anyLong(), any(Connection.class)))
+                .thenReturn(emptySet());
+
+        contactService.getContacts(0, 10);
+
+        verify(contactDao).getContactsList(anyLong(), anyLong(), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenGetContacts() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).getContactsList(anyLong(), anyLong(), any(Connection.class));
+
+        contactService.getContacts(0, 10);
+
+        verify(contactDao).getContactsList(anyLong(), anyLong(), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test
+    public void shouldSearchContacts() throws SQLException {
+        when(contactDao.searchContacts(any(Contact.class), any(Date.class), any(Date.class), anyLong(), anyLong(),
+                any(Connection.class)))
+                .thenReturn(emptySet());
+
+        contactService.searchContacts(contact, Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()), 0, 10);
+
+        verify(contactDao).searchContacts(any(Contact.class), any(Date.class), any(Date.class), anyLong(), anyLong(),
+                any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenSearchContacts() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).searchContacts(any(Contact.class), any(Date.class), any(Date.class), anyLong(), anyLong(),
+                any(Connection.class));
+
+        contactService.searchContacts(contact, Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()), 0, 10);
+
+        verify(contactDao).searchContacts(any(Contact.class), any(Date.class), any(Date.class), anyLong(), anyLong(),
+                any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test
+    public void shouldGetSearchedContactsNumber() throws SQLException {
+        when(contactDao.getNumberOfSearchContacts(any(Contact.class), any(Date.class), any(Date.class), any(Connection.class)))
+                .thenReturn(1L);
+
+        contactService.getSearchedContactsNumber(contact, Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
+
+        verify(contactDao).getNumberOfSearchContacts(any(Contact.class), any(Date.class), any(Date.class), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenGetSearchedContactsNumber() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).getNumberOfSearchContacts(any(Contact.class), any(Date.class), any(Date.class), any(Connection.class));
+
+        contactService.getSearchedContactsNumber(contact, Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now()));
+
+        verify(contactDao).getNumberOfSearchContacts(any(Contact.class), any(Date.class), any(Date.class), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test
+    public void shouldDeleteContacts() throws SQLException {
+        doNothing()
+                .when(contactDao).delete(anyLong(), any(Connection.class));
+
+        Set<Long> ids = new HashSet<>();
+        ids.add(1L);
+        ids.add(2L);
+        contactService.deleteContacts(ids);
+
+        verify(contactDao, times(2)).delete(anyLong(), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenDeleteContacts() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).delete(anyLong(), any(Connection.class));
+
+        Set<Long> ids = new HashSet<>();
+        ids.add(1L);
+        ids.add(2L);
+        contactService.deleteContacts(ids);
+
+        verify(contactDao).delete(anyLong(), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test
+    public void shouldGetContactsNumber() throws SQLException {
+        when(contactDao.getNumberOfContacts(any(Connection.class)))
+                .thenReturn(anyLong());
+
+        contactService.getContactsNumber();
+
+        verify(contactDao).getNumberOfContacts(any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenGetContactsNumber() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).getNumberOfContacts(any(Connection.class));
+
+        contactService.getContactsNumber();
+
+        verify(contactDao).getNumberOfContacts(any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test
+    public void shouldFindContactByEmail() throws SQLException {
+        when(contactDao.findByEmail(anyString(), any(Connection.class)))
+                .thenReturn(contact);
+
+        contactService.findByEmail("email");
+
+        verify(contactDao).findByEmail(anyString(), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenGetContactByEmail() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).findByEmail(anyString(), any(Connection.class));
+
+        contactService.findByEmail("email");
+
+        verify(contactDao).findByEmail(anyString(), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test
+    public void shouldFindContactsByBirthday() throws SQLException {
+        when(contactDao.findContactsByBirthday(any(Date.class), any(Connection.class)))
+                .thenReturn(emptySet());
+
+        contactService.findContactsByBirthday(Date.valueOf(LocalDate.now()));
+
+        verify(contactDao).findContactsByBirthday(any(Date.class), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenFindContactsByBirthday() throws SQLException {
+        doThrow(new SQLException())
+                .when(contactDao).findContactsByBirthday(any(Date.class), any(Connection.class));
+
+        contactService.findContactsByBirthday(Date.valueOf(LocalDate.now()));
+
+        verify(contactDao).findContactsByBirthday(any(Date.class), any(Connection.class));
+        verifyNoMoreInteractions(contactDao);
+    }
+
     private Set<Attachment> getAttachments() {
         HashSet<Attachment> attachments = new HashSet<>();
-        attachments.add(new Attachment());
+        Attachment attachment = new Attachment();
+        attachment.setId(1L);
+        attachments.add(attachment);
+        return attachments;
+    }
+
+    private Set<Attachment> getAttachmentsForSave() {
+        HashSet<Attachment> attachments = new HashSet<>();
+        Attachment firstAttachment = new Attachment();
+        firstAttachment.setId(1L);
+        firstAttachment.setFileName("filename1");
+        Attachment secondAttachment = new Attachment();
+        secondAttachment.setId(2L);
+        secondAttachment.setFileName("filename2");
+        attachments.add(firstAttachment);
+        attachments.add(secondAttachment);
         return attachments;
     }
 
     private Set<Phone> getPhones() {
         HashSet<Phone> phones = new HashSet<>();
-        phones.add(new Phone());
+        Phone phone = new Phone();
+        phone.setId(1L);
+        phones.add(phone);
+        return phones;
+    }
+
+    private Set<Phone> getPhonesForSave() {
+        HashSet<Phone> phones = new HashSet<>();
+        Phone firstPhone = new Phone();
+        firstPhone.setId(1L);
+        firstPhone.setNumber(1);
+        Phone secondPhone = new Phone();
+        secondPhone.setId(2L);
+        secondPhone.setNumber(2);
+        phones.add(firstPhone);
+        phones.add(secondPhone);
         return phones;
     }
 }

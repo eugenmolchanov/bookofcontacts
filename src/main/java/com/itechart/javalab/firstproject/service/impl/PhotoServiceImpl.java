@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static com.itechart.javalab.firstproject.service.database.Database.closeConnection;
+
 /**
  * Created by Yauhen Malchanau on 11.09.2017.
  */
@@ -18,13 +20,16 @@ public class PhotoServiceImpl implements PhotoService {
     private static Logger logger = Logger.getLogger(PhotoServiceImpl.class);
     private static PhotoServiceImpl instance;
     private PhotoDao photoDao = PhotoDaoImpl.getInstance();
+    private static final Object lock = new Object();
 
     private PhotoServiceImpl() {
     }
 
     public static PhotoServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new PhotoServiceImpl();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new PhotoServiceImpl();
+            }
         }
         return instance;
     }
@@ -36,17 +41,11 @@ public class PhotoServiceImpl implements PhotoService {
             connection = Database.getConnection();
             photoDao.delete(id, connection);
         } catch (SQLException e) {
-            logger.error("Can't delete photo. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't delete photo. Exception.");
+            logger.error("Can't delete photo.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -57,22 +56,16 @@ public class PhotoServiceImpl implements PhotoService {
             connection = Database.getConnection();
             return photoDao.findById(id, connection);
         } catch (SQLException e) {
-            logger.error("Can't find photo by id. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't find photo by id. Exception.");
+            logger.error("Can't find photo by id.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
 
-    protected void update(Photo entity, Connection connection) throws SQLException {
+    void update(Photo entity, Connection connection) throws SQLException {
         photoDao.update(entity, connection);
     }
 

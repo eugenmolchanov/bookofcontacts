@@ -120,23 +120,17 @@ public class ContactServiceImpl implements ContactService {
                         }
                     }
                 }
-                for (Attachment attachment : contact.getAttachments()) {
-                    attachment.setContactId(contact.getId());
-                    attachmentService.create(attachment, connection);
-                }
-            } else if (contact.getAttachments().size() != 0) {
-                for (Attachment attachment : contact.getAttachments()) {
-                    attachment.setContactId(contact.getId());
-                    attachmentService.create(attachment, connection);
-                }
+                saveAttachments(contact, connection);
+            } else if (!contact.getAttachments().isEmpty()) {
+                saveAttachments(contact, connection);
             }
-            if (attachmentsForDelete != null && attachmentsForDelete.size() > 0) {
+            if (attachmentsForDelete != null && !attachmentsForDelete.isEmpty()) {
                 for (long id : attachmentsForDelete) {
                     attachmentService.delete(id);
                 }
             }
             Set<Phone> phones = phoneService.getAllPhonesOfContact(contact.getId(), connection);
-            if (phones.size() != 0) {
+            if (!phones.isEmpty()) {
                 Iterator<Phone> entityIterator = contact.getPhones().iterator();
                 while (entityIterator.hasNext()) {
                     Phone potentialNewcomer = entityIterator.next();
@@ -149,17 +143,11 @@ public class ContactServiceImpl implements ContactService {
                         }
                     }
                 }
-                for (Phone phone : contact.getPhones()) {
-                    phone.setContactId(contact.getId());
-                    phoneService.create(phone, connection);
-                }
-            } else if (contact.getPhones().size() != 0) {
-                for (Phone phone : contact.getPhones()) {
-                    phone.setContactId(contact.getId());
-                    phoneService.create(phone, connection);
-                }
+                savePhones(contact, connection);
+            } else if (!contact.getPhones().isEmpty()) {
+                savePhones(contact, connection);
             }
-            if (phonesForDelete != null && phonesForDelete.size() > 0) {
+            if (phonesForDelete != null && !phonesForDelete.isEmpty()) {
                 for (long id : phonesForDelete) {
                     phoneService.delete(id);
                 }
@@ -167,28 +155,28 @@ public class ContactServiceImpl implements ContactService {
             if (contact.getPhoto().getId() != 0 && contact.getPhoto().getPathToFile() != null) {
                 photoService.update(contact.getPhoto(), connection);
             }
-            connection.commit();
-            connection.setAutoCommit(true);
+            commitConnection(connection);
         } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't update contact. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't update contact. Exception.");
+            rollbackConnection(connection);
+            logger.error("Can't update contact.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
+        }
+    }
+
+    private void saveAttachments(Contact contact, Connection connection) throws SQLException {
+        for (Attachment attachment : contact.getAttachments()) {
+            attachment.setContactId(contact.getId());
+            attachmentService.create(attachment, connection);
+        }
+    }
+
+    private void savePhones(Contact contact, Connection connection) throws SQLException {
+        for (Phone phone : contact.getPhones()) {
+            phone.setContactId(contact.getId());
+            phoneService.create(phone, connection);
         }
     }
 
@@ -199,17 +187,11 @@ public class ContactServiceImpl implements ContactService {
             connection = getConnection();
             return contactDao.getContactsList(startContactNumber, quantityOfContacts, connection);
         } catch (SQLException e) {
-            logger.error("Can't get set of contacts. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't get set of contacts. Exception.");
+            logger.error("Can't get set of contacts.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -220,17 +202,11 @@ public class ContactServiceImpl implements ContactService {
             connection = getConnection();
             return contactDao.searchContacts(contact, lowerLimit, upperLimit, startContactNumber, quantityOfContacts, connection);
         } catch (SQLException e) {
-            logger.error("Can't search contacts. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't search contacts. Exception.");
+            logger.error("Can't search contacts.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -241,17 +217,11 @@ public class ContactServiceImpl implements ContactService {
             connection = getConnection();
             return contactDao.getNumberOfSearchContacts(contact, lowerLimit, upperLimit, connection);
         } catch (SQLException e) {
-            logger.error("Can't get number of searched contacts. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't get number of searched contacts. Exception.");
+            logger.error("Can't get number of searched contacts.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -259,33 +229,18 @@ public class ContactServiceImpl implements ContactService {
     public void deleteContacts(Set<Long> contactIds) throws SQLException {
         Connection connection = null;
         try {
-            connection = getConnection();
-            connection.setAutoCommit(false);
+            connection = getDisabledAutoCommitConnection();
             for (Long id : contactIds) {
                 contactDao.delete(id, connection);
             }
-            connection.commit();
-            connection.setAutoCommit(true);
+            commitConnection(connection);
         } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't delete group of contacts. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            if (connection != null) {
-                connection.rollback();
-                logger.error("Connection rollback.");
-            }
-            logger.error("Can't delete group of contacts. Exception.");
+            rollbackConnection(connection);
+            logger.error("Can't delete group of contacts.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -296,17 +251,11 @@ public class ContactServiceImpl implements ContactService {
             connection = getConnection();
             return contactDao.getNumberOfContacts(connection);
         } catch (SQLException e) {
-            logger.error("Can't get number of all contacts. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't get number of all contacts. Exception.");
+            logger.error("Can't get number of all contacts.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -317,17 +266,11 @@ public class ContactServiceImpl implements ContactService {
             connection = getConnection();
             return contactDao.findByEmail(email, connection);
         } catch (SQLException e) {
-            logger.error("Can't find contact by email. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't find contact by email. Exception.");
+            logger.error("Can't find contact by email.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -338,17 +281,11 @@ public class ContactServiceImpl implements ContactService {
             connection = getConnection();
             return contactDao.findContactsByBirthday(date, connection);
         } catch (SQLException e) {
-            logger.error("Can't find contacts by birth date. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't find contacts by birth date. Exception.");
+            logger.error("Can't find contacts by birth date.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 }

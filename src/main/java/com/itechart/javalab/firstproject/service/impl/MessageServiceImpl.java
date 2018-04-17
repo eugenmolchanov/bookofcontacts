@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Set;
 
+import static com.itechart.javalab.firstproject.service.database.Database.closeConnection;
+
 /**
  * Created by Yauhen Malchanau on 24.09.2017.
  */
@@ -19,13 +21,16 @@ public class MessageServiceImpl implements MessageService {
     private static Logger logger = Logger.getLogger(MessageServiceImpl.class);
     private static MessageServiceImpl instance;
     private MessageDao messageDao = MessageDaoImpl.getInstance();
+    private static final Object lock = new Object();
 
     private MessageServiceImpl() {
     }
 
     public static MessageService getInstance() {
-        if (instance == null) {
-            instance = new MessageServiceImpl();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new MessageServiceImpl();
+            }
         }
         return instance;
     }
@@ -37,17 +42,11 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             messageDao.delete(id, connection);
         } catch (SQLException e) {
-            logger.error("Can't delete message by id. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't delete message by id. Exception.");
+            logger.error("Can't delete message by id.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -58,17 +57,11 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             messageDao.save(message, connection);
         } catch (SQLException e) {
-            logger.error("Can't save message. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't save message. Exception.");
+            logger.error("Can't save message.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -79,17 +72,11 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             return messageDao.findById(id, connection);
         } catch (SQLException e) {
-            logger.error("Can't find message by id. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't find message by id. Exception.");
+            logger.error("Can't find message by id.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -100,17 +87,11 @@ public class MessageServiceImpl implements MessageService {
             connection = Database.getConnection();
             return messageDao.getNotDeletedMessages(startContactNumber, quantityOfContacts, connection);
         } catch (SQLException e) {
-            logger.error("Can't get messages. SqlException.");
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Can't get messages. Exception.");
+            logger.error("Can't get messages.");
             logger.error(e.getMessage(), e);
             throw e;
         } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            closeConnection(connection);
         }
     }
 
@@ -212,7 +193,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void fullDelete(Set<Long> messageIds) throws SQLException {
+    public void remove(Set<Long> messageIds) throws SQLException {
         Connection connection = null;
         try {
             connection = Database.getConnection();
